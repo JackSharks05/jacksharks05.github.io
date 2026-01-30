@@ -1,0 +1,86 @@
+.card-nav-container {
+  --cn-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --cn-menu: #000;
+
+  width: 100%;
+}
+
+.card-nav {
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid rgba(98, 31, 109, 0.92);
+  background: rgba(0, 0, 0, 0.88);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(255, 70, 70, 0.25));
+}
+
+.card-nav-content {
+  padding: 6px 14px 14px;
+}
+
+.card-nav.open .card-nav-content {
+  pointer-events: auto;
+}
+
+.nav-card {
+  border-radius: 14px;
+  padding: 12px;
+  border: 1px solid rgba(254, 0, 0, 0.32);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.2);
+}
+
+.nav-card-label {
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  margin-bottom: 10px;
+}
+
+.nav-card-label.is-active {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.nav-card-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nav-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-size: 12px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.92);
+  transition: transform 140ms var(--cn-ease);
+}
+
+.nav-card-link:hover {
+  transform: translateY(-1px);
+}
+
+.nav-card-link-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.card-nav-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

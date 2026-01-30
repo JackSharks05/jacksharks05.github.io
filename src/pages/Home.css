@@ -1,0 +1,325 @@
+.home {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: visible;
+  background: #000;
+}
+
+.home__stage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.home__stageFade {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 140px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0.92)
+  );
+  pointer-events: none;
+  z-index: 5;
+}
+
+.home__landing {
+  position: relative;
+  z-index: 2;
+  padding: 34px 22px 70px;
+  background:
+    radial-gradient(
+      900px 520px at 70% 0%,
+      rgba(64, 128, 255, 0.12),
+      rgba(0, 0, 0, 0)
+    ),
+    radial-gradient(
+      760px 620px at 10% 40%,
+      rgba(255, 120, 200, 0.08),
+      rgba(0, 0, 0, 0)
+    ),
+    #000;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.home__planetariumToggle {
+  position: absolute;
+  left: 22px;
+  bottom: 22px;
+  z-index: 220;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(8, 12, 24, 0.55);
+  color: #fff;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+  font-size: 13px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    opacity 420ms ease;
+}
+
+.home__planetariumToggle.is-ready {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.home__constellationPreview {
+  position: absolute;
+  z-index: 230;
+  width: min(340px, calc(100vw - 44px));
+  padding: 14px 14px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(140, 190, 255, 0.22);
+  background: rgba(8, 12, 24, 0.72);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+}
+
+.home__constellationPreviewClose {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+}
+
+.home__constellationPreviewTitle {
+  font-size: 14px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+  padding-right: 34px;
+}
+
+.home__constellationPreviewBlurb {
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.76);
+  line-height: 1.45;
+  font-size: 13px;
+}
+
+.home__constellationPreviewLink {
+  margin-top: 12px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(140, 190, 255, 0.35);
+  background: rgba(10, 20, 40, 0.35);
+  color: rgba(140, 190, 255, 0.95);
+  cursor: pointer;
+}
+
+.home__planetariumToggle:hover {
+  transform: translateY(-1px);
+  border-color: rgba(140, 190, 255, 0.48);
+  background: rgba(8, 12, 24, 0.72);
+}
+
+.home__container {
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+.home__nebula {
+  position: absolute;
+  inset: -180px auto auto -180px;
+  width: 520px;
+  height: 520px;
+  border-radius: 999px;
+  filter: blur(34px);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.home__nebula--a {
+  background: radial-gradient(
+    closest-side,
+    rgba(120, 180, 255, 0.28),
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.home__nebula--b {
+  left: auto;
+  right: -220px;
+  top: 80px;
+  width: 620px;
+  height: 620px;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 140, 210, 0.18),
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.home__intro {
+  margin-bottom: 22px;
+}
+
+.home__h2 {
+  font-size: 34px;
+  letter-spacing: 0.3px;
+}
+
+.home__lead {
+  margin-top: 10px;
+  max-width: 720px;
+  color: rgba(255, 255, 255, 0.76);
+  line-height: 1.55;
+}
+
+.home__cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.home__card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(8, 12, 24, 0.35);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 16px 16px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.home__card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(140, 190, 255, 0.35);
+  background: rgba(8, 12, 24, 0.5);
+}
+
+.home__cardTitle {
+  font-size: 14px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.home__cardBody {
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.5;
+}
+
+.home__cardLinks {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+}
+
+.home__cardLinks a {
+  pointer-events: auto;
+  color: rgba(140, 190, 255, 0.92);
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.home__cardLinks a:hover {
+  text-decoration: underline;
+}
+
+.home__split {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.home__panel {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.home__h3 {
+  font-size: 14px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.home__bullets {
+  margin-top: 10px;
+  padding-left: 18px;
+  color: rgba(255, 255, 255, 0.74);
+  line-height: 1.6;
+}
+
+.home__quick {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.home__quickBtn {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(8, 12, 24, 0.36);
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  font-size: 13px;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.home__quickBtn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(140, 190, 255, 0.38);
+  background: rgba(8, 12, 24, 0.55);
+}
+
+@media (max-width: 760px) {
+  .home__planetariumToggle {
+    right: 14px;
+    bottom: 14px;
+  }
+
+  .home__h2 {
+    font-size: 28px;
+  }
+
+  .home__cards {
+    grid-template-columns: 1fr;
+  }
+
+  .home__split {
+    grid-template-columns: 1fr;
+  }
+}

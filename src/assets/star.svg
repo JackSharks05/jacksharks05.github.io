@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <defs>
+    <linearGradient id="g" x1="32" y1="32" x2="224" y2="224" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff4b4b"/>
+      <stop offset="1" stop-color="#d60000"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feColorMatrix in="b" type="matrix" values="1 0 0 0 0  0 0.2 0 0 0  0 0 0.2 0 0  0 0 0 1 0"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- A simple stylized "star" / compass mark; used as a fallback if star.png isn't present. -->
+  <g filter="url(#glow)">
+    <path fill="url(#g)" d="M128 18c6 0 10 5 10 11v45c0 4 2 7 6 9 21 9 36 30 36 54 0 24-15 45-36 54-4 2-6 5-6 9v45c0 6-4 11-10 11s-10-5-10-11v-45c0-4-2-7-6-9-21-9-36-30-36-54 0-24 15-45 36-54 4-2 6-5 6-9V29c0-6 4-11 10-11Z"/>
+    <path fill="url(#g)" d="M18 128c0-6 5-10 11-10h45c4 0 7-2 9-6 9-21 30-36 54-36 24 0 45 15 54 36 2 4 5 6 9 6h45c6 0 11 4 11 10s-5 10-11 10h-45c-4 0-7 2-9 6-9 21-30 36-54 36-24 0-45-15-54-36-2-4-5-6-9-6H29c-6 0-11-4-11-10Z"/>
+    <path fill="#b80000" d="M128 70c32 0 58 26 58 58s-26 58-58 58-58-26-58-58 26-58 58-58Z" opacity="0.55"/>
+  </g>
+</svg>

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <script>
+      // GitHub Pages SPA fallback for BrowserRouter.
+      // Store the attempted URL, then redirect to the root so the app can restore it.
+      try {
+        sessionStorage.setItem("spa:redirect", window.location.href);
+      } catch (e) {}
+      window.location.replace("/");
+    </script>
+  </body>
+</html>
