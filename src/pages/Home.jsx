@@ -22,6 +22,7 @@ export default function Home() {
   const [isPlanetarium, setIsPlanetarium] = useState(true);
   const [skyLoaded, setSkyLoaded] = useState(false);
   const [uiUnlocked, setUiUnlocked] = useState(false);
+  const [introStageHeight, setIntroStageHeight] = useState(null);
   const [selectedConstellationKeys, setSelectedConstellationKeys] = useState(
     [],
   );
@@ -29,7 +30,7 @@ export default function Home() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [previewAnchorClient, setPreviewAnchorClient] = useState(null);
   const stageRef = useRef(null);
-  const landingRef = useRef(null);
+  const introOverlayInnerRef = useRef(null);
   const lastEnterHandledLocationKeyRef = useRef(null);
   const lastIntroHandledLocationKeyRef = useRef(null);
   const exitAutoEnterCooldownUntilRef = useRef(0);
@@ -77,6 +78,7 @@ export default function Home() {
   const enterPlanetarium = ({ smooth = true } = {}) => {
     setIsPreviewOpen(false);
     setIsPlanetarium(true);
+    setIntroStageHeight(null);
     window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
   };
 
@@ -86,26 +88,29 @@ export default function Home() {
     exitAutoEnterCooldownUntilRef.current = Date.now() + 1200;
     setIsPlanetarium(false);
 
-    // Once the intro is mounted, scroll it into view similar to the
-    // original working implementation.
+    // Once the intro overlay is mounted, scroll so that its bottom
+    // comes to rest at the bottom of the viewport.
     requestAnimationFrame(() => {
-      const el = landingRef.current;
+      const el = introOverlayInnerRef.current;
       if (
         !el ||
         typeof window === "undefined" ||
         typeof document === "undefined"
-      )
+      ) {
         return;
+      }
+
       const docEl = document.documentElement;
       const body = document.body;
       const currentScroll =
         window.scrollY || docEl.scrollTop || body.scrollTop || 0;
-      const landingTop = el.getBoundingClientRect().top + currentScroll;
-      const revealFactor = window.innerWidth <= 520 ? 0.25 : 0.5;
-      const target = Math.max(
-        0,
-        landingTop - window.innerHeight * revealFactor,
-      );
+
+      const rect = el.getBoundingClientRect();
+      const stageHeight = window.innerHeight + rect.height;
+      setIntroStageHeight(stageHeight);
+
+      const overlayBottom = rect.bottom + currentScroll;
+      const target = Math.max(0, overlayBottom - window.innerHeight);
       const behavior = smooth ? "smooth" : "auto";
 
       if (smooth) {
@@ -122,7 +127,7 @@ export default function Home() {
         }
       } else {
         try {
-          window.scrollTo({ top: target, behavior: "auto" });
+          window.scrollTo({ top: target, behavior: behavior });
         } catch {
           window.scrollTo(0, target);
         }
@@ -307,7 +312,13 @@ export default function Home() {
 
   return (
     <div className="home">
-      <div className="home__stage" ref={stageRef}>
+      <div
+        className="home__stage"
+        ref={stageRef}
+        style={
+          introStageHeight ? { height: `${introStageHeight}px` } : undefined
+        }
+      >
         <GalaxyCanvas
           onConstellationClick={handleConstellationClick}
           forcedProjectionMode={isPlanetarium ? "fill" : undefined}
@@ -394,11 +405,11 @@ export default function Home() {
       </div>
 
       {!isPlanetarium && (
-        <section id="intro" className="home__landing" ref={landingRef}>
+        <div className="home__introOverlay">
           <div className="home__nebula home__nebula--a" aria-hidden="true" />
           <div className="home__nebula home__nebula--b" aria-hidden="true" />
 
-          <div className="home__container">
+          <div className="home__introOverlayInner" ref={introOverlayInnerRef}>
             <div className="home__intro">
               <div className="home__introText">
                 <h2 className="home__h2">Hey, I’m Jack!</h2>
@@ -541,7 +552,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </div>
       )}
     </div>
   );
