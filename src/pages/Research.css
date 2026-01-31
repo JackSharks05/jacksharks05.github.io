@@ -41,6 +41,28 @@
   gap: 12px;
 }
 
+.research__heading {
+  min-width: 0;
+}
+
+.research__subhead {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+
+.research__subheadItem {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.18);
+  white-space: nowrap;
+}
+
 .research__logoWrap {
   flex: 0 0 auto;
   width: 56px;
