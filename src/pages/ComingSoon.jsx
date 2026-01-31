@@ -19,10 +19,10 @@ export default function ComingSoon() {
       <div className="comingSoon__veil" />
 
       <div className="comingSoon__content">
-        <div className="comingSoon__badge">Jack DeHaan</div>
-        <h1 className="comingSoon__title">Coming soon</h1>
+        <div className="comingSoon__badge">jack de haan</div>
+        <h1 className="comingSoon__title">coming soon</h1>
         <p className="comingSoon__subtitle">
-          This site is under construction. Check back soon.
+          currently building the cosmos. check back soon!
         </p>
       </div>
     </div>
