@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import GalaxyCanvas from "../components/GalaxyCanvas";
 import RotatingText from "../components/RotatingText";
 import ImageCarousel from "../components/ImageCarousel";
 import { getConstellationCard } from "../data/constellationCards";
@@ -37,6 +36,7 @@ export default function Home() {
 
   const uiTimerRef = useRef(null);
   const hasActivatedConstellationRef = useRef(false);
+  const skyLoadedHandledRef = useRef(false);
 
   useEffect(() => {
     // Keep a sticky flag so layout can infer current state on mount.
@@ -282,6 +282,8 @@ export default function Home() {
   };
 
   const handleSkyLoaded = () => {
+    if (skyLoadedHandledRef.current) return;
+    skyLoadedHandledRef.current = true;
     setSkyLoaded(true);
 
     // If the user has already loaded the planetarium once in this session,
@@ -303,10 +305,37 @@ export default function Home() {
       uiTimerRef.current = null;
     }, 5000);
   };
-
   useEffect(() => {
+    const onLoaded = () => {
+      handleSkyLoaded();
+    };
+    const onFirstDrag = () => {
+      unlockUi();
+    };
+    const onClick = (e) => {
+      if (!e?.detail) return;
+      handleConstellationClick(e.detail);
+    };
+
+    window.addEventListener("planetarium:loaded", onLoaded);
+    window.addEventListener("planetarium:first-drag", onFirstDrag);
+    window.addEventListener("planetarium:click", onClick);
+
+    // If the planetarium has already loaded (e.g. we navigated away and back),
+    // immediately unlock the UI so the exit button is available.
+    try {
+      if (sessionStorage.getItem("planetarium:loaded")) {
+        handleSkyLoaded();
+      }
+    } catch {
+      // Ignore sessionStorage errors (e.g. privacy mode).
+    }
+
     return () => {
       if (uiTimerRef.current) window.clearTimeout(uiTimerRef.current);
+      window.removeEventListener("planetarium:loaded", onLoaded);
+      window.removeEventListener("planetarium:first-drag", onFirstDrag);
+      window.removeEventListener("planetarium:click", onClick);
     };
   }, []);
 
@@ -319,15 +348,6 @@ export default function Home() {
           introStageHeight ? { height: `${introStageHeight}px` } : undefined
         }
       >
-        <GalaxyCanvas
-          onConstellationClick={handleConstellationClick}
-          forcedProjectionMode={isPlanetarium ? "fill" : undefined}
-          onLoaded={handleSkyLoaded}
-          onFirstDrag={unlockUi}
-          selectedConstellationKeys={selectedConstellationKeys}
-          interactive={isPlanetarium}
-        />
-
         <div
           className="home__stageFade"
           style={{ opacity: isPlanetarium ? 0.25 : 0.9 }}

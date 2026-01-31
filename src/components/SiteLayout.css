@@ -145,6 +145,12 @@
   padding: 0;
 }
 
+/* When Home is in planetarium mode, let pointer events pass through to the
+   background canvas, except for explicit UI like the exit button/preview. */
+.site-main.is-home.is-planetarium {
+  pointer-events: none;
+}
+
 @media (max-width: 760px) {
   .site-header {
     padding: 14px 14px;
@@ -177,7 +183,21 @@
     padding: 170px 14px 36px;
   }
 
+  .site-main.is-home.is-planetarium {
+    pointer-events: none;
+  }
+
   .header-hint {
     display: none;
   }
+}
+
+/* 404 layout: remove global shell padding so the full-page 404 can occupy
+   the whole viewport, similar to the ComingSoon layout. */
+.site-main.is-notFound {
+  padding: 0;
+}
+
+.site-shell.has-dock .site-main.is-notFound {
+  padding-bottom: 0;
 }

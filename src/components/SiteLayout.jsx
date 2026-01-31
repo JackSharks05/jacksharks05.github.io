@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import CardNav from "./CardNav";
 import Dock from "./Dock";
+import GalaxyCanvas from "./GalaxyCanvas";
 import starPng from "../assets/star.png";
 import starSvg from "../assets/star.svg";
 import "./SiteLayout.css";
@@ -29,6 +30,8 @@ export default function SiteLayout() {
   const [logoSrc, setLogoSrc] = useState(starPng);
   const [navOpen, setNavOpen] = useState(false);
   const [compactDock, setCompactDock] = useState(false);
+  const [hidePlanetarium, setHidePlanetarium] = useState(false);
+  const [isNotFound, setIsNotFound] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -78,6 +81,16 @@ export default function SiteLayout() {
     window.addEventListener("planetarium:state", onPlanetariumState);
     return () =>
       window.removeEventListener("planetarium:state", onPlanetariumState);
+  }, []);
+
+  useEffect(() => {
+    const on404 = (e) => {
+      const active = Boolean(e?.detail?.active);
+      setHidePlanetarium(active);
+      setIsNotFound(active);
+    };
+    window.addEventListener("planetarium:404", on404);
+    return () => window.removeEventListener("planetarium:404", on404);
   }, []);
 
   useEffect(() => {
@@ -195,6 +208,24 @@ export default function SiteLayout() {
             : "site-shell"
       }
     >
+      {!hidePlanetarium && (
+        <GalaxyCanvas
+          onConstellationClick={(payload) => {
+            window.dispatchEvent(
+              new CustomEvent("planetarium:click", { detail: payload }),
+            );
+          }}
+          forcedProjectionMode="fill"
+          onLoaded={() => {
+            window.dispatchEvent(new CustomEvent("planetarium:loaded"));
+          }}
+          onFirstDrag={() => {
+            window.dispatchEvent(new CustomEvent("planetarium:first-drag"));
+          }}
+          interactive={isHome && planetariumActive}
+        />
+      )}
+
       <header className="site-header">
         <div className="header-left">
           <div
@@ -219,17 +250,21 @@ export default function SiteLayout() {
 
             <Link
               to="/"
-              state={{ enterPlanetarium: true }}
+              state={{ openIntro: true }}
               className="brandHome"
               aria-label="Home"
-              onClick={() => {
-                // If we're already on Home, the route may not remount. Fire a
-                // lightweight event so Home can re-enter planetarium reliably.
-                window.dispatchEvent(
-                  new CustomEvent("planetarium:enter", {
-                    detail: { source: "brand" },
-                  }),
-                );
+              onClick={(e) => {
+                // On Home, just toggle into the intro mode; on other routes
+                // let the navigation happen with openIntro state.
+                if (isHome) {
+                  e.preventDefault();
+                  setNavOpen(false);
+                  window.dispatchEvent(
+                    new CustomEvent("planetarium:intro", {
+                      detail: { source: "brand" },
+                    }),
+                  );
+                }
               }}
             >
               <div className="brand__text">
@@ -280,7 +315,17 @@ export default function SiteLayout() {
         />
       </div>
 
-      <main className={isHome ? "site-main is-home" : "site-main"}>
+      <main
+        className={
+          isHome
+            ? planetariumActive
+              ? "site-main is-home is-planetarium"
+              : "site-main is-home"
+            : isNotFound
+              ? "site-main is-notFound"
+              : "site-main"
+        }
+      >
         <Outlet />
       </main>
 
@@ -295,13 +340,13 @@ export default function SiteLayout() {
               onClick: () => {
                 if (isHome) {
                   window.dispatchEvent(
-                    new CustomEvent("planetarium:intro", {
+                    new CustomEvent("planetarium:enter", {
                       detail: { source: "dock" },
                     }),
                   );
                   return;
                 }
-                navigate("/", { state: { openIntro: true } });
+                navigate("/", { state: { enterPlanetarium: true } });
               },
             },
             ...(compactDock
