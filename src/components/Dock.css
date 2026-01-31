@@ -1,0 +1,65 @@
+.dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  z-index: 80;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  padding: 0 14px;
+}
+
+.dock__bar {
+  pointer-events: auto;
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 18px;
+  border: 1px solid var(--theme-outline-outer, rgba(98, 31, 109, 0.92));
+  background: rgba(8, 12, 24, 0.55);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+}
+
+.dock__item {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid var(--theme-outline-inner, rgba(254, 0, 0, 0.32));
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  letter-spacing: 0.2px;
+  font-weight: 700;
+}
+
+.dock__item.is-active {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(140, 190, 255, 0.35);
+}
+
+.dock__item.is-disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.dock__label {
+  font-size: 13px;
+}
+
+@media (max-width: 520px) {
+  .dock {
+    bottom: 12px;
+  }
+
+  .dock__bar {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .dock__item {
+    flex: 1;
+    justify-content: center;
+  }
+}

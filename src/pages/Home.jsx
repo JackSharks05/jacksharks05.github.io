@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import GalaxyCanvas from "../components/GalaxyCanvas";
 import RotatingText from "../components/RotatingText";
+import ImageCarousel from "../components/ImageCarousel";
 import { getConstellationCard } from "../data/constellationCards";
 import { getSolarSystemCard, sunLink } from "../data/solarSystemCards";
 import "./Home.css";
@@ -9,6 +10,14 @@ import "./Home.css";
 export default function Home() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [hasVisitedPlanetarium, setHasVisitedPlanetarium] = useState(() => {
+    try {
+      return Boolean(sessionStorage.getItem("planetarium:loaded"));
+    } catch {
+      return false;
+    }
+  });
 
   const [isPlanetarium, setIsPlanetarium] = useState(true);
   const [skyLoaded, setSkyLoaded] = useState(false);
@@ -22,9 +31,25 @@ export default function Home() {
   const stageRef = useRef(null);
   const landingRef = useRef(null);
   const lastEnterHandledLocationKeyRef = useRef(null);
+  const lastIntroHandledLocationKeyRef = useRef(null);
   const exitAutoEnterCooldownUntilRef = useRef(0);
 
   const uiTimerRef = useRef(null);
+  const hasActivatedConstellationRef = useRef(false);
+
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("planetarium:state", { detail: { isPlanetarium } }),
+    );
+
+    return () => {
+      window.dispatchEvent(
+        new CustomEvent("planetarium:state", {
+          detail: { isPlanetarium: false },
+        }),
+      );
+    };
+  }, [isPlanetarium]);
 
   useEffect(() => {
     // Lock scroll while in planetarium; unlock once "Exit" is pressed.
@@ -52,10 +77,36 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
   };
 
+  const openIntro = ({ smooth = true } = {}) => {
+    setIsPreviewOpen(false);
+    setIsPlanetarium(false);
+
+    // Suppress the auto-enter-on-top behavior while we transition.
+    exitAutoEnterCooldownUntilRef.current = Date.now() + 1200;
+
+    requestAnimationFrame(() => {
+      const el = landingRef.current;
+      if (!el) return;
+      const landingTop = el.getBoundingClientRect().top + (window.scrollY || 0);
+      const revealFactor = window.innerWidth <= 520 ? 0.25 : 0.5;
+      const target = Math.max(
+        0,
+        landingTop - window.innerHeight * revealFactor,
+      );
+      window.scrollTo({ top: target, behavior: smooth ? "smooth" : "auto" });
+    });
+  };
+
   useEffect(() => {
     const onEnter = () => enterPlanetarium({ smooth: true });
     window.addEventListener("planetarium:enter", onEnter);
     return () => window.removeEventListener("planetarium:enter", onEnter);
+  }, []);
+
+  useEffect(() => {
+    const onIntro = () => openIntro({ smooth: true });
+    window.addEventListener("planetarium:intro", onIntro);
+    return () => window.removeEventListener("planetarium:intro", onIntro);
   }, []);
 
   useEffect(() => {
@@ -67,10 +118,22 @@ export default function Home() {
     enterPlanetarium({ smooth: false });
   }, [location.key, location.state]);
 
+  useEffect(() => {
+    if (!location?.state?.openIntro) return;
+    if (lastIntroHandledLocationKeyRef.current === location.key) return;
+    lastIntroHandledLocationKeyRef.current = location.key;
+    openIntro({ smooth: false });
+  }, [location.key, location.state]);
+
   const handleConstellationClick = (payload) => {
     const kind = payload?.kind ?? "constellation";
     const key = payload?.key ?? null;
     const name = payload?.name ?? "";
+
+    if (kind === "constellation" && !hasActivatedConstellationRef.current) {
+      hasActivatedConstellationRef.current = true;
+      window.dispatchEvent(new CustomEvent("constellation:activated"));
+    }
 
     if (payload?.anchorClient) setPreviewAnchorClient(payload.anchorClient);
 
@@ -114,6 +177,17 @@ export default function Home() {
       linkText: card.linkText || "See more",
     });
     setIsPreviewOpen(true);
+  };
+
+  const openPreviewTarget = () => {
+    const to = constellationPreview?.path;
+    if (!to) return;
+    const isExternal = /^https?:\/\//i.test(to);
+    if (isExternal) {
+      window.open(to, "_blank", "noopener,noreferrer");
+      return;
+    }
+    navigate(to);
   };
 
   const handleTogglePlanetarium = () => {
@@ -175,6 +249,19 @@ export default function Home() {
 
   const handleSkyLoaded = () => {
     setSkyLoaded(true);
+
+    // If the user has already loaded the planetarium once in this session,
+    // don't make them wait again.
+    if (hasVisitedPlanetarium) {
+      setUiUnlocked(true);
+      if (uiTimerRef.current) {
+        window.clearTimeout(uiTimerRef.current);
+        uiTimerRef.current = null;
+      }
+      return;
+    }
+
+    setHasVisitedPlanetarium(true);
     setUiUnlocked(false);
     if (uiTimerRef.current) window.clearTimeout(uiTimerRef.current);
     uiTimerRef.current = window.setTimeout(() => {
@@ -268,7 +355,7 @@ export default function Home() {
             <button
               type="button"
               className="home__constellationPreviewLink"
-              onClick={() => navigate(constellationPreview.path)}
+              onClick={openPreviewTarget}
             >
               {constellationPreview.linkText || "See more"}
             </button>
@@ -283,18 +370,77 @@ export default function Home() {
 
           <div className="home__container">
             <div className="home__intro">
-              <h2 className="home__h2">Hey, I’m Jack!</h2>
-              <p className="home__lead">
-                I build things at the intersection of{" "}
-                <RotatingText
-                  texts={["software", "research", "creative work"]}
-                  rotationInterval={2200}
-                  staggerDuration={0.02}
-                  staggerFrom="first"
-                  className="home__rotatingText"
+              <div className="home__introText">
+                <h2 className="home__h2">Hey, I’m Jack!</h2>
+                <p className="home__lead">
+                  I am{" "}
+                  <RotatingText
+                    texts={[
+                      "a sidequester",
+                      "a puzzlehunter",
+                      "a cognitive scientist",
+                      "an AI researcher",
+                      "a polyglot",
+                      "passionately interdisciplinary",
+                      "an award-winning speaker",
+                      "a classical musician",
+                      "intellectually fearless",
+                      "a long distance runner",
+                      "a translator",
+                      "a horticulturist",
+                      "a linguist",
+                      "a mentor",
+                      "a ski coach",
+                      "a tester",
+                      "a traveler",
+                      "a inspirer",
+                      "a team leader",
+                      "a synthesizer",
+                      "a behavioral scientist",
+                      "a visionary",
+                      "a peer advisor",
+                      "a slalom skier",
+                      "a catalyst",
+                      "a film editor",
+                      "a calligrapher",
+                      "a stargazer",
+                    ]}
+                    rotationInterval={2200}
+                    staggerDuration={0.02}
+                    staggerFrom="first"
+                    className="home__rotatingText"
+                  />
+                  . I build human-centric decision systems at the intersection
+                  of Cognitive Science and Computer Science. I do a lot of
+                  things and love even more! Welcome to my planetarium
+                  portfolio! You can use this site to learn about me, see my
+                  projects & research experience, hear what I've been listening
+                  to recently, read my thoughts...
+                </p>
+                <p className="home__lead">
+                  ...and you can <i>also</i> use it as a fully functioning and
+                  accurate planetarium, accurate to the sky above you (really!
+                  try it out!)!
+                </p>
+              </div>
+
+              <div className="home__introMedia">
+                <ImageCarousel
+                  className="home__carousel carousel--portrait"
+                  ariaLabel="Introduction photos"
+                  items={[
+                    { key: "intro-1", caption: "Add an intro photo here" },
+                    {
+                      key: "intro-2",
+                      caption: "Talk / research / project shot",
+                    },
+                    {
+                      key: "intro-3",
+                      caption: "Travel / music / something fun",
+                    },
+                  ]}
                 />
-                . This site is a planetarium you can navigate.
-              </p>
+              </div>
             </div>
 
             <div className="home__cards">

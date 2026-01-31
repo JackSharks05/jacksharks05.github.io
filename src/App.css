@@ -4,6 +4,12 @@
   box-sizing: border-box;
 }
 
+:root {
+  /* Keep these in sync with src/components/CardNav.css */
+  --theme-outline-outer: rgba(98, 31, 109, 0.92);
+  --theme-outline-inner: rgba(254, 0, 0, 0.32);
+}
+
 html {
   -webkit-text-size-adjust: 100%;
 }

@@ -4,7 +4,7 @@
 }
 
 .page__card {
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--theme-outline-outer, rgba(98, 31, 109, 0.92));
   background: rgba(10, 14, 28, 0.6);
   backdrop-filter: blur(10px);
   border-radius: 18px;
@@ -29,12 +29,98 @@
   line-height: 1.7;
 }
 
+.page__mediaRow {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.95fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.page__mediaAside {
+  position: relative;
+}
+
 .page__content p + p {
   margin-top: 12px;
 }
 
 .page__content a {
   color: rgba(140, 190, 255, 0.95);
+}
+
+.page__sectionTitle {
+  margin-top: 18px;
+  font-size: 14px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.page__meta {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.page__pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(8, 12, 24, 0.32);
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 12px;
+}
+
+.page__list {
+  margin-top: 10px;
+  padding-left: 18px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.page__list li + li {
+  margin-top: 6px;
+}
+
+.page__grid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.page__gridItem {
+  border: 1px solid var(--theme-outline-inner, rgba(254, 0, 0, 0.32));
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.page__metaLabel {
+  font-size: 12px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.page__metaValue {
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.86);
+  line-height: 1.6;
+}
+
+.page__callout {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--theme-outline-inner, rgba(254, 0, 0, 0.32));
+  background: rgba(8, 12, 24, 0.32);
+  color: rgba(255, 255, 255, 0.82);
 }
 
 @media (max-width: 760px) {
@@ -44,5 +130,13 @@
 
   .page__title {
     font-size: 28px;
+  }
+
+  .page__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page__mediaRow {
+    grid-template-columns: 1fr;
   }
 }

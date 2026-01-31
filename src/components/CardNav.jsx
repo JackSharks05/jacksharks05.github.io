@@ -262,48 +262,6 @@ export default function CardNav({
               >
                 {item.label}
               </NavLink>
-
-              {item.links && item.links.length > 0 ? (
-                <div className="nav-card-links">
-                  {item.links.map((lnk, i) => {
-                    const key = `${item.to}:${lnk.label}:${i}`;
-                    if (lnk.href) {
-                      return (
-                        <a
-                          key={key}
-                          className="nav-card-link"
-                          href={lnk.href}
-                          aria-label={lnk.ariaLabel || lnk.label}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <span
-                            className="nav-card-link-icon"
-                            aria-hidden="true"
-                          >
-                            ↗
-                          </span>
-                          {lnk.label}
-                        </a>
-                      );
-                    }
-
-                    return (
-                      <Link
-                        key={key}
-                        className="nav-card-link"
-                        to={lnk.to || item.to}
-                        aria-label={lnk.ariaLabel || lnk.label}
-                      >
-                        <span className="nav-card-link-icon" aria-hidden="true">
-                          ↗
-                        </span>
-                        {lnk.label}
-                      </Link>
-                    );
-                  })}
-                </div>
-              ) : null}
             </div>
           ))}
         </div>

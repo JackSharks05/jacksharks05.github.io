@@ -160,7 +160,10 @@ const RotatingText = forwardRef(function RotatingText(props, ref) {
     return () => window.clearInterval(intervalId);
   }, [next, rotationInterval, auto]);
 
-  const totalChars = elements.reduce((sum, word) => sum + word.characters.length, 0);
+  const totalChars = elements.reduce(
+    (sum, word) => sum + word.characters.length,
+    0,
+  );
 
   return (
     <motion.span
@@ -170,10 +173,15 @@ const RotatingText = forwardRef(function RotatingText(props, ref) {
       transition={transition}
     >
       <span className="text-rotate-sr-only">{safeTexts[currentTextIndex]}</span>
-      <AnimatePresence mode={animatePresenceMode} initial={animatePresenceInitial}>
+      <AnimatePresence
+        mode={animatePresenceMode}
+        initial={animatePresenceInitial}
+      >
         <motion.span
           key={currentTextIndex}
-          className={cn(splitBy === "lines" ? "text-rotate-lines" : "text-rotate")}
+          className={cn(
+            splitBy === "lines" ? "text-rotate-lines" : "text-rotate",
+          )}
           layout
           aria-hidden="true"
         >
@@ -195,14 +203,19 @@ const RotatingText = forwardRef(function RotatingText(props, ref) {
                     exit={exit}
                     transition={{
                       ...transition,
-                      delay: getStaggerDelay(previousCharsCount + charIndex, totalChars),
+                      delay: getStaggerDelay(
+                        previousCharsCount + charIndex,
+                        totalChars,
+                      ),
                     }}
                     className={cn("text-rotate-element", elementLevelClassName)}
                   >
                     {char}
                   </motion.span>
                 ))}
-                {wordObj.needsSpace && <span className="text-rotate-space"> </span>}
+                {wordObj.needsSpace && (
+                  <span className="text-rotate-space"> </span>
+                )}
               </span>
             );
           })}

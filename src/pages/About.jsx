@@ -1,4 +1,5 @@
 import React from "react";
+import ImageCarousel from "../components/ImageCarousel";
 import "./Page.css";
 
 export default function About() {
@@ -7,17 +8,103 @@ export default function About() {
       <section className="page__card">
         <h1 className="page__title">About</h1>
         <p className="page__lede">
-          A quick intro, what I care about, and what I’m exploring right now.
+          Computer Science + Cognitive Science at Brown University (’28). I
+          build human-centric decision systems.
         </p>
         <div className="page__content">
-          <p>
-            Replace this with your bio: where you’re based, what you
-            study/build, and the through-line connecting your work.
-          </p>
-          <p>
-            You can also link out to your GitHub, LinkedIn, CV, or a longer
-            “now” page.
-          </p>
+          <div className="page__mediaRow">
+            <div>
+              <p>
+                I’m Jack de Haan — a builder with a research mindset. My
+                through-line is the intersection of Cognitive Science (how
+                humans choose) and Computer Science (how systems enforce and
+                scale those choices).
+              </p>
+              <p>
+                I care about shipping real tools, but I’m equally obsessed with
+                the “why”: incentives, interfaces, and the hidden decision
+                systems that shape outcomes in the real world.
+              </p>
+            </div>
+
+            <div className="page__mediaAside">
+              <ImageCarousel
+                className="carousel--portrait"
+                ariaLabel="About photos"
+                items={[
+                  { key: "about-1", caption: "Add a portrait / bio photo" },
+                  { key: "about-2", caption: "Add a project / talk photo" },
+                  {
+                    key: "about-3",
+                    caption: "Add something personal (music/travel)",
+                  },
+                ]}
+              />
+            </div>
+          </div>
+
+          <h2 className="page__sectionTitle">Archetypes</h2>
+          <ul className="page__list">
+            <li>
+              <strong>The Force Multiplier</strong> — I don’t just add value; I
+              multiply a team’s velocity.
+            </li>
+            <li>
+              <strong>The Process Architect</strong> — I treat products and
+              organizations as decision systems you can debug.
+            </li>
+            <li>
+              <strong>The Synthesizer</strong> — I connect ideas across HCI,
+              behavioral economics, and system architecture.
+            </li>
+          </ul>
+
+          <h2 className="page__sectionTitle">Current Focus</h2>
+          <ul className="page__list">
+            <li>
+              Human-centered intelligent systems and ethical choice architecture
+            </li>
+            <li>AI safety: robustness, interpretability, and alignment</li>
+            <li>
+              Decision systems for high-stakes, messy, real-world constraints
+            </li>
+          </ul>
+
+          <h2 className="page__sectionTitle">Skills</h2>
+          <div className="page__grid">
+            <div className="page__gridItem">
+              <div className="page__metaLabel">Programming Languages</div>
+              <div className="page__metaValue">
+                Python, TypeScript/JavaScript, Java, R, Swift, SQL
+              </div>
+            </div>
+            <div className="page__gridItem">
+              <div className="page__metaLabel">Frameworks</div>
+              <div className="page__metaValue">
+                React, Node.js, Next.js, PyTorch, TensorFlow, scikit-learn
+              </div>
+            </div>
+            <div className="page__gridItem">
+              <div className="page__metaLabel">Tools</div>
+              <div className="page__metaValue">Git, LaTeX, Tableau, Vercel</div>
+            </div>
+            <div className="page__gridItem">
+              <div className="page__metaLabel">
+                Languages (Fluent to Beginner)
+              </div>
+              <div className="page__metaValue">
+                Mandarin, Spanish, French, ASL, German, Italian, Dutch,
+                Bulgarian, Cantonese
+              </div>
+            </div>
+          </div>
+
+          <h2 className="page__sectionTitle">Honors (Selected)</h2>
+          <ul className="page__list">
+            <li>2nd place (out of 5,000+) — MIT Mystery Hunt 2025</li>
+            <li>2nd place — Tsinghua Inter-University Speech Contest</li>
+            <li>Selected class speaker — Princeton in Beijing</li>
+          </ul>
         </div>
       </section>
     </div>

@@ -3,6 +3,8 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import SiteLayout from "./components/SiteLayout";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import Now from "./pages/Now";
+import ThisSite from "./pages/ThisSite";
 import Projects from "./pages/Projects";
 import Research from "./pages/Research";
 import Music from "./pages/Music";
@@ -30,6 +32,8 @@ function App() {
       <Route element={<SiteLayout />}>
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
+        <Route path="now" element={<Now />} />
+        <Route path="this-site" element={<ThisSite />} />
         <Route path="projects" element={<Projects />} />
         <Route path="research" element={<Research />} />
         <Route path="music" element={<Music />} />

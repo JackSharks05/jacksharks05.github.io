@@ -133,7 +133,12 @@ export const constellationCards = {
   },
   Tri: { title: "Triangulum", fact: "(Add a fun fact here)", to: "/projects" },
   Tuc: { title: "Tucana", fact: "(Add a fun fact here)", to: "/projects" },
-  UMa: { title: "Ursa Major", fact: "(Add a fun fact here)", to: "/about" },
+  UMa: {
+    title: "Ursa Major",
+    fact: "I work as a ski coach in Stratton Mountain, and one of their chairlifts is called Ursa Express! (Not my favourite though...)",
+    to: "/",
+    linkText: "Read about my work experience!",
+  },
   UMi: { title: "Ursa Minor", fact: "(Add a fun fact here)", to: "/about" },
   Vel: { title: "Vela", fact: "(Add a fun fact here)", to: "/projects" },
   Vir: { title: "Virgo", fact: "(Add a fun fact here)", to: "/projects" },

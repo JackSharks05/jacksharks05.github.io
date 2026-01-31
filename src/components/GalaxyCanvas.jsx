@@ -255,6 +255,7 @@ const GalaxyCanvas = ({
   });
   const didSignalLoadedRef = useRef(false);
   const didSignalFirstDragRef = useRef(false);
+  const isFirstLoadRef = useRef(true);
 
   // Get user location and fetch star catalog on mount
   useEffect(() => {
@@ -266,6 +267,8 @@ const GalaxyCanvas = ({
           return true;
         }
       })();
+
+      isFirstLoadRef.current = isFirstLoad;
 
       setLoadingMessage("Getting your location...");
       await new Promise((resolve) => setTimeout(resolve, 200));
@@ -316,6 +319,12 @@ const GalaxyCanvas = ({
     if (loading) {
       setControlsUnlocked(false);
       setControlsVisible(false);
+      return;
+    }
+
+    // Returning visitors shouldn't need to wait again.
+    if (!isFirstLoadRef.current) {
+      setControlsUnlocked(true);
       return;
     }
 

@@ -31,7 +31,7 @@
 .home__landing {
   position: relative;
   z-index: 2;
-  padding: 34px 22px 70px;
+  padding: 34px 22px calc(70px + var(--dock-h, 0px));
   background:
     radial-gradient(
       900px 520px at 70% 0%,
@@ -174,7 +174,19 @@
 }
 
 .home__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.9fr);
+  gap: 16px;
+  align-items: start;
   margin-bottom: 22px;
+}
+
+.home__carousel {
+  margin-top: 0;
+}
+
+.home__introMedia {
+  position: relative;
 }
 
 .home__h2 {
@@ -184,7 +196,7 @@
 
 .home__lead {
   margin-top: 10px;
-  max-width: 720px;
+  max-width: 1060px;
   color: rgba(255, 255, 255, 0.76);
   line-height: 1.55;
 }
@@ -207,7 +219,7 @@
 }
 
 .home__card {
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--theme-outline-outer, rgba(98, 31, 109, 0.92));
   background: rgba(8, 12, 24, 0.35);
   backdrop-filter: blur(10px);
   border-radius: 16px;
@@ -263,7 +275,7 @@
 }
 
 .home__panel {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--theme-outline-inner, rgba(254, 0, 0, 0.32));
   background: rgba(0, 0, 0, 0.4);
   border-radius: 16px;
   padding: 16px;
@@ -362,6 +374,10 @@
   }
 
   .home__cards {
+    grid-template-columns: 1fr;
+  }
+
+  .home__intro {
     grid-template-columns: 1fr;
   }
 

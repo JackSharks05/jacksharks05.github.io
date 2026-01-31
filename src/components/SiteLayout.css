@@ -15,6 +15,10 @@
     #000;
 }
 
+.site-shell.has-dock {
+  --dock-h: 84px;
+}
+
 .site-shell.is-home {
   background: transparent;
 }
@@ -47,7 +51,7 @@
   gap: 10px;
   padding: 8px 10px;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid var(--theme-outline-outer, rgba(98, 31, 109, 0.92));
   background: rgba(8, 12, 24, 0.45);
   backdrop-filter: blur(10px);
 }
@@ -109,6 +113,11 @@
   font-size: 12px;
   color: rgba(255, 255, 255, 0.65);
   letter-spacing: 0.5px;
+  transition: opacity 420ms ease;
+}
+
+.header-hint.is-hidden {
+  opacity: 0;
 }
 
 .site-nav {
@@ -116,7 +125,7 @@
   top: 86px;
   left: 22px;
   right: auto;
-  width: min(360px, calc(100vw - 44px));
+  width: auto;
   z-index: 55;
   pointer-events: auto;
 }
@@ -125,6 +134,10 @@
   position: relative;
   z-index: 10;
   padding: 160px 22px 42px;
+}
+
+.site-shell.has-dock .site-main {
+  padding-bottom: calc(42px + var(--dock-h, 0px));
 }
 
 .site-main.is-home {

@@ -1,0 +1,23 @@
+.scroll-stack-scroller {
+  position: relative;
+  width: 100%;
+}
+
+.scroll-stack-inner {
+  position: relative;
+}
+
+.scroll-stack-card {
+  position: relative;
+  transform-origin: top center;
+}
+
+.scroll-stack-end {
+  height: 55vh;
+}
+
+@media (max-width: 760px) {
+  .scroll-stack-end {
+    height: 45vh;
+  }
+}
