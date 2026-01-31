@@ -25,14 +25,18 @@ export default function Research() {
             <ScrollStackItem itemClassName="research__item">
               <div className="research__header">
                 <div className="research__heading">
-                  <h2 className="research__title">
-                    Duane Lab (PRIME School of Engineering)
-                  </h2>
-                  <div className="research__subhead">
-                    <span className="research__subheadItem">
-                      Dates: (add dates)
-                    </span>
-                    <span className="research__subheadItem">PI: (add PI)</span>
+                  <div className="research__titleRow">
+                    <h2 className="research__title">
+                      Duane Lab (PRIME School of Engineering)
+                    </h2>
+                    <div className="research__subhead">
+                      <span className="research__subheadItem">
+                        Dates: (add dates)
+                      </span>
+                      <span className="research__subheadItem">
+                        PI: (add PI)
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div className="research__logoWrap" aria-hidden="true">
@@ -76,12 +80,16 @@ export default function Research() {
             <ScrollStackItem itemClassName="research__item">
               <div className="research__header">
                 <div className="research__heading">
-                  <h2 className="research__title">Brown AI Safety Team</h2>
-                  <div className="research__subhead">
-                    <span className="research__subheadItem">
-                      Dates: (add dates)
-                    </span>
-                    <span className="research__subheadItem">PI: (add PI)</span>
+                  <div className="research__titleRow">
+                    <h2 className="research__title">Brown AI Safety Team</h2>
+                    <div className="research__subhead">
+                      <span className="research__subheadItem">
+                        Dates: (add dates)
+                      </span>
+                      <span className="research__subheadItem">
+                        PI: (add PI)
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div className="research__logoWrap" aria-hidden="true">
@@ -120,14 +128,18 @@ export default function Research() {
             <ScrollStackItem itemClassName="research__item">
               <div className="research__header">
                 <div className="research__heading">
-                  <h2 className="research__title">
-                    Brown Language and Thought Lab
-                  </h2>
-                  <div className="research__subhead">
-                    <span className="research__subheadItem">
-                      Dates: (add dates)
-                    </span>
-                    <span className="research__subheadItem">PI: (add PI)</span>
+                  <div className="research__titleRow">
+                    <h2 className="research__title">
+                      Brown Language and Thought Lab
+                    </h2>
+                    <div className="research__subhead">
+                      <span className="research__subheadItem">
+                        Dates: (add dates)
+                      </span>
+                      <span className="research__subheadItem">
+                        PI: (add PI)
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div className="research__logoWrap" aria-hidden="true">
@@ -164,12 +176,16 @@ export default function Research() {
             <ScrollStackItem itemClassName="research__item">
               <div className="research__header">
                 <div className="research__heading">
-                  <h2 className="research__title">Amicus Brain Innovations</h2>
-                  <div className="research__subhead">
-                    <span className="research__subheadItem">
-                      Dates: (add dates)
-                    </span>
-                    <span className="research__subheadItem">PI: (add PI)</span>
+                  <div className="research__titleRow">
+                    <h2 className="research__title">Amicus Brain Innovations</h2>
+                    <div className="research__subhead">
+                      <span className="research__subheadItem">
+                        Dates: (add dates)
+                      </span>
+                      <span className="research__subheadItem">
+                        PI: (add PI)
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div className="research__logoWrap" aria-hidden="true">
