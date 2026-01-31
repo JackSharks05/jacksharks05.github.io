@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import GalaxyCanvas from "../components/GalaxyCanvas";
+import RotatingText from "../components/RotatingText";
 import { getConstellationCard } from "../data/constellationCards";
 import { getSolarSystemCard, sunLink } from "../data/solarSystemCards";
 import "./Home.css";
@@ -282,10 +283,17 @@ export default function Home() {
 
           <div className="home__container">
             <div className="home__intro">
-              <h2 className="home__h2">Hi, I’m Jack.</h2>
+              <h2 className="home__h2">Hey, I’m Jack!</h2>
               <p className="home__lead">
-                I build things at the intersection of software, research, and
-                creative work. This site is a planetarium you can navigate.
+                I build things at the intersection of{" "}
+                <RotatingText
+                  texts={["software", "research", "creative work"]}
+                  rotationInterval={2200}
+                  staggerDuration={0.02}
+                  staggerFrom="first"
+                  className="home__rotatingText"
+                />
+                . This site is a planetarium you can navigate.
               </p>
             </div>
 

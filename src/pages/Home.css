@@ -189,6 +189,16 @@
   line-height: 1.55;
 }
 
+.home__rotatingText {
+  display: inline-flex;
+  padding: 2px 8px;
+  margin: 0 2px;
+  border-radius: 999px;
+  border: 1px solid rgba(140, 190, 255, 0.22);
+  background: rgba(8, 12, 24, 0.35);
+  color: rgba(140, 190, 255, 0.95);
+}
+
 .home__cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -345,6 +355,10 @@
 
   .home__h2 {
     font-size: 28px;
+  }
+
+  .home__rotatingText {
+    padding: 3px 10px;
   }
 
   .home__cards {

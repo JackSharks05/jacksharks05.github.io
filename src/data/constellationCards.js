@@ -97,7 +97,12 @@ export const constellationCards = {
   Nor: { title: "Norma", fact: "(Add a fun fact here)", to: "/projects" },
   Oct: { title: "Octans", fact: "(Add a fun fact here)", to: "/about" },
   Oph: { title: "Ophiuchus", fact: "(Add a fun fact here)", to: "/research" },
-  Ori: { title: "Orion", fact: "(Add a fun fact here)", to: "/projects" },
+  Ori: {
+    title: "Orion",
+    fact: "I love taking photos, especially of the stars. One of my best photos was of Orion!",
+    to: "/photography-videography",
+    linkText: "Take a look!",
+  },
   Pav: { title: "Pavo", fact: "(Add a fun fact here)", to: "/projects" },
   Peg: { title: "Pegasus", fact: "(Add a fun fact here)", to: "/projects" },
   Per: { title: "Perseus", fact: "(Add a fun fact here)", to: "/projects" },
