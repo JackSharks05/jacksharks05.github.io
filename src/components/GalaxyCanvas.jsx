@@ -11,6 +11,7 @@ import {
   getConstellationHipIds,
   getAllConstellationKeys,
 } from "../data/starCatalog";
+import { getConstellationCard } from "../data/constellationCards";
 import EarthGlobe from "./EarthGlobe";
 import { computeSolarSystemObjects } from "../utils/solarSystem";
 import "./GalaxyCanvas.css";
@@ -567,6 +568,7 @@ const GalaxyCanvas = ({
       constellationsRef.current = getAllConstellationKeys()
         .map((key) => {
           const mapping = constellationMappings[key] || null;
+          const card = getConstellationCard(key, "");
 
           // Build the constellation star set from the HIP endpoints referenced by the
           // authoritative stick-figure line dataset.
@@ -587,7 +589,7 @@ const GalaxyCanvas = ({
 
           return {
             key,
-            name: mapping?.name || key,
+            name: card?.title || mapping?.name || key,
             section: mapping?.section || null,
             stars,
             connections,
@@ -1243,6 +1245,7 @@ const GalaxyCanvas = ({
   const handlePointerDown = (e) => {
     if (!canvasRef.current) return;
     if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (e.pointerType !== "mouse") e.preventDefault();
 
     // Cancel any reset animation.
     if (resetAnimRef.current) {
@@ -1284,6 +1287,7 @@ const GalaxyCanvas = ({
     if (!dragRef.current.active) return;
     if (dragRef.current.pointerId !== e.pointerId) return;
     if (!canvasRef.current) return;
+    if (e.pointerType !== "mouse") e.preventDefault();
 
     const rect = canvasRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -1318,6 +1322,7 @@ const GalaxyCanvas = ({
   const handlePointerUp = (e) => {
     if (!dragRef.current.active) return;
     if (dragRef.current.pointerId !== e.pointerId) return;
+    if (e.pointerType !== "mouse") e.preventDefault();
     dragRef.current.active = false;
     dragRef.current.pointerId = null;
     setIsDragging(false);

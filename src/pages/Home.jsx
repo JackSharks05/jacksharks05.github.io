@@ -128,7 +128,11 @@ export default function Home() {
           if (!el) return;
           const landingTop =
             el.getBoundingClientRect().top + (window.scrollY || 0);
-          const target = Math.max(0, landingTop - window.innerHeight * 0.5);
+          const revealFactor = window.innerWidth <= 520 ? 0.25 : 0.5;
+          const target = Math.max(
+            0,
+            landingTop - window.innerHeight * revealFactor,
+          );
           window.scrollTo({ top: target, behavior: "smooth" });
         });
       } else {
