@@ -307,8 +307,40 @@
 
 @media (max-width: 760px) {
   .home__planetariumToggle {
-    right: 14px;
+    left: 14px;
+    right: auto;
     bottom: 14px;
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 16px;
+    font-size: 14px;
+  }
+
+  .home__constellationPreview {
+    width: auto;
+    padding: 14px 14px 14px;
+    border-radius: 16px;
+  }
+
+  .home__constellationPreviewClose {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+
+  .home__constellationPreviewTitle {
+    font-size: 13px;
+  }
+
+  .home__constellationPreviewBlurb {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .home__constellationPreviewLink {
+    height: 44px;
+    border-radius: 14px;
+    font-size: 14px;
   }
 
   .home__h2 {
@@ -321,5 +353,12 @@
 
   .home__split {
     grid-template-columns: 1fr;
+  }
+
+  .home__quickBtn {
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 14px;
+    font-size: 14px;
   }
 }

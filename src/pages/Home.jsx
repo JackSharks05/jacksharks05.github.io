@@ -221,6 +221,18 @@ export default function Home() {
             style={(() => {
               if (!previewAnchorClient || !stageRef.current) return undefined;
               const rect = stageRef.current.getBoundingClientRect();
+
+              // Mobile: keep the preview fully readable and on-screen.
+              if (rect.width <= 520) {
+                return {
+                  left: 14,
+                  right: 14,
+                  bottom: 74,
+                  top: "auto",
+                  transform: "none",
+                };
+              }
+
               const x = previewAnchorClient.x - rect.left;
               const y = previewAnchorClient.y - rect.top;
               const placeRight = x < rect.width * 0.55;

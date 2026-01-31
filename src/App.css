@@ -4,11 +4,22 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   font-family: "Spectral", ui-serif, Georgia, "Times New Roman", Times, serif;
   overflow: auto;
   background: #000;
   color: #fff;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }
 
 html,

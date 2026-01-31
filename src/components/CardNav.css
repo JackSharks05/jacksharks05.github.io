@@ -84,3 +84,10 @@
   flex-direction: column;
   gap: 10px;
 }
+
+@media (max-width: 760px) {
+  .nav-card-link {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+}

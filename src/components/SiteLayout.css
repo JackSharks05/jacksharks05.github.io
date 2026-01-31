@@ -136,6 +136,22 @@
     padding: 14px 14px;
   }
 
+  .brandPanel {
+    padding: 10px 12px;
+    border-radius: 16px;
+  }
+
+  .site-menu-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+  }
+
+  .site-menu-btn__icon {
+    width: 24px;
+    height: 24px;
+  }
+
   .site-nav {
     top: 78px;
     left: 14px;
