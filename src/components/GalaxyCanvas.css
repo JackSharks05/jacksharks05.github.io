@@ -289,8 +289,10 @@
 
 @media (max-width: 768px) {
   .controls-panel {
+    left: 14px;
     right: 14px;
     bottom: 14px;
+    align-items: stretch;
   }
 
   .controls-toggle {
@@ -302,9 +304,13 @@
 
   .controls-content {
     min-width: 0;
-    width: min(340px, calc(100vw - 28px));
+    width: 100%;
     padding: 16px;
-    max-height: calc(100vh - 140px);
+    height: 50vh;
+    max-height: 50vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   .control-group label {
