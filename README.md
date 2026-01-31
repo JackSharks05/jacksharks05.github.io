@@ -1,4 +1,4 @@
-# Jack de Haan - Personal Portfolio
+# Jack de Haan - Planetarium Portfolio
 
 An interactive personal website featuring a real-time accurate sky map with clickable constellations.
 
@@ -45,7 +45,6 @@ An interactive personal website featuring a real-time accurate sky map with clic
    npm run preview
    ```
 
-
 ## Media assets (logos & photos)
 
 Put images you want to reference directly in the app under:
@@ -57,6 +56,7 @@ Anything in `public/` is served from the site root, so you reference files like:
 
 - `/media/logos/duane-lab.png`
 - `/media/photos/headshot.jpg`
+
 ## How It Works
 
 ### Astronomical Calculations

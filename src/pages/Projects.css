@@ -1,6 +1,7 @@
 .projects__stack {
   margin-top: 6px;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
@@ -8,6 +9,7 @@
 
 .projects__pageCard {
   height: calc(100vh - 202px);
+  height: calc(100dvh - 202px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -20,6 +22,8 @@
 .projects__content {
   flex: 1;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .projects__item {
@@ -97,6 +101,7 @@
 @media (max-width: 760px) {
   .projects__pageCard {
     height: calc(100vh - 206px);
+    height: calc(100dvh - 206px);
   }
 
   .projects__header {

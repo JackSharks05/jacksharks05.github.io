@@ -11,7 +11,16 @@ export default function SiteLayout() {
   const navigate = useNavigate();
   const isHome = location.pathname === "/";
 
-  const [planetariumActive, setPlanetariumActive] = useState(false);
+  const [planetariumActive, setPlanetariumActive] = useState(() => {
+    if (typeof window === "undefined") return false;
+    if (!isHome) return false;
+
+    const sticky = window.__planetariumIsActive;
+    if (typeof sticky === "boolean") return sticky;
+
+    // Home defaults to planetarium-on initially.
+    return true;
+  });
   const [planetariumHintDismissed, setPlanetariumHintDismissed] =
     useState(false);
   const brandPanelRef = useRef(null);
@@ -19,6 +28,29 @@ export default function SiteLayout() {
 
   const [logoSrc, setLogoSrc] = useState(starPng);
   const [navOpen, setNavOpen] = useState(false);
+  const [compactDock, setCompactDock] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const mq = window.matchMedia("(max-width: 760px)");
+    const update = () => setCompactDock(Boolean(mq.matches));
+    update();
+
+    if (typeof mq.addEventListener === "function") {
+      mq.addEventListener("change", update);
+      return () => mq.removeEventListener("change", update);
+    }
+
+    mq.addListener(update);
+    return () => mq.removeListener(update);
+  }, []);
+
+  useEffect(() => {
+    if (!isHome) return;
+    const sticky = window.__planetariumIsActive;
+    if (typeof sticky === "boolean") setPlanetariumActive(sticky);
+  }, [isHome, location.key]);
 
   useEffect(() => {
     const onPlanetariumEnter = () => setNavOpen(false);
@@ -202,7 +234,7 @@ export default function SiteLayout() {
             >
               <div className="brand__text">
                 <div className="brand__name">Jack de Haan</div>
-                <div className="brand__tag">Portfolio</div>
+                <div className="brand__tag">Planetarium Portfolio</div>
               </div>
             </Link>
           </div>
@@ -234,6 +266,11 @@ export default function SiteLayout() {
           expanded={navOpen}
           collapsedHeight={0}
           items={navItems}
+          onNavigate={() => {
+            if (window.matchMedia("(max-width: 760px)").matches) {
+              setNavOpen(false);
+            }
+          }}
           baseColor="#000"
           menuColor="#000"
           buttonBgColor="#000"
@@ -252,7 +289,7 @@ export default function SiteLayout() {
           items={[
             {
               key: "planetarium",
-              label: "Back to planetarium",
+              label: compactDock ? "Planetarium" : "Back to planetarium",
               ariaLabel: "Back to planetarium",
               isActive: isHome,
               onClick: () => {
@@ -267,13 +304,17 @@ export default function SiteLayout() {
                 navigate("/", { state: { openIntro: true } });
               },
             },
-            {
-              key: "this-site",
-              label: "This site",
-              ariaLabel: "About this site",
-              isActive: location.pathname === "/this-site",
-              onClick: () => navigate("/this-site"),
-            },
+            ...(compactDock
+              ? []
+              : [
+                  {
+                    key: "this-site",
+                    label: "This site",
+                    ariaLabel: "About this site",
+                    isActive: location.pathname === "/this-site",
+                    onClick: () => navigate("/this-site"),
+                  },
+                ]),
             {
               key: "about",
               label: "About",

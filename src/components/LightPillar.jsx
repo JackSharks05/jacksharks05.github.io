@@ -265,6 +265,20 @@ export default function LightPillar({
     const targetFPS = effectiveQuality === "low" ? 30 : 60;
     const frameTime = 1000 / targetFPS;
 
+    const stop = () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    };
+
+    const start = () => {
+      if (!rafRef.current) {
+        lastTime = performance.now();
+        rafRef.current = requestAnimationFrame(animate);
+      }
+    };
+
     const animate = (currentTime) => {
       if (
         !materialRef.current ||
@@ -289,7 +303,14 @@ export default function LightPillar({
 
       rafRef.current = requestAnimationFrame(animate);
     };
-    rafRef.current = requestAnimationFrame(animate);
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) stop();
+      else start();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    start();
 
     let resizeTimeout = null;
     const handleResize = () => {
@@ -312,11 +333,12 @@ export default function LightPillar({
     window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("resize", handleResize);
       if (interactive) {
         container.removeEventListener("mousemove", handleMouseMove);
       }
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      stop();
 
       if (rendererRef.current) {
         rendererRef.current.dispose();

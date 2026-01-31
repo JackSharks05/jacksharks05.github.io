@@ -44,6 +44,7 @@ export default function CardNav({
   theme = "dark",
   expanded = false,
   collapsedHeight = 0,
+  onNavigate,
 }) {
   const [isVisible, setIsVisible] = useState(expanded);
   const navRef = useRef(null);
@@ -259,6 +260,7 @@ export default function CardNav({
                 className={({ isActive }) =>
                   isActive ? "nav-card-label is-active" : "nav-card-label"
                 }
+                onClick={onNavigate}
               >
                 {item.label}
               </NavLink>

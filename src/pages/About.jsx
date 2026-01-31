@@ -32,11 +32,15 @@ export default function About() {
                 className="carousel--portrait"
                 ariaLabel="About photos"
                 items={[
-                  { key: "about-1", caption: "Add a portrait / bio photo" },
-                  { key: "about-2", caption: "Add a project / talk photo" },
+                  { key: "about-1", caption: "enjoying brown's greenhouse!" },
+                  {
+                    key: "about-2",
+                    caption:
+                      "giving the graduation address at Princeton in Beijing 2025",
+                  },
                   {
                     key: "about-3",
-                    caption: "Add something personal (music/travel)",
+                    caption: "hiking franconia ridge loop in nov 2025!",
                   },
                 ]}
               />
@@ -101,8 +105,9 @@ export default function About() {
 
           <h2 className="page__sectionTitle">Honors (Selected)</h2>
           <ul className="page__list">
-            <li>2nd place (out of 5,000+) — MIT Mystery Hunt 2025</li>
+            <li>1st place (out of 5,000+) — MIT Mystery Hunt 2026</li>
             <li>2nd place — Tsinghua Inter-University Speech Contest</li>
+            <li>Head of School Award, Rye Country Day School (Rye, NY)</li>
             <li>Selected class speaker — Princeton in Beijing</li>
           </ul>
         </div>

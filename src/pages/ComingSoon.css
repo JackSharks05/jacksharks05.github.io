@@ -1,6 +1,7 @@
 .comingSoon {
   position: relative;
   min-height: 100vh;
+  min-height: 100dvh;
   background: #05060b;
   color: rgba(255, 255, 255, 0.92);
   overflow: hidden;
@@ -33,6 +34,7 @@
   position: relative;
   z-index: 2;
   min-height: 100vh;
+  min-height: 100dvh;
   display: grid;
   align-content: center;
   justify-items: center;

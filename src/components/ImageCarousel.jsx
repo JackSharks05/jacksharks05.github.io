@@ -86,7 +86,7 @@ export default function ImageCarousel({
         >
           Prev
         </button>
-        <div className="carousel__dots" aria-hidden="true">
+        <div className="carousel__dots">
           {slides.map((_, i) => (
             <button
               key={i}
@@ -96,7 +96,6 @@ export default function ImageCarousel({
               }
               onClick={() => go(i)}
               aria-label={`Go to slide ${i + 1}`}
-              tabIndex={-1}
             />
           ))}
         </div>

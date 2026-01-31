@@ -38,11 +38,14 @@ export default function Home() {
   const hasActivatedConstellationRef = useRef(false);
 
   useEffect(() => {
+    // Keep a sticky flag so layout can infer current state on mount.
+    window.__planetariumIsActive = isPlanetarium;
     window.dispatchEvent(
       new CustomEvent("planetarium:state", { detail: { isPlanetarium } }),
     );
 
     return () => {
+      window.__planetariumIsActive = false;
       window.dispatchEvent(
         new CustomEvent("planetarium:state", {
           detail: { isPlanetarium: false },
@@ -79,21 +82,53 @@ export default function Home() {
 
   const openIntro = ({ smooth = true } = {}) => {
     setIsPreviewOpen(false);
-    setIsPlanetarium(false);
-
     // Suppress the auto-enter-on-top behavior while we transition.
     exitAutoEnterCooldownUntilRef.current = Date.now() + 1200;
+    setIsPlanetarium(false);
 
+    // Once the intro is mounted, scroll it into view similar to the
+    // original working implementation.
     requestAnimationFrame(() => {
       const el = landingRef.current;
-      if (!el) return;
-      const landingTop = el.getBoundingClientRect().top + (window.scrollY || 0);
+      if (
+        !el ||
+        typeof window === "undefined" ||
+        typeof document === "undefined"
+      )
+        return;
+      const docEl = document.documentElement;
+      const body = document.body;
+      const currentScroll =
+        window.scrollY || docEl.scrollTop || body.scrollTop || 0;
+      const landingTop = el.getBoundingClientRect().top + currentScroll;
       const revealFactor = window.innerWidth <= 520 ? 0.25 : 0.5;
       const target = Math.max(
         0,
         landingTop - window.innerHeight * revealFactor,
       );
-      window.scrollTo({ top: target, behavior: smooth ? "smooth" : "auto" });
+      const behavior = smooth ? "smooth" : "auto";
+
+      if (smooth) {
+        if (typeof body.scrollTo === "function") {
+          body.scrollTo({ top: target, behavior: "smooth" });
+        } else if (typeof docEl.scrollTo === "function") {
+          docEl.scrollTo({ top: target, behavior: "smooth" });
+        } else {
+          try {
+            window.scrollTo({ top: target, behavior: "smooth" });
+          } catch {
+            window.scrollTo(0, target);
+          }
+        }
+      } else {
+        try {
+          window.scrollTo({ top: target, behavior: "auto" });
+        } catch {
+          window.scrollTo(0, target);
+        }
+        docEl.scrollTop = target;
+        body.scrollTop = target;
+      }
     });
   };
 
@@ -191,30 +226,11 @@ export default function Home() {
   };
 
   const handleTogglePlanetarium = () => {
-    setIsPlanetarium((v) => {
-      const next = !v;
-      // Exit: reveal landing and scroll to it.
-      if (!next) {
-        // While exiting, we may still be at scrollY=0 for a beat.
-        // Temporarily suppress the scroll-to-top auto-enter behavior.
-        exitAutoEnterCooldownUntilRef.current = Date.now() + 1200;
-        requestAnimationFrame(() => {
-          const el = landingRef.current;
-          if (!el) return;
-          const landingTop =
-            el.getBoundingClientRect().top + (window.scrollY || 0);
-          const revealFactor = window.innerWidth <= 520 ? 0.25 : 0.5;
-          const target = Math.max(
-            0,
-            landingTop - window.innerHeight * revealFactor,
-          );
-          window.scrollTo({ top: target, behavior: "smooth" });
-        });
-      } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-      return next;
-    });
+    if (isPlanetarium) {
+      openIntro({ smooth: true });
+    } else {
+      enterPlanetarium({ smooth: true });
+    }
   };
 
   useEffect(() => {
@@ -229,14 +245,27 @@ export default function Home() {
       requestAnimationFrame(() => {
         ticking = false;
         if (Date.now() < exitAutoEnterCooldownUntilRef.current) return;
-        if ((window.scrollY || 0) <= 2) {
+        if (typeof window === "undefined" || typeof document === "undefined")
+          return;
+        const docEl = document.documentElement;
+        const body = document.body;
+        const currentY =
+          window.scrollY || docEl.scrollTop || body.scrollTop || 0;
+        if (currentY <= 10) {
           enterPlanetarium({ smooth: false });
         }
       });
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    document.addEventListener("scroll", onScroll, {
+      passive: true,
+      capture: true,
+    });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("scroll", onScroll, { capture: true });
+    };
   }, [isPlanetarium]);
 
   const unlockUi = () => {
@@ -285,6 +314,7 @@ export default function Home() {
           onLoaded={handleSkyLoaded}
           onFirstDrag={unlockUi}
           selectedConstellationKeys={selectedConstellationKeys}
+          interactive={isPlanetarium}
         />
 
         <div

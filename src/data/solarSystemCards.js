@@ -50,13 +50,13 @@ export const solarSystemCards = {
   Uranus: {
     title: "Uranus",
     fact: "(Add a fun fact here)",
-    to: "https://solarsystem.nasa.gov/planets/uranus/overview/",
+    to: "https://www.emmazou.com",
     linkText: "Open NASA overview",
   },
   Neptune: {
     title: "Neptune",
     fact: "(Add a fun fact here)",
-    to: "https://solarsystem.nasa.gov/planets/neptune/overview/",
+    to: "https://www.yuyuanhuang.com",
     linkText: "Open NASA overview",
   },
 };

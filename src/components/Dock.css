@@ -2,7 +2,7 @@
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   z-index: 80;
   pointer-events: none;
   display: flex;
@@ -32,6 +32,10 @@
   cursor: pointer;
   letter-spacing: 0.2px;
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
 }
 
 .dock__item.is-active {
@@ -46,20 +50,39 @@
 
 .dock__label {
   font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
-@media (max-width: 520px) {
+@media (max-width: 760px) {
   .dock {
-    bottom: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   }
 
   .dock__bar {
     width: 100%;
     justify-content: space-between;
+    gap: 8px;
+    padding: 8px;
   }
 
   .dock__item {
     flex: 1;
     justify-content: center;
+    height: 44px;
+    padding: 0 10px;
+  }
+
+  .dock__label {
+    font-size: 12.5px;
+    letter-spacing: 0.1px;
+  }
+}
+
+@media (max-width: 380px) {
+  .dock__label {
+    font-size: 12px;
   }
 }

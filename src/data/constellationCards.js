@@ -74,7 +74,12 @@ export const constellationCards = {
   Gem: { title: "Gemini", fact: "(Add a fun fact here)", to: "/resume" },
   Gru: { title: "Grus", fact: "(Add a fun fact here)", to: "/projects" },
   Her: { title: "Hercules", fact: "(Add a fun fact here)", to: "/projects" },
-  Hor: { title: "Horologium", fact: "(Add a fun fact here)", to: "/projects" },
+  Hor: {
+    title: "Horologium",
+    fact: "I love watches and timekeeping.",
+    to: "/about",
+    linkText: "read about why!",
+  },
   Hya: { title: "Hydra", fact: "(Add a fun fact here)", to: "/projects" },
   Hyi: { title: "Hydrus", fact: "(Add a fun fact here)", to: "/projects" },
   Ind: { title: "Indus", fact: "(Add a fun fact here)", to: "/projects" },
@@ -104,7 +109,12 @@ export const constellationCards = {
     linkText: "Take a look!",
   },
   Pav: { title: "Pavo", fact: "(Add a fun fact here)", to: "/projects" },
-  Peg: { title: "Pegasus", fact: "(Add a fun fact here)", to: "/projects" },
+  Peg: {
+    title: "Pegasus",
+    fact: 'One of my favorite Spanish podcasts is "Caso 63" (produced around CoVID) which tells of a virus named "Pegasus". Highly recommend!',
+    to: "/about",
+    linkText: "read more about my langauge experiences!",
+  },
   Per: { title: "Perseus", fact: "(Add a fun fact here)", to: "/projects" },
   Phe: { title: "Phoenix", fact: "(Add a fun fact here)", to: "/about" },
   Pic: { title: "Pictor", fact: "(Add a fun fact here)", to: "/projects" },
@@ -135,8 +145,8 @@ export const constellationCards = {
   Tuc: { title: "Tucana", fact: "(Add a fun fact here)", to: "/projects" },
   UMa: {
     title: "Ursa Major",
-    fact: "I work as a ski coach in Stratton Mountain, and one of their chairlifts is called Ursa Express! (Not my favourite though...)",
-    to: "/",
+    fact: "I work as a ski coach in Stratton Mountain, and one of their chairlifts is called Ursa Express! (It's not my favourite though...)",
+    to: "/resume",
     linkText: "Read about my work experience!",
   },
   UMi: { title: "Ursa Minor", fact: "(Add a fun fact here)", to: "/about" },
@@ -151,8 +161,8 @@ export const getConstellationCard = (key, fallbackTitle = "") => {
   if (entry) return entry;
   return {
     title: fallbackTitle || key || "Constellation",
-    fact: "(Add a fun fact here)",
-    to: "/about",
-    linkText: "See more",
+    fact: "You shouldn't be seeing this!",
+    to: "/error",
+    linkText: "Come here!",
   };
 };

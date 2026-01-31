@@ -25,6 +25,3 @@ scripts/.cache/
 *.njsproj
 *.sln
 *.sw?
-
-# Private notes
-jack.txt

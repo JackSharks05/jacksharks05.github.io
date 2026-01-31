@@ -1,6 +1,7 @@
 .research__stack {
   margin-top: 6px;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
@@ -8,6 +9,7 @@
 
 .research__pageCard {
   height: calc(100vh - 202px);
+  height: calc(100dvh - 202px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -20,6 +22,8 @@
 .research__content {
   flex: 1;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .research__item {
@@ -106,6 +110,7 @@
 @media (max-width: 760px) {
   .research__pageCard {
     height: calc(100vh - 206px);
+    height: calc(100dvh - 206px);
   }
 
   .research__header {

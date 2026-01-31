@@ -169,6 +169,7 @@ const GalaxyCanvas = ({
   onFirstDrag,
   selectedConstellationKey,
   selectedConstellationKeys,
+  interactive = true,
 }) => {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
@@ -1166,6 +1167,7 @@ const GalaxyCanvas = ({
 
   // Handle mouse movement
   const handleMouseMove = (e) => {
+    if (!interactive) return;
     const rect = canvasRef.current.getBoundingClientRect();
     const containerRect = containerRef.current?.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -1252,6 +1254,7 @@ const GalaxyCanvas = ({
   };
 
   const handlePointerDown = (e) => {
+    if (!interactive) return;
     if (!canvasRef.current) return;
     if (e.pointerType === "mouse" && e.button !== 0) return;
     if (e.pointerType !== "mouse") e.preventDefault();
@@ -1293,6 +1296,7 @@ const GalaxyCanvas = ({
   };
 
   const handlePointerMove = (e) => {
+    if (!interactive) return;
     if (!dragRef.current.active) return;
     if (dragRef.current.pointerId !== e.pointerId) return;
     if (!canvasRef.current) return;
@@ -1329,6 +1333,7 @@ const GalaxyCanvas = ({
   };
 
   const handlePointerUp = (e) => {
+    if (!interactive) return;
     if (!dragRef.current.active) return;
     if (dragRef.current.pointerId !== e.pointerId) return;
     if (e.pointerType !== "mouse") e.preventDefault();
@@ -1609,6 +1614,7 @@ const GalaxyCanvas = ({
   });
 
   const handleClick = (e) => {
+    if (!interactive) return;
     if (dragRef.current.moved) {
       dragRef.current.moved = false;
       return;
@@ -1725,366 +1731,375 @@ const GalaxyCanvas = ({
         onPointerCancel={handlePointerUp}
         onClick={handleClick}
         style={{
-          cursor: isDragging
-            ? "grabbing"
-            : hoveredConstellation || hoveredStar || hoveredBody
-              ? "pointer"
-              : "crosshair",
+          cursor: interactive
+            ? isDragging
+              ? "grabbing"
+              : hoveredConstellation || hoveredStar || hoveredBody
+                ? "pointer"
+                : "crosshair"
+            : "default",
+          pointerEvents: interactive ? "auto" : "none",
         }}
       />
 
       {/* Controls Panel */}
-      {!loading && (controlsVisible || controlsUnlocked || hasMovedOnce) && (
-        <div
-          className={
-            controlsVisible
-              ? "controls-panel is-ready is-open"
-              : "controls-panel is-ready"
-          }
-        >
-          {controlsVisible && (
-            <div className="controls-content">
-              <div className="control-section">
-                <h3>View Controls</h3>
+      {!loading &&
+        interactive &&
+        (controlsVisible || controlsUnlocked || hasMovedOnce) && (
+          <div
+            className={
+              controlsVisible
+                ? "controls-panel is-ready is-open"
+                : "controls-panel is-ready"
+            }
+          >
+            {controlsVisible && (
+              <div className="controls-content">
+                <div className="control-section">
+                  <h3>View Controls</h3>
 
-                <div className="control-group">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={showAllStars}
-                      onChange={(e) => setShowAllStars(e.target.checked)}
-                    />
-                    Show all star info on hover
-                  </label>
-                </div>
-
-                <div className="control-group">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={showAllConstellations}
-                      onChange={(e) =>
-                        setShowAllConstellations(e.target.checked)
-                      }
-                    />
-                    Show all constellation lines
-                  </label>
-                </div>
-
-                <div className="control-group">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={showSolarSystem}
-                      onChange={(e) => setShowSolarSystem(e.target.checked)}
-                    />
-                    Show Sun, Moon, and planets
-                  </label>
-                </div>
-
-                <div className="control-group">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={projectionMode === "accurate"}
-                      onChange={(e) =>
-                        setProjectionMode(
-                          e.target.checked ? "accurate" : "fill",
-                        )
-                      }
-                    />
-                    Accurate projection (fit full hemisphere)
-                  </label>
-                </div>
-
-                <div className="control-group">
-                  <label>Star brightness: {starBrightness.toFixed(2)}×</label>
-                  <input
-                    type="range"
-                    min="0.4"
-                    max="2.4"
-                    step="0.05"
-                    value={starBrightness}
-                    onChange={(e) =>
-                      setStarBrightness(parseFloat(e.target.value))
-                    }
-                  />
-                </div>
-
-                <div className="control-group">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={showMilkyWay}
-                      onChange={(e) => setShowMilkyWay(e.target.checked)}
-                    />
-                    Milky Way haze (approx)
-                  </label>
-                </div>
-
-                <div className="control-group">
-                  <label>Location</label>
-                  <div className="location-display">
-                    {locationName || "Loading..."}
+                  <div className="control-group">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={showAllStars}
+                        onChange={(e) => setShowAllStars(e.target.checked)}
+                      />
+                      Show all star info on hover
+                    </label>
                   </div>
-                  <div style={{ margin: "10px auto", display: "block" }}>
-                    <EarthGlobe
-                      latitude={displayLat}
-                      longitude={displayLon}
-                      width={200}
-                      height={200}
-                      transitionMs={isResetting ? 0 : 1000}
-                      onLocationClick={(lat, lon) => {
-                        if (resetAnimRef.current) {
-                          cancelAnimationFrame(resetAnimRef.current);
-                          resetAnimRef.current = null;
-                          setIsResetting(false);
+
+                  <div className="control-group">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={showAllConstellations}
+                        onChange={(e) =>
+                          setShowAllConstellations(e.target.checked)
                         }
-                        setCustomLat(lat);
-                        setCustomLon(lon);
-                      }}
+                      />
+                      Show all constellation lines
+                    </label>
+                  </div>
+
+                  <div className="control-group">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={showSolarSystem}
+                        onChange={(e) => setShowSolarSystem(e.target.checked)}
+                      />
+                      Show Sun, Moon, and planets
+                    </label>
+                  </div>
+
+                  <div className="control-group">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={projectionMode === "accurate"}
+                        onChange={(e) =>
+                          setProjectionMode(
+                            e.target.checked ? "accurate" : "fill",
+                          )
+                        }
+                      />
+                      Accurate projection (fit full hemisphere)
+                    </label>
+                  </div>
+
+                  <div className="control-group">
+                    <label>Star brightness: {starBrightness.toFixed(2)}×</label>
+                    <input
+                      type="range"
+                      min="0.4"
+                      max="2.4"
+                      step="0.05"
+                      value={starBrightness}
+                      onChange={(e) =>
+                        setStarBrightness(parseFloat(e.target.value))
+                      }
                     />
                   </div>
-                </div>
 
-                <div className="control-group">
-                  <label>Latitude: {displayLat.toFixed(2)}°</label>
-                  <input
-                    type="range"
-                    min="-90"
-                    max="90"
-                    step="0.5"
-                    value={displayLat}
-                    onChange={(e) => setCustomLat(parseFloat(e.target.value))}
-                  />
-                </div>
+                  <div className="control-group">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={showMilkyWay}
+                        onChange={(e) => setShowMilkyWay(e.target.checked)}
+                      />
+                      Milky Way haze (approx)
+                    </label>
+                  </div>
 
-                <div className="control-group">
-                  <label>Longitude: {displayLon.toFixed(2)}°</label>
-                  <input
-                    type="range"
-                    min="-180"
-                    max="180"
-                    step="0.5"
-                    value={displayLon}
-                    onChange={(e) => setCustomLon(parseFloat(e.target.value))}
-                  />
-                </div>
-
-                <div className="control-group">
-                  <label>Time</label>
-                  <div className="time-display">{timeDisplay}</div>
-                </div>
-
-                <div className="control-group">
-                  <label>
-                    Time Offset: {timeOffsetTarget > 0 ? "+" : ""}
-                    {timeOffsetTarget.toFixed(2)}h
-                  </label>
-                  <input
-                    type="range"
-                    min="-12"
-                    max="12"
-                    step="0.1"
-                    value={timeOffsetTarget}
-                    onChange={(e) =>
-                      setTimeOffsetTarget(parseFloat(e.target.value))
-                    }
-                  />
-                </div>
-
-                {/**
-                 * Manual Inputs (temporarily disabled)
-                 *
-                 * If you want these back later, we can also polish validation
-                 * and add keyboard shortcuts.
-                 */}
-                {false && (
-                  <div className="control-section">
-                    <h3>Manual Inputs</h3>
-
-                    <div className="control-group">
-                      <label>Set Coordinates</label>
-                      <div
-                        style={{ display: "flex", gap: 8, flexWrap: "wrap" }}
-                      >
-                        <input
-                          type="number"
-                          step="0.00001"
-                          placeholder="Latitude"
-                          value={latText}
-                          onChange={(e) => setLatText(e.target.value)}
-                          style={{ width: 140 }}
-                        />
-                        <input
-                          type="number"
-                          step="0.00001"
-                          placeholder="Longitude"
-                          value={lonText}
-                          onChange={(e) => setLonText(e.target.value)}
-                          style={{ width: 140 }}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const lat = Number.parseFloat(latText);
-                            const lon = Number.parseFloat(lonText);
-                            if (
-                              !Number.isFinite(lat) ||
-                              !Number.isFinite(lon)
-                            ) {
-                              return;
-                            }
-                            setCustomLat(clamp(lat, -90, 90));
-                            setCustomLon(wrapLongitude(lon));
-                          }}
-                        >
-                          Apply
-                        </button>
-                      </div>
+                  <div className="control-group">
+                    <label>Location</label>
+                    <div className="location-display">
+                      {locationName || "Loading..."}
                     </div>
+                    <div style={{ margin: "10px auto", display: "block" }}>
+                      <EarthGlobe
+                        latitude={displayLat}
+                        longitude={displayLon}
+                        width={200}
+                        height={200}
+                        transitionMs={isResetting ? 0 : 1000}
+                        onLocationClick={(lat, lon) => {
+                          if (resetAnimRef.current) {
+                            cancelAnimationFrame(resetAnimRef.current);
+                            resetAnimRef.current = null;
+                            setIsResetting(false);
+                          }
+                          setCustomLat(lat);
+                          setCustomLon(lon);
+                        }}
+                      />
+                    </div>
+                  </div>
 
-                    <div className="control-group">
-                      <label>Search Location</label>
-                      <div style={{ display: "flex", gap: 8 }}>
-                        <input
-                          type="text"
-                          placeholder="e.g. Boston, MA"
-                          value={locationQuery}
-                          onChange={(e) => setLocationQuery(e.target.value)}
-                          style={{ flex: 1 }}
-                        />
-                        <button
-                          type="button"
-                          onClick={async () => {
-                            const q = locationQuery.trim();
-                            if (!q) return;
-                            setLocationSearchMessage("Searching...");
-                            setLocationResults([]);
-                            try {
-                              const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(q)}`;
-                              const res = await fetch(url);
-                              if (!res.ok) {
-                                setLocationSearchMessage(
-                                  `Search failed: ${res.status}`,
-                                );
+                  <div className="control-group">
+                    <label>Latitude: {displayLat.toFixed(2)}°</label>
+                    <input
+                      type="range"
+                      min="-90"
+                      max="90"
+                      step="0.5"
+                      value={displayLat}
+                      onChange={(e) => setCustomLat(parseFloat(e.target.value))}
+                    />
+                  </div>
+
+                  <div className="control-group">
+                    <label>Longitude: {displayLon.toFixed(2)}°</label>
+                    <input
+                      type="range"
+                      min="-180"
+                      max="180"
+                      step="0.5"
+                      value={displayLon}
+                      onChange={(e) => setCustomLon(parseFloat(e.target.value))}
+                    />
+                  </div>
+
+                  <div className="control-group">
+                    <label>Time</label>
+                    <div className="time-display">{timeDisplay}</div>
+                  </div>
+
+                  <div className="control-group">
+                    <label>
+                      Time Offset: {timeOffsetTarget > 0 ? "+" : ""}
+                      {timeOffsetTarget.toFixed(2)}h
+                    </label>
+                    <input
+                      type="range"
+                      min="-12"
+                      max="12"
+                      step="0.1"
+                      value={timeOffsetTarget}
+                      onChange={(e) =>
+                        setTimeOffsetTarget(parseFloat(e.target.value))
+                      }
+                    />
+                  </div>
+
+                  {/**
+                   * Manual Inputs (temporarily disabled)
+                   *
+                   * If you want these back later, we can also polish validation
+                   * and add keyboard shortcuts.
+                   */}
+                  {false && (
+                    <div className="control-section">
+                      <h3>Manual Inputs</h3>
+
+                      <div className="control-group">
+                        <label>Set Coordinates</label>
+                        <div
+                          style={{ display: "flex", gap: 8, flexWrap: "wrap" }}
+                        >
+                          <input
+                            type="number"
+                            step="0.00001"
+                            placeholder="Latitude"
+                            value={latText}
+                            onChange={(e) => setLatText(e.target.value)}
+                            style={{ width: 140 }}
+                          />
+                          <input
+                            type="number"
+                            step="0.00001"
+                            placeholder="Longitude"
+                            value={lonText}
+                            onChange={(e) => setLonText(e.target.value)}
+                            style={{ width: 140 }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const lat = Number.parseFloat(latText);
+                              const lon = Number.parseFloat(lonText);
+                              if (
+                                !Number.isFinite(lat) ||
+                                !Number.isFinite(lon)
+                              ) {
                                 return;
                               }
-                              const data = await res.json();
-                              const results = (Array.isArray(data) ? data : [])
-                                .map((r) => ({
-                                  name: r.display_name,
-                                  lat: Number.parseFloat(r.lat),
-                                  lon: Number.parseFloat(r.lon),
-                                }))
-                                .filter(
-                                  (r) =>
-                                    Number.isFinite(r.lat) &&
-                                    Number.isFinite(r.lon),
+                              setCustomLat(clamp(lat, -90, 90));
+                              setCustomLon(wrapLongitude(lon));
+                            }}
+                          >
+                            Apply
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="control-group">
+                        <label>Search Location</label>
+                        <div style={{ display: "flex", gap: 8 }}>
+                          <input
+                            type="text"
+                            placeholder="e.g. Boston, MA"
+                            value={locationQuery}
+                            onChange={(e) => setLocationQuery(e.target.value)}
+                            style={{ flex: 1 }}
+                          />
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              const q = locationQuery.trim();
+                              if (!q) return;
+                              setLocationSearchMessage("Searching...");
+                              setLocationResults([]);
+                              try {
+                                const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(q)}`;
+                                const res = await fetch(url);
+                                if (!res.ok) {
+                                  setLocationSearchMessage(
+                                    `Search failed: ${res.status}`,
+                                  );
+                                  return;
+                                }
+                                const data = await res.json();
+                                const results = (
+                                  Array.isArray(data) ? data : []
+                                )
+                                  .map((r) => ({
+                                    name: r.display_name,
+                                    lat: Number.parseFloat(r.lat),
+                                    lon: Number.parseFloat(r.lon),
+                                  }))
+                                  .filter(
+                                    (r) =>
+                                      Number.isFinite(r.lat) &&
+                                      Number.isFinite(r.lon),
+                                  );
+                                setLocationResults(results);
+                                setLocationSearchMessage(
+                                  results.length ? "" : "No results found.",
                                 );
-                              setLocationResults(results);
-                              setLocationSearchMessage(
-                                results.length ? "" : "No results found.",
-                              );
-                            } catch (err) {
-                              console.error(err);
-                              setLocationSearchMessage("Search failed.");
-                            }
-                          }}
-                        >
-                          Search
-                        </button>
+                              } catch (err) {
+                                console.error(err);
+                                setLocationSearchMessage("Search failed.");
+                              }
+                            }}
+                          >
+                            Search
+                          </button>
+                        </div>
+
+                        {locationSearchMessage && (
+                          <div style={{ marginTop: 6, opacity: 0.85 }}>
+                            {locationSearchMessage}
+                          </div>
+                        )}
+
+                        {locationResults.length > 0 && (
+                          <div
+                            style={{ marginTop: 8, display: "grid", gap: 6 }}
+                          >
+                            {locationResults.map((r, idx) => (
+                              <button
+                                key={`${r.lat},${r.lon},${idx}`}
+                                type="button"
+                                style={{ textAlign: "left" }}
+                                onClick={() => {
+                                  setCustomLat(clamp(r.lat, -90, 90));
+                                  setCustomLon(wrapLongitude(r.lon));
+                                  setLocationName(r.name);
+                                  setLocationResults([]);
+                                  setLocationSearchMessage("");
+                                }}
+                              >
+                                {r.name}
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
 
-                      {locationSearchMessage && (
-                        <div style={{ marginTop: 6, opacity: 0.85 }}>
-                          {locationSearchMessage}
-                        </div>
-                      )}
-
-                      {locationResults.length > 0 && (
-                        <div style={{ marginTop: 8, display: "grid", gap: 6 }}>
-                          {locationResults.map((r, idx) => (
-                            <button
-                              key={`${r.lat},${r.lon},${idx}`}
-                              type="button"
-                              style={{ textAlign: "left" }}
-                              onClick={() => {
-                                setCustomLat(clamp(r.lat, -90, 90));
-                                setCustomLon(wrapLongitude(r.lon));
-                                setLocationName(r.name);
-                                setLocationResults([]);
-                                setLocationSearchMessage("");
-                              }}
-                            >
-                              {r.name}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="control-group">
-                      <label>Set Date/Time (local)</label>
-                      <div
-                        style={{ display: "flex", gap: 8, flexWrap: "wrap" }}
-                      >
-                        <input
-                          type="datetime-local"
-                          value={dateTimeText}
-                          onChange={(e) => setDateTimeText(e.target.value)}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const dt = parseDateTimeLocal(dateTimeText);
-                            if (!dt) return;
-                            const now = new Date();
-                            const hours =
-                              (dt.getTime() - now.getTime()) / 3600000;
-                            setTimeOffsetTarget(clamp(hours, -12, 12));
-                          }}
+                      <div className="control-group">
+                        <label>Set Date/Time (local)</label>
+                        <div
+                          style={{ display: "flex", gap: 8, flexWrap: "wrap" }}
                         >
-                          Apply
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const d = new Date();
-                            d.setHours(d.getHours() + timeOffset);
-                            setDateTimeText(formatDateTimeLocal(d));
-                          }}
-                        >
-                          Use Current
-                        </button>
+                          <input
+                            type="datetime-local"
+                            value={dateTimeText}
+                            onChange={(e) => setDateTimeText(e.target.value)}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const dt = parseDateTimeLocal(dateTimeText);
+                              if (!dt) return;
+                              const now = new Date();
+                              const hours =
+                                (dt.getTime() - now.getTime()) / 3600000;
+                              setTimeOffsetTarget(clamp(hours, -12, 12));
+                            }}
+                          >
+                            Apply
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const d = new Date();
+                              d.setHours(d.getHours() + timeOffset);
+                              setDateTimeText(formatDateTimeLocal(d));
+                            }}
+                          >
+                            Use Current
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <div className="controls-actions">
-            {hasLocationTimeOverrides && (
+            <div className="controls-actions">
+              {hasLocationTimeOverrides && (
+                <button
+                  type="button"
+                  className="controls-toggle controls-reset"
+                  onClick={resetView}
+                >
+                  ↺ Reset
+                </button>
+              )}
               <button
                 type="button"
-                className="controls-toggle controls-reset"
-                onClick={resetView}
+                className="controls-toggle"
+                onClick={() => setControlsVisible(!controlsVisible)}
               >
-                ↺ Reset
+                {controlsVisible ? "✕" : "⚙️"} Controls
               </button>
-            )}
-            <button
-              type="button"
-              className="controls-toggle"
-              onClick={() => setControlsVisible(!controlsVisible)}
-            >
-              {controlsVisible ? "✕" : "⚙️"} Controls
-            </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       {loading && (
         <div className="loading-screen">

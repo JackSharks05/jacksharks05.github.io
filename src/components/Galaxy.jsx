@@ -268,7 +268,20 @@ export default function Galaxy({
     });
 
     const mesh = new Mesh(gl, { geometry, program });
-    let animateId;
+    let animateId = null;
+
+    const stop = () => {
+      if (animateId != null) {
+        cancelAnimationFrame(animateId);
+        animateId = null;
+      }
+    };
+
+    const start = () => {
+      if (animateId == null) {
+        animateId = requestAnimationFrame(update);
+      }
+    };
 
     function update(t) {
       animateId = requestAnimationFrame(update);
@@ -293,7 +306,13 @@ export default function Galaxy({
       renderer.render({ scene: mesh });
     }
 
-    animateId = requestAnimationFrame(update);
+    const handleVisibilityChange = () => {
+      if (document.hidden) stop();
+      else start();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    start();
     ctn.appendChild(gl.canvas);
 
     function handleMouseMove(e) {
@@ -314,7 +333,8 @@ export default function Galaxy({
     }
 
     return () => {
-      cancelAnimationFrame(animateId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      stop();
       window.removeEventListener("resize", resize);
       if (mouseInteraction) {
         ctn.removeEventListener("mousemove", handleMouseMove);

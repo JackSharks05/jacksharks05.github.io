@@ -31,10 +31,13 @@ export default function Research() {
                     </h2>
                     <div className="research__subhead">
                       <span className="research__subheadItem">
-                        Dates: (add dates)
+                        Dates: February 2025–present
                       </span>
                       <span className="research__subheadItem">
-                        PI: (add PI)
+                        PI:{" "}
+                        <a href="https://www.ja-nae.io/projects">
+                          Ja-Naé Duane
+                        </a>
                       </span>
                     </div>
                   </div>
@@ -42,7 +45,7 @@ export default function Research() {
                 <div className="research__logoWrap" aria-hidden="true">
                   <img
                     className="research__logo"
-                    src="/media/logos/duane-lab.png"
+                    src="/media/logos/prime.jpg"
                     alt=""
                     loading="lazy"
                   />
@@ -84,7 +87,7 @@ export default function Research() {
                     <h2 className="research__title">Brown AI Safety Team</h2>
                     <div className="research__subhead">
                       <span className="research__subheadItem">
-                        Dates: (add dates)
+                        Dates: February 2025–present
                       </span>
                       <span className="research__subheadItem">
                         PI: (add PI)
@@ -95,7 +98,7 @@ export default function Research() {
                 <div className="research__logoWrap" aria-hidden="true">
                   <img
                     className="research__logo"
-                    src="/media/logos/brown-ai-safety.png"
+                    src="/media/logos/baist.webp"
                     alt=""
                     loading="lazy"
                   />
@@ -134,10 +137,10 @@ export default function Research() {
                     </h2>
                     <div className="research__subhead">
                       <span className="research__subheadItem">
-                        Dates: (add dates)
+                        Dates: February 2025–present
                       </span>
                       <span className="research__subheadItem">
-                        PI: (add PI)
+                        PI: Roman Feiman
                       </span>
                     </div>
                   </div>
@@ -145,14 +148,14 @@ export default function Research() {
                 <div className="research__logoWrap" aria-hidden="true">
                   <img
                     className="research__logo"
-                    src="/media/logos/brown-language-thought.png"
+                    src="/media/logos/blt.png"
                     alt=""
                     loading="lazy"
                   />
                 </div>
               </div>
               <p className="page__meta">
-                <span className="page__pill">Research Assistant</span>
+                <span className="page__pill">Volunteer Research Assistant</span>
                 <span className="page__pill">Computational Linguistics</span>
               </p>
               <div className="research__body">
@@ -177,7 +180,9 @@ export default function Research() {
               <div className="research__header">
                 <div className="research__heading">
                   <div className="research__titleRow">
-                    <h2 className="research__title">Amicus Brain Innovations</h2>
+                    <h2 className="research__title">
+                      Amicus Brain Innovations
+                    </h2>
                     <div className="research__subhead">
                       <span className="research__subheadItem">
                         Dates: (add dates)
@@ -191,7 +196,7 @@ export default function Research() {
                 <div className="research__logoWrap" aria-hidden="true">
                   <img
                     className="research__logo"
-                    src="/media/logos/amicus.png"
+                    src="/media/logos/amicus.jpg"
                     alt=""
                     loading="lazy"
                   />

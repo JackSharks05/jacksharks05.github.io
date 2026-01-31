@@ -26,6 +26,7 @@ const ScrollStack = ({
   const stackCompletedRef = useRef(false);
   const animationFrameRef = useRef(null);
   const lenisRef = useRef(null);
+  const visibilityHandlerRef = useRef(null);
   const cardsRef = useRef([]);
   const lastTransformsRef = useRef(new Map());
   const isUpdatingRef = useRef(false);
@@ -214,6 +215,14 @@ const ScrollStack = ({
   }, [updateCardTransforms]);
 
   const setupLenis = useCallback(() => {
+    if (visibilityHandlerRef.current) {
+      document.removeEventListener(
+        "visibilitychange",
+        visibilityHandlerRef.current,
+      );
+      visibilityHandlerRef.current = null;
+    }
+
     if (useWindowScroll) {
       const lenis = new Lenis({
         duration: 1.2,
@@ -233,7 +242,28 @@ const ScrollStack = ({
         lenis.raf(time);
         animationFrameRef.current = requestAnimationFrame(raf);
       };
-      animationFrameRef.current = requestAnimationFrame(raf);
+
+      const stopRaf = () => {
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
+        }
+      };
+
+      const startRaf = () => {
+        if (!animationFrameRef.current) {
+          animationFrameRef.current = requestAnimationFrame(raf);
+        }
+      };
+
+      const handleVisibilityChange = () => {
+        if (document.hidden) stopRaf();
+        else startRaf();
+      };
+
+      visibilityHandlerRef.current = handleVisibilityChange;
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+      startRaf();
 
       lenisRef.current = lenis;
       return lenis;
@@ -263,7 +293,28 @@ const ScrollStack = ({
       lenis.raf(time);
       animationFrameRef.current = requestAnimationFrame(raf);
     };
-    animationFrameRef.current = requestAnimationFrame(raf);
+
+    const stopRaf = () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    };
+
+    const startRaf = () => {
+      if (!animationFrameRef.current) {
+        animationFrameRef.current = requestAnimationFrame(raf);
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) stopRaf();
+      else startRaf();
+    };
+
+    visibilityHandlerRef.current = handleVisibilityChange;
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    startRaf();
 
     lenisRef.current = lenis;
     return lenis;
@@ -302,6 +353,13 @@ const ScrollStack = ({
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
+      }
+      if (visibilityHandlerRef.current) {
+        document.removeEventListener(
+          "visibilitychange",
+          visibilityHandlerRef.current,
+        );
+        visibilityHandlerRef.current = null;
       }
       if (lenisRef.current) {
         lenisRef.current.destroy();
