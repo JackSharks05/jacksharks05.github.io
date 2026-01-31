@@ -6,8 +6,8 @@ export default function NotFound() {
   return (
     <div className="page">
       <section className="page__card">
-        <h1 className="page__title">404</h1>
-        <p className="page__lede">That page doesn’t exist.</p>
+        <h1 className="page__title">Where in the universe are you?</h1>
+        <p className="page__lede">That page doesn’t exist... yet!</p>
         <div className="page__content">
           <p>
             Head back <Link to="/">home</Link>.

@@ -11,9 +11,20 @@ import Contact from "./pages/Contact";
 import PhotographyVideography from "./pages/PhotographyVideography";
 import Resume from "./pages/Resume";
 import NotFound from "./pages/NotFound";
+import ComingSoon from "./pages/ComingSoon";
 import "./App.css";
 
 function App() {
+  const isProd = import.meta.env.PROD;
+
+  if (isProd) {
+    return (
+      <Routes>
+        <Route path="*" element={<ComingSoon />} />
+      </Routes>
+    );
+  }
+
   return (
     <Routes>
       <Route element={<SiteLayout />}>

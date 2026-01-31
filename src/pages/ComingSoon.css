@@ -1,0 +1,59 @@
+.comingSoon {
+  position: relative;
+  min-height: 100vh;
+  background: #05060b;
+  color: rgba(255, 255, 255, 0.92);
+  overflow: hidden;
+}
+
+.comingSoon__bg {
+  position: absolute;
+  inset: 0;
+}
+
+.comingSoon__veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(800px 500px at 50% 40%, rgba(110, 170, 255, 0.10), transparent 60%),
+    radial-gradient(900px 600px at 55% 60%, rgba(180, 100, 255, 0.08), transparent 60%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.55));
+  pointer-events: none;
+}
+
+.comingSoon__content {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding: 48px 20px;
+  text-align: center;
+}
+
+.comingSoon__badge {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+}
+
+.comingSoon__title {
+  margin: 18px 0 10px;
+  font-size: clamp(40px, 6vw, 72px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.comingSoon__subtitle {
+  margin: 0;
+  max-width: 42ch;
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+}

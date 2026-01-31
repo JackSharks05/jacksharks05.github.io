@@ -56,6 +56,20 @@ const DEFAULT_BODIES = [
     color: "#f2e2b6",
     radius: 4.6,
   },
+  {
+    key: "Uranus",
+    body: Body.Uranus,
+    kind: "planet",
+    color: "#b3e5ff",
+    radius: 4.2,
+  },
+  {
+    key: "Neptune",
+    body: Body.Neptune,
+    kind: "planet",
+    color: "#6aa5ff",
+    radius: 4.2,
+  },
 ];
 
 export function computeSolarSystemObjects(

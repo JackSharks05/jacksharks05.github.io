@@ -1,6 +1,8 @@
 import { constellationLines } from "./constellationLines.js";
 import { hipStars } from "./hipStars.generated.js";
 
+export const getAllConstellationKeys = () => Object.keys(constellationLines);
+
 // Star catalog - will generate realistic star field
 let starCatalogCache = null;
 
@@ -2397,6 +2399,9 @@ const constellationKeyToAbbrev = {
 };
 
 export function getConstellationAbbrev(constellationKey) {
+  if (!constellationKey) return null;
+  // If the caller already passed an IAU abbreviation (e.g. "Ori"), accept it.
+  if (constellationLines[constellationKey]) return constellationKey;
   return constellationKeyToAbbrev[constellationKey] || null;
 }
 

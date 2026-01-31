@@ -1,48 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import GalaxyCanvas from "../components/GalaxyCanvas";
+import { getConstellationCard } from "../data/constellationCards";
+import { getSolarSystemCard, sunLink } from "../data/solarSystemCards";
 import "./Home.css";
-
-const sectionToRoute = (sectionId) => {
-  if (!sectionId) return null;
-  if (sectionId === "experience") return "/resume";
-  return `/${sectionId}`;
-};
-
-const sectionMeta = {
-  projects: {
-    title: "Projects",
-    blurb: "Selected builds, experiments, and shipped work.",
-  },
-  research: {
-    title: "Research",
-    blurb: "Research interests, papers, and technical deep-dives.",
-  },
-  music: {
-    title: "Music",
-    blurb: "Compositions, performances, and what I’m listening to.",
-  },
-  thoughts: {
-    title: "Thoughts",
-    blurb: "Short essays and notes on engineering and creativity.",
-  },
-  about: {
-    title: "About",
-    blurb: "A bit more background and what I care about.",
-  },
-  contact: {
-    title: "Contact",
-    blurb: "Ways to reach me and say hello.",
-  },
-  resume: {
-    title: "Resume",
-    blurb: "Experience, skills, and what I’ve worked on.",
-  },
-  "photography-videography": {
-    title: "Photo/Video",
-    blurb: "Visual work: photography, video, and related projects.",
-  },
-};
 
 export default function Home() {
   const navigate = useNavigate();
@@ -106,25 +67,50 @@ export default function Home() {
   }, [location.key, location.state]);
 
   const handleConstellationClick = (payload) => {
-    const sectionId = payload?.section;
-    const path = sectionToRoute(sectionId);
-    if (!path) return;
-
+    const kind = payload?.kind ?? "constellation";
     const key = payload?.key ?? null;
+    const name = payload?.name ?? "";
+
+    if (payload?.anchorClient) setPreviewAnchorClient(payload.anchorClient);
+
+    if (kind === "body") {
+      if (name === "Sun") {
+        setIsPreviewOpen(false);
+        const to = sunLink.to || "/about";
+        const isExternal = /^https?:\/\//i.test(to);
+        if (isExternal) {
+          window.open(to, "_blank", "noopener,noreferrer");
+        } else {
+          navigate(to);
+        }
+        return;
+      }
+
+      const card = getSolarSystemCard(name);
+      if (!card) return;
+
+      setConstellationPreview({
+        title: card.title || name,
+        blurb: card.fact || "",
+        path: card.to || "/about",
+        linkText: card.linkText || "See more",
+      });
+      setIsPreviewOpen(true);
+      return;
+    }
+
     if (key) {
       setSelectedConstellationKeys((prev) =>
         prev.includes(key) ? prev : [...prev, key],
       );
     }
-    if (payload?.anchorClient) setPreviewAnchorClient(payload.anchorClient);
 
-    const meta = sectionMeta[sectionId] || {};
+    const card = getConstellationCard(key, name);
     setConstellationPreview({
-      title: meta.title || payload?.name || sectionId,
-      blurb:
-        meta.blurb ||
-        "Explore this section for a deeper look — projects, writing, and more.",
-      path,
+      title: card.title || name || key,
+      blurb: card.fact || "",
+      path: card.to || "/about",
+      linkText: card.linkText || "See more",
     });
     setIsPreviewOpen(true);
   };
@@ -267,7 +253,7 @@ export default function Home() {
               className="home__constellationPreviewLink"
               onClick={() => navigate(constellationPreview.path)}
             >
-              See more
+              {constellationPreview.linkText || "See more"}
             </button>
           </div>
         )}

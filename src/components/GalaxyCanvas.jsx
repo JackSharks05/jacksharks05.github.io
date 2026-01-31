@@ -9,6 +9,7 @@ import {
   constellationMappings,
   buildConstellationConnections,
   getConstellationHipIds,
+  getAllConstellationKeys,
 } from "../data/starCatalog";
 import EarthGlobe from "./EarthGlobe";
 import { computeSolarSystemObjects } from "../utils/solarSystem";
@@ -563,9 +564,9 @@ const GalaxyCanvas = ({
       const starsById = new Map(starsRef.current.map((s) => [s.id, s]));
 
       // Build constellation data from ALL stars (including below horizon)
-      constellationsRef.current = Object.keys(constellationMappings)
+      constellationsRef.current = getAllConstellationKeys()
         .map((key) => {
-          const mapping = constellationMappings[key];
+          const mapping = constellationMappings[key] || null;
 
           // Build the constellation star set from the HIP endpoints referenced by the
           // authoritative stick-figure line dataset.
@@ -586,8 +587,8 @@ const GalaxyCanvas = ({
 
           return {
             key,
-            name: mapping.name,
-            section: mapping.section,
+            name: mapping?.name || key,
+            section: mapping?.section || null,
             stars,
             connections,
           };
@@ -1603,6 +1604,50 @@ const GalaxyCanvas = ({
     const rect = canvasRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
+
+    // Solar system objects (when enabled): treat as first-class clickable targets.
+    if (showSolarSystemRef.current) {
+      const blend = projectionBlendRef.current;
+      const { width: viewportW, height: viewportH } = viewportRef.current;
+      const fillRadius = Math.max(viewportW, viewportH) * 0.7;
+      const accurateRadius = Math.min(viewportW, viewportH) * 0.48;
+      const maxRadius = fillRadius + (accurateRadius - fillRadius) * blend;
+      const pxPerDeg = maxRadius / 90;
+
+      const getBodyRadiusPx = (obj) => {
+        const angularDiameterDeg =
+          obj.name === "Sun" ? 0.533 : obj.name === "Moon" ? 0.518 : null;
+        if (!angularDiameterDeg) return obj.radius;
+        const visibilityBoost = 6;
+        return clamp(
+          (angularDiameterDeg / 2) * pxPerDeg * visibilityBoost,
+          8,
+          18,
+        );
+      };
+
+      let clickedBody = null;
+      for (const obj of solarSystemRef.current) {
+        if (!obj.visible) continue;
+        const r = getBodyRadiusPx(obj) + 8;
+        const dx = x - obj.x;
+        const dy = y - obj.y;
+        if (dx * dx + dy * dy <= r * r) {
+          clickedBody = obj;
+          break;
+        }
+      }
+
+      if (clickedBody) {
+        onConstellationClick?.({
+          kind: "body",
+          key: clickedBody.name,
+          name: clickedBody.name,
+          anchorClient: { x: e.clientX, y: e.clientY },
+        });
+        return;
+      }
+    }
 
     let clickedConstellation = null;
     for (const constellation of constellationsRef.current) {
