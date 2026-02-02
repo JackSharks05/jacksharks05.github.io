@@ -9,7 +9,9 @@ export default function Research() {
       <section className="page__card research__pageCard">
         <h1 className="page__title">Research</h1>
         <p className="page__lede">
-          Behavioral data science, HCI, and AI safety — built with rigor.
+          I love my research! From behavioral technology and HCI to
+          computational linguistics and AI safety — I investigate with rigor,
+          curiosity, and passion.
         </p>
         <div className="page__content research__content">
           <ScrollStack
@@ -29,32 +31,47 @@ export default function Research() {
                     <h2 className="research__title">
                       Duane Lab (PRIME School of Engineering)
                     </h2>
-                    <div className="research__subhead">
+                    <div className="research__subhead research__subhead--inline">
                       <span className="research__subheadItem">
                         Dates: February 2025–present
                       </span>
                       <span className="research__subheadItem">
                         PI:{" "}
-                        <a href="https://www.ja-nae.io/projects">
+                        <a
+                          href="https://www.ja-nae.io/ "
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           Ja-Naé Duane
+                        </a>
+                      </span>
+                      <span className="research__subheadItem">
+                        <a
+                          href="https://replace-with-duane-lab-url.example"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Lab website
                         </a>
                       </span>
                     </div>
                   </div>
+                  <p className="page__meta research__meta">
+                    <span className="page__pill">
+                      Project Lead &amp; Researcher
+                    </span>
+                    <span className="page__pill">Behavioral Data Science</span>
+                  </p>
                 </div>
                 <div className="research__logoWrap" aria-hidden="true">
                   <img
                     className="research__logo"
-                    src="/media/logos/prime.jpg"
+                    src="/media/logos/prime.png"
                     alt=""
                     loading="lazy"
                   />
                 </div>
               </div>
-              <p className="page__meta">
-                <span className="page__pill">Project Lead & Researcher</span>
-                <span className="page__pill">Behavioral Data Science</span>
-              </p>
               <div className="research__body">
                 <p>
                   I lead research on “digital nudges” — how interface design
@@ -65,18 +82,14 @@ export default function Research() {
                     Quantitative meta-analysis across 100+ experimental studies
                   </li>
                   <li>
-                    Built a unified taxonomy to normalize metrics (conversion,
-                    time-on-task, error rates)
+                    Built a unified taxonomy to normalize design to maximize
+                    effects
                   </li>
                   <li>
-                    Mapped correlations between nudge types (social proof,
-                    scarcity) and outcomes
+                    Leading a team of graduate students with backgrounds from
+                    behavioral science to business technology
                   </li>
                 </ul>
-                <p className="page__callout">
-                  Output: first-author submission to Behaviour & Information
-                  Technology.
-                </p>
               </div>
             </ScrollStackItem>
 
@@ -85,31 +98,37 @@ export default function Research() {
                 <div className="research__heading">
                   <div className="research__titleRow">
                     <h2 className="research__title">Brown AI Safety Team</h2>
-                    <div className="research__subhead">
+                    <div className="research__subhead research__subhead--inline">
                       <span className="research__subheadItem">
                         Dates: February 2025–present
                       </span>
                       <span className="research__subheadItem">
-                        PI: (add PI)
+                        <a
+                          href="https://www.baist.ai/"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Group website
+                        </a>
                       </span>
                     </div>
                   </div>
+                  <p className="page__meta research__meta">
+                    <span className="page__pill">Technical Fellow</span>
+                    <span className="page__pill">Governance</span>
+                    <span className="page__pill">Robustness</span>
+                    <span className="page__pill">Alignment</span>
+                  </p>
                 </div>
                 <div className="research__logoWrap" aria-hidden="true">
                   <img
                     className="research__logo"
-                    src="/media/logos/baist.webp"
+                    src="/media/logos/baist.png"
                     alt=""
                     loading="lazy"
                   />
                 </div>
               </div>
-              <p className="page__meta">
-                <span className="page__pill">Technical Fellow</span>
-                <span className="page__pill">Governance</span>
-                <span className="page__pill">Robustness</span>
-                <span className="page__pill">Alignment</span>
-              </p>
               <div className="research__body">
                 <ul className="page__list">
                   <li>
@@ -135,15 +154,38 @@ export default function Research() {
                     <h2 className="research__title">
                       Brown Language and Thought Lab
                     </h2>
-                    <div className="research__subhead">
+                    <div className="research__subhead research__subhead--inline">
                       <span className="research__subheadItem">
                         Dates: February 2025–present
                       </span>
                       <span className="research__subheadItem">
-                        PI: Roman Feiman
+                        <a
+                          href="https://lailacj.github.io/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          PhD Mentor: Laila Johnston
+                        </a>
+                      </span>
+                      <span className="research__subheadItem">
+                        <a
+                          href="https://sites.brown.edu/bltlab/"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Lab website
+                        </a>
                       </span>
                     </div>
                   </div>
+                  <p className="page__meta research__meta">
+                    <span className="page__pill">
+                      Volunteer Research Assistant
+                    </span>
+                    <span className="page__pill">
+                      Computational Linguistics
+                    </span>
+                  </p>
                 </div>
                 <div className="research__logoWrap" aria-hidden="true">
                   <img
@@ -154,10 +196,6 @@ export default function Research() {
                   />
                 </div>
               </div>
-              <p className="page__meta">
-                <span className="page__pill">Volunteer Research Assistant</span>
-                <span className="page__pill">Computational Linguistics</span>
-              </p>
               <div className="research__body">
                 <p>
                   I work on the “relevance problem” (frame problem): how models
@@ -183,29 +221,37 @@ export default function Research() {
                     <h2 className="research__title">
                       Amicus Brain Innovations
                     </h2>
-                    <div className="research__subhead">
+                    <div className="research__subhead research__subhead--inline">
                       <span className="research__subheadItem">
-                        Dates: (add dates)
+                        Dates: July 2022–August 2024
                       </span>
                       <span className="research__subheadItem">
-                        PI: (add PI)
+                        <a
+                          href="https://amicusbrain.com/"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Company website
+                        </a>
                       </span>
                     </div>
                   </div>
+                  <p className="page__meta research__meta">
+                    <span className="page__pill">IP R&amp;D Lead</span>
+                    <span className="page__pill">
+                      Applied GenAI (2022–2024)
+                    </span>
+                  </p>
                 </div>
                 <div className="research__logoWrap" aria-hidden="true">
                   <img
                     className="research__logo"
-                    src="/media/logos/amicus.jpg"
+                    src="/media/logos/ab.png"
                     alt=""
                     loading="lazy"
                   />
                 </div>
               </div>
-              <p className="page__meta">
-                <span className="page__pill">IP R&D Lead</span>
-                <span className="page__pill">Applied GenAI (2022–2024)</span>
-              </p>
               <div className="research__body">
                 <ul className="page__list">
                   <li>

@@ -10,8 +10,12 @@
   height: 220px;
 }
 
+.carousel--portrait {
+  width: 100%;
+}
+
 .carousel--portrait .carousel__viewport {
-  height: 340px;
+  height: 360px;
 }
 
 .carousel__slide {

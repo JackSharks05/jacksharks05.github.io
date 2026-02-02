@@ -1,0 +1,11 @@
+User-agent: *
+
+# Block image crawling
+Disallow: /media/
+
+# Block selected pages/routes
+Disallow: /thissite
+Disallow: /thoughts
+Disallow: /photography-videography
+Disallow: /now
+Disallow: /music

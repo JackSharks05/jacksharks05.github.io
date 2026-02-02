@@ -1,7 +1,6 @@
 .projects__stack {
   margin-top: 6px;
-  flex: 1;
-  min-height: 0;
+  height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
@@ -9,7 +8,6 @@
 
 .projects__pageCard {
   height: calc(100vh - 202px);
-  height: calc(100dvh - 202px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -22,8 +20,6 @@
 .projects__content {
   flex: 1;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
 }
 
 .projects__item {
@@ -81,6 +77,19 @@
   min-height: 220px;
 }
 
+.projects__carousel {
+  width: 100%;
+  height: 100%;
+}
+
+.projects__carousel .carousel__viewport {
+  height: 100%;
+}
+
+.projects__carousel .carousel__slide {
+  height: 100%;
+}
+
 .projects__mediaPlaceholder {
   width: 100%;
   height: 100%;
@@ -101,7 +110,6 @@
 @media (max-width: 760px) {
   .projects__pageCard {
     height: calc(100vh - 206px);
-    height: calc(100dvh - 206px);
   }
 
   .projects__header {

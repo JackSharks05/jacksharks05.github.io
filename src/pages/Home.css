@@ -177,7 +177,7 @@
 .home__nebula--a {
   background: radial-gradient(
     closest-side,
-    rgba(120, 180, 255, 0.28),
+    rgba(230, 0, 255, 0.28),
     rgba(0, 0, 0, 0)
   );
 }
@@ -188,11 +188,7 @@
   top: 80px;
   width: 620px;
   height: 620px;
-  background: radial-gradient(
-    closest-side,
-    rgba(255, 140, 210, 0.18),
-    rgba(0, 0, 0, 0)
-  );
+  background: radial-gradient(closest-side, #ff0f232e, rgba(0, 0, 0, 0));
 }
 
 .home__intro {

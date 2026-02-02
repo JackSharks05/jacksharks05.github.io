@@ -205,6 +205,7 @@ const GalaxyCanvas = ({
 
   const [latText, setLatText] = useState("");
   const [lonText, setLonText] = useState("");
+  const [customTimeEnabled, setCustomTimeEnabled] = useState(false);
   const [locationQuery, setLocationQuery] = useState("");
   const [locationResults, setLocationResults] = useState([]);
   const [locationSearchMessage, setLocationSearchMessage] = useState("");
@@ -246,6 +247,8 @@ const GalaxyCanvas = ({
   const milkyWayPointsRef = useRef([]);
   const pulseEnabledRef = useRef(true);
   const [hoveredBody, setHoveredBody] = useState(null);
+  const [localSelectedConstellationKeys, setLocalSelectedConstellationKeys] =
+    useState([]);
   const constellationPulseRef = useRef({
     activeKey: null,
     startAt: -1,
@@ -312,8 +315,15 @@ const GalaxyCanvas = ({
   }, [selectedConstellationKey]);
 
   useEffect(() => {
-    selectedConstellationKeysRef.current = selectedConstellationKeys;
-  }, [selectedConstellationKeys]);
+    if (
+      Array.isArray(selectedConstellationKeys) &&
+      selectedConstellationKeys.length > 0
+    ) {
+      selectedConstellationKeysRef.current = selectedConstellationKeys;
+    } else {
+      selectedConstellationKeysRef.current = localSelectedConstellationKeys;
+    }
+  }, [selectedConstellationKeys, localSelectedConstellationKeys]);
 
   useEffect(() => {
     // Hide controls until a short beat after load (or until the user moves).
@@ -1710,6 +1720,13 @@ const GalaxyCanvas = ({
         { x: 0, y: 0 },
       );
 
+      setLocalSelectedConstellationKeys((prev) => {
+        if (Array.isArray(prev) && prev.includes(clickedConstellation.key)) {
+          return prev;
+        }
+        return [...(prev || []), clickedConstellation.key];
+      });
+
       onConstellationClick?.({
         key: clickedConstellation.key,
         name: clickedConstellation.name,
@@ -1894,8 +1911,8 @@ const GalaxyCanvas = ({
                     </label>
                     <input
                       type="range"
-                      min="-12"
-                      max="12"
+                      min="-24"
+                      max="24"
                       step="0.1"
                       value={timeOffsetTarget}
                       onChange={(e) =>
@@ -1904,15 +1921,20 @@ const GalaxyCanvas = ({
                     />
                   </div>
 
-                  {/**
-                   * Manual Inputs (temporarily disabled)
-                   *
-                   * If you want these back later, we can also polish validation
-                   * and add keyboard shortcuts.
-                   */}
-                  {false && (
+                  <div className="control-group">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={customTimeEnabled}
+                        onChange={(e) => setCustomTimeEnabled(e.target.checked)}
+                      />
+                      Enable custom date/time controls
+                    </label>
+                  </div>
+
+                  {customTimeEnabled && (
                     <div className="control-section">
-                      <h3>Manual Inputs</h3>
+                      <h3>Custom Date/Time</h3>
 
                       <div className="control-group">
                         <label>Set Coordinates</label>
@@ -2057,7 +2079,9 @@ const GalaxyCanvas = ({
                               const now = new Date();
                               const hours =
                                 (dt.getTime() - now.getTime()) / 3600000;
-                              setTimeOffsetTarget(clamp(hours, -12, 12));
+                              setTimeOffsetTarget(
+                                clamp(hours, -99999999, 99999999),
+                              );
                             }}
                           >
                             Apply

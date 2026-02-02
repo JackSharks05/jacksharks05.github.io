@@ -127,7 +127,7 @@
   left: 22px;
   right: auto;
   width: auto;
-  z-index: 55;
+  z-index: 90;
   pointer-events: auto;
 }
 
@@ -146,9 +146,17 @@
 }
 
 /* When Home is in planetarium mode, let pointer events pass through to the
-   background canvas, except for explicit UI like the exit button/preview. */
+   background canvas, except for explicit UI like the exit button/preview.
+   Applied globally so desktop and mobile both behave the same. */
 .site-main.is-home.is-planetarium {
   pointer-events: none;
+}
+
+/* Allow Home's planetarium controls to remain clickable even when the
+   main content layer is pass-through. */
+.site-main.is-home.is-planetarium .home__planetariumToggle,
+.site-main.is-home.is-planetarium .home__constellationPreview {
+  pointer-events: auto;
 }
 
 @media (max-width: 760px) {
@@ -181,10 +189,6 @@
 
   .site-main {
     padding: 170px 14px 36px;
-  }
-
-  .site-main.is-home.is-planetarium {
-    pointer-events: none;
   }
 
   .header-hint {

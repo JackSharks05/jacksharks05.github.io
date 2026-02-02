@@ -1,0 +1,54 @@
+.music__content {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.music__copy {
+  flex: 1 1 0;
+  max-width: 520px;
+}
+
+.music__list {
+  margin-top: 12px;
+  padding-left: 18px;
+}
+
+.music__list li + li {
+  margin-top: 6px;
+}
+
+.music__listCard {
+  margin-top: 14px;
+}
+
+.music__hint {
+  margin-top: 10px;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.music__cards {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.music__sectionTitle {
+  margin-bottom: 6px;
+}
+
+.music__card {
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .music__content {
+    flex-direction: column;
+  }
+
+  .music__cards {
+    width: 100%;
+  }
+}

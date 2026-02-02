@@ -22,7 +22,7 @@ export default function ComingSoon() {
         <div className="comingSoon__badge">jack de haan</div>
         <h1 className="comingSoon__title">coming soon</h1>
         <p className="comingSoon__subtitle">
-          currently building the cosmos. check back soon!
+          currently building the cosmos. check back in a few days!!
         </p>
       </div>
     </div>

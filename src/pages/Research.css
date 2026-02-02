@@ -1,15 +1,13 @@
 .research__stack {
   margin-top: 6px;
-  flex: 1;
-  min-height: 0;
+  height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
 
 .research__pageCard {
-  height: calc(100vh - 202px);
-  height: calc(100dvh - 202px);
+  height: calc(100vh - 170px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -22,8 +20,6 @@
 .research__content {
   flex: 1;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
 }
 
 .research__item {
@@ -51,19 +47,28 @@
 
 .research__titleRow {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
+  column-gap: 10px;
+  row-gap: 4px;
   min-width: 0;
 }
 
 .research__subhead {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   color: rgba(255, 255, 255, 0.62);
   font-size: 12.5px;
   line-height: 1.35;
+}
+
+.research__subhead--inline {
+  margin-left: 2px;
+}
+
+.research__subhead--below {
+  margin-top: 4px;
 }
 
 .research__subheadItem {
@@ -88,9 +93,9 @@
 
 .research__logo {
   display: block;
-  width: 82%;
-  height: 82%;
-  object-fit: contain;
+  width: 130%;
+  height: 130%;
+  object-fit: cover;
   filter: saturate(1.05);
 }
 
@@ -107,10 +112,13 @@
   line-height: 1.65;
 }
 
+.research__meta {
+  margin-top: 6px;
+}
+
 @media (max-width: 760px) {
   .research__pageCard {
-    height: calc(100vh - 206px);
-    height: calc(100dvh - 206px);
+    height: calc(100vh - 176px);
   }
 
   .research__header {

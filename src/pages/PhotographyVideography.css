@@ -1,0 +1,62 @@
+.photography__content {
+  position: relative;
+}
+
+.page__card .masonry__list {
+  margin-top: 12px;
+  min-height: 260px;
+}
+
+.photography__overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  z-index: 2;
+}
+
+.photography__overlayCard {
+  max-width: 640px;
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid var(--theme-outline-inner, rgba(254, 0, 0, 0.32));
+  background: rgba(8, 12, 24, 0.95);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.7);
+  padding: 16px;
+}
+
+.photography__overlayImageWrap {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.photography__overlayImage {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.photography__overlayTitle {
+  margin: 8px 0 0;
+  font-size: 17px;
+}
+
+.photography__overlayText {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.photography__overlayClose {
+  margin-top: 10px;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+@media (max-width: 760px) {
+  .page__card .masonry__list {
+    min-height: 200px;
+  }
+}

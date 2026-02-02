@@ -12,7 +12,7 @@ export default function About() {
           build human-centric decision systems.
         </p>
         <div className="page__content">
-          <div className="page__mediaRow">
+          <div className="page__mediaRow page__mediaRow--about">
             <div>
               <p>
                 I’m Jack de Haan — a builder with a research mindset. My
@@ -32,15 +32,24 @@ export default function About() {
                 className="carousel--portrait"
                 ariaLabel="About photos"
                 items={[
-                  { key: "about-1", caption: "enjoying brown's greenhouse!" },
+                  {
+                    key: "about-1",
+                    src: "/media/photos/green.JPG",
+                    alt: "Enjoying Brown's greenhouse",
+                    caption: "enjoying brown's greenhouse!",
+                  },
                   {
                     key: "about-2",
+                    src: "/media/photos/speech2.jpeg",
+                    alt: "Giving the graduation address at Princeton in Beijing",
                     caption:
                       "giving the graduation address at Princeton in Beijing 2025",
                   },
                   {
                     key: "about-3",
-                    caption: "hiking franconia ridge loop in nov 2025!",
+                    src: "/media/photos/ski.jpeg",
+                    alt: "jack with adorable little children in a ski gondola cabin!",
+                    caption: "ski coaching the best kids this past winter!",
                   },
                 ]}
               />

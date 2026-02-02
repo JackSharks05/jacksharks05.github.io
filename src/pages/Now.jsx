@@ -25,16 +25,22 @@ export default function Now() {
 
         <div className="now__content">
           <h1 className="page__title">Now</h1>
-          <p className="page__lede">What I’m focused on right now.</p>
+          <p className="page__lede">what's happening in my life currenly!</p>
           <div className="page__content">
-            <p>
-              This page is a snapshot — I’ll keep it updated as my priorities
-              shift.
-            </p>
+            <p>I am currently:</p>
             <ul className="page__list">
-              <li>Building human-centered decision systems</li>
-              <li>AI safety: interpretability, robustness, and alignment</li>
-              <li>Shipping tools that reduce friction for real users</li>
+              <li>in my fourth semester at Brown! </li>{" "}
+              {/*Taking:</li>
+              {/* <ul className="page__list">
+                <li>Distributed Systems</li>
+                <li>Computational Linguistics</li>
+                <li>Logic in Language and Thought</li>
+                <li>Bilingualism</li>
+                <li>History of Chatbots (Independent Study)</li>
+              </ul> */}
+              <li>helping to write MIT mystery hunt 2027!</li>
+              <li>self-studying learning korean with another polyglot</li>
+              <li>applying for summer internships :(</li>
             </ul>
           </div>
         </div>

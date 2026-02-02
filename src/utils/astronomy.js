@@ -179,8 +179,8 @@ export async function getUserLocation() {
     console.log("Could not get location, using default");
     // Default to Greenwich
     return {
-      latitude: 51.4779,
-      longitude: 0,
+      latitude: 40.7128,
+      longitude: -74.006,
       city: "Default",
     };
   }

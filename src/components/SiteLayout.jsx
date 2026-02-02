@@ -222,7 +222,7 @@ export default function SiteLayout() {
           onFirstDrag={() => {
             window.dispatchEvent(new CustomEvent("planetarium:first-drag"));
           }}
-          interactive={isHome && planetariumActive}
+          interactive={isHome}
         />
       )}
 

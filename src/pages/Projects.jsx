@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ScrollStack, { ScrollStackItem } from "../components/ScrollStack";
+import ImageCarousel from "../components/ImageCarousel";
 import "./Page.css";
 import "./Projects.css";
 
@@ -50,9 +51,26 @@ export default function Projects() {
               </p>
 
               <div className="projects__media">
-                <div className="projects__mediaPlaceholder">
-                  Project image coming soon
-                </div>
+                <ImageCarousel
+                  className="projects__carousel"
+                  items={[
+                    {
+                      key: "thissite-1",
+                      alt: "Planetarium homepage",
+                      caption: "Interactive star map",
+                    },
+                    {
+                      key: "thissite-2",
+                      alt: "Card navigation",
+                      caption: "Smooth scroll stacks",
+                    },
+                    {
+                      key: "thissite-3",
+                      alt: "Project showcase",
+                      caption: "Constellation interaction",
+                    },
+                  ]}
+                />
               </div>
 
               <div className="projects__body">
@@ -102,9 +120,26 @@ export default function Projects() {
               </p>
 
               <div className="projects__media">
-                <div className="projects__mediaPlaceholder">
-                  Project image coming soon
-                </div>
+                <ImageCarousel
+                  className="projects__carousel"
+                  items={[
+                    {
+                      key: "cabnet-1",
+                      alt: "Course catalog interface",
+                      caption: "Enhanced search",
+                    },
+                    {
+                      key: "cabnet-2",
+                      alt: "Prerequisite visualization",
+                      caption: "Course dependencies",
+                    },
+                    {
+                      key: "cabnet-3",
+                      alt: "Concentration paths",
+                      caption: "85+ pathways",
+                    },
+                  ]}
+                />
               </div>
 
               <div className="projects__body">
@@ -165,9 +200,26 @@ export default function Projects() {
               </p>
 
               <div className="projects__media">
-                <div className="projects__mediaPlaceholder">
-                  Project image coming soon
-                </div>
+                <ImageCarousel
+                  className="projects__carousel"
+                  items={[
+                    {
+                      key: "bph-1",
+                      alt: "Puzzle hunt homepage",
+                      caption: "Team dashboard",
+                    },
+                    {
+                      key: "bph-2",
+                      alt: "Puzzle interface",
+                      caption: "Submission system",
+                    },
+                    {
+                      key: "bph-3",
+                      alt: "Leaderboard view",
+                      caption: "Real-time rankings",
+                    },
+                  ]}
+                />
               </div>
 
               <div className="projects__body">
@@ -217,9 +269,26 @@ export default function Projects() {
               </p>
 
               <div className="projects__media">
-                <div className="projects__mediaPlaceholder">
-                  Project image coming soon
-                </div>
+                <ImageCarousel
+                  className="projects__carousel"
+                  items={[
+                    {
+                      key: "wyc-1",
+                      alt: "Apple Watch calendar",
+                      caption: "Next class view",
+                    },
+                    {
+                      key: "wyc-2",
+                      alt: "Schedule complication",
+                      caption: "Watch face integration",
+                    },
+                    {
+                      key: "wyc-3",
+                      alt: "Booking interface",
+                      caption: "Conference scheduling",
+                    },
+                  ]}
+                />
               </div>
 
               <div className="projects__body">

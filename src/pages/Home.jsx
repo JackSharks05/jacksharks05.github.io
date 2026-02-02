@@ -30,6 +30,7 @@ export default function Home() {
   const [previewAnchorClient, setPreviewAnchorClient] = useState(null);
   const stageRef = useRef(null);
   const introOverlayInnerRef = useRef(null);
+  const skipNextPlanetariumScrollResetRef = useRef(false);
   const lastEnterHandledLocationKeyRef = useRef(null);
   const lastIntroHandledLocationKeyRef = useRef(null);
   const exitAutoEnterCooldownUntilRef = useRef(0);
@@ -56,6 +57,17 @@ export default function Home() {
   }, [isPlanetarium]);
 
   useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setIsPreviewOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  useEffect(() => {
     // Lock scroll while in planetarium; unlock once "Exit" is pressed.
     const prevHtmlOverflow = document.documentElement.style.overflow;
     const prevBodyOverflow = document.body.style.overflow;
@@ -66,7 +78,11 @@ export default function Home() {
     document.body.style.overflow = isPlanetarium ? "hidden" : prevBodyOverflow;
 
     if (isPlanetarium) {
-      window.scrollTo({ top: 0, behavior: "auto" });
+      if (skipNextPlanetariumScrollResetRef.current) {
+        skipNextPlanetariumScrollResetRef.current = false;
+      } else {
+        window.scrollTo({ top: 0, behavior: "auto" });
+      }
     }
 
     return () => {
@@ -77,9 +93,19 @@ export default function Home() {
 
   const enterPlanetarium = ({ smooth = true } = {}) => {
     setIsPreviewOpen(false);
+    skipNextPlanetariumScrollResetRef.current = true;
     setIsPlanetarium(true);
     setIntroStageHeight(null);
-    window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
+
+    if (smooth) {
+      try {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } catch {
+        window.scrollTo(0, 0);
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
   };
 
   const openIntro = ({ smooth = true } = {}) => {
@@ -106,11 +132,12 @@ export default function Home() {
         window.scrollY || docEl.scrollTop || body.scrollTop || 0;
 
       const rect = el.getBoundingClientRect();
-      const stageHeight = window.innerHeight + rect.height;
+      const desiredTop = 140;
+      const stageHeight = window.innerHeight + rect.height + desiredTop;
       setIntroStageHeight(stageHeight);
 
-      const overlayBottom = rect.bottom + currentScroll;
-      const target = Math.max(0, overlayBottom - window.innerHeight);
+      const elementTop = rect.top + currentScroll;
+      const target = Math.max(0, elementTop - desiredTop);
       const behavior = smooth ? "smooth" : "auto";
 
       if (smooth) {
@@ -353,29 +380,15 @@ export default function Home() {
           style={{ opacity: isPlanetarium ? 0.25 : 0.9 }}
         />
 
-        {skyLoaded && (
-          <button
-            type="button"
-            className={
-              uiUnlocked
-                ? "home__planetariumToggle is-ready"
-                : "home__planetariumToggle"
-            }
-            onClick={handleTogglePlanetarium}
-          >
-            {isPlanetarium ? "Exit planetarium" : "Enter planetarium"}
-          </button>
-        )}
-
         {isPreviewOpen && constellationPreview && (
           <div
             className="home__constellationPreview"
             role="dialog"
             style={(() => {
-              if (!previewAnchorClient || !stageRef.current) return undefined;
+              if (!stageRef.current) return undefined;
               const rect = stageRef.current.getBoundingClientRect();
 
-              // Mobile: keep the preview fully readable and on-screen.
+              // Mobile: keep the preview readable and anchored above the dock.
               if (rect.width <= 520) {
                 return {
                   left: 14,
@@ -386,16 +399,11 @@ export default function Home() {
                 };
               }
 
-              const x = previewAnchorClient.x - rect.left;
-              const y = previewAnchorClient.y - rect.top;
-              const placeRight = x < rect.width * 0.55;
-              const placeDown = y < rect.height * 0.55;
-              const tx = placeRight ? "16px" : "calc(-100% - 16px)";
-              const ty = placeDown ? "16px" : "calc(-100% - 16px)";
+              // Desktop: center the preview on the screen.
               return {
-                left: x,
-                top: y,
-                transform: `translate(${tx}, ${ty})`,
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
               };
             })()}
           >
@@ -448,6 +456,7 @@ export default function Home() {
                       "intellectually fearless",
                       "a long distance runner",
                       "a translator",
+                      "a record-breaker",
                       "a horticulturist",
                       "a linguist",
                       "a mentor",
@@ -456,6 +465,7 @@ export default function Home() {
                       "a traveler",
                       "a inspirer",
                       "a team leader",
+                      "an award-winning poet",
                       "a synthesizer",
                       "a behavioral scientist",
                       "a visionary",
@@ -471,12 +481,11 @@ export default function Home() {
                     staggerFrom="first"
                     className="home__rotatingText"
                   />
-                  . I build human-centric decision systems at the intersection
-                  of Cognitive Science and Computer Science. I do a lot of
-                  things and love even more! Welcome to my planetarium
-                  portfolio! You can use this site to learn about me, see my
-                  projects & research experience, hear what I've been listening
-                  to recently, read my thoughts...
+                  . Welcome to my planetarium portfolio! As you'll come to
+                  learn, I do a lot of things and love even more! You can use
+                  this site to learn about me, see my projects & research
+                  experience, hear what I've been listening to recently, read my
+                  thoughts...
                 </p>
                 <p className="home__lead">
                   ...and you can <i>also</i> use it as a fully functioning and
@@ -490,14 +499,24 @@ export default function Home() {
                   className="home__carousel carousel--portrait"
                   ariaLabel="Introduction photos"
                   items={[
-                    { key: "intro-1", caption: "Add an intro photo here" },
+                    {
+                      key: "intro-1",
+                      src: "/media/photos/leaf.JPG",
+                      alt: "picture of jack holding up a leaf to his face with fall foliage in the background",
+                      caption: "autumn in providence :)",
+                    },
                     {
                       key: "intro-2",
-                      caption: "Talk / research / project shot",
+                      src: "/media/photos/franconia.JPG",
+                      alt: "picture of jack by a waterfall in franconia, nh",
+                      caption:
+                        "hiking the franconia ridge loop in november 2025!",
                     },
                     {
                       key: "intro-3",
-                      caption: "Travel / music / something fun",
+                      src: "/media/photos/guards1.jpg",
+                      alt: "jack holding a mic in front of a crowd at brown puzzle hunt 2025!",
+                      caption: "hosting a game show at brown puzzle hunt 2025!",
                     },
                   ]}
                 />
@@ -573,6 +592,20 @@ export default function Home() {
             </div>
           </div>
         </div>
+      )}
+
+      {skyLoaded && (
+        <button
+          type="button"
+          className={
+            uiUnlocked
+              ? "home__planetariumToggle is-ready"
+              : "home__planetariumToggle"
+          }
+          onClick={handleTogglePlanetarium}
+        >
+          {isPlanetarium ? "Exit planetarium" : "Enter planetarium"}
+        </button>
       )}
     </div>
   );
