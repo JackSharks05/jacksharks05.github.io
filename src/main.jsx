@@ -4,6 +4,14 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import starPng from "./assets/star.png";
 
+if (typeof window !== "undefined") {
+  const host = window.location.hostname;
+  if (host === "jacksharks05.github.io") {
+    const target = `https://jackdehaan.com${window.location.pathname}${window.location.search}${window.location.hash}`;
+    window.location.replace(target);
+  }
+}
+
 const setFavicon = (href) => {
   if (typeof document === "undefined") return;
   let link = document.querySelector('link[rel="icon"]');
