@@ -4,7 +4,6 @@ import RotatingText from "../components/RotatingText";
 import ImageCarousel from "../components/ImageCarousel";
 import { getConstellationCard } from "../data/constellationCards";
 import { getSolarSystemCard, sunLink } from "../data/solarSystemCards";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 import "./Home.css";
 
 export default function Home() {
@@ -608,7 +607,6 @@ export default function Home() {
           {isPlanetarium ? "Exit planetarium" : "Enter planetarium"}
         </button>
       )}
-      <SpeedInsights />
     </div>
   );
 }
