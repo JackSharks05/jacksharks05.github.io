@@ -1,19 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Galaxy from "../components/Galaxy";
+import { SiteLayoutContext } from "../components/SiteLayout";
 import "./NotFoundFull.css";
 
 export default function NotFound() {
+  const layout = useContext(SiteLayoutContext);
+
   useEffect(() => {
-    window.dispatchEvent(
-      new CustomEvent("planetarium:404", { detail: { active: true } }),
-    );
+    layout?.setIsNotFound?.(true);
+    layout?.setHidePlanetarium?.(true);
     return () => {
-      window.dispatchEvent(
-        new CustomEvent("planetarium:404", { detail: { active: false } }),
-      );
+      layout?.setIsNotFound?.(false);
+      layout?.setHidePlanetarium?.(false);
     };
-  }, []);
+  }, [layout]);
 
   useEffect(() => {
     const prevHtmlOverflow = document.documentElement.style.overflow;
@@ -47,8 +48,8 @@ export default function NotFound() {
         <div className="notFound__badge">jack de haan</div>
         <h1 className="notFound__title">404</h1>
         <p className="notFound__subtitle">
-          that page doesnt exist... just yet! head back <Link to="/">home</Link>
-          .
+          that page doesn't exist... just yet! head back{" "}
+          <Link to="/">home</Link>.
         </p>
       </div>
     </div>
