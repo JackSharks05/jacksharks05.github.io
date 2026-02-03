@@ -399,7 +399,96 @@ export default function Home() {
                 };
               }
 
-              // Desktop: center the preview on the screen.
+              // If we have an anchor from the click, position the card
+              // adjacent to that point without covering it, and keep it
+              // within the stage bounds.
+              if (previewAnchorClient) {
+                const margin = 16;
+                const maxWidth = Math.min(340, rect.width - 44);
+                const estHeight = 170;
+
+                let x = previewAnchorClient.x - rect.left;
+                let y = previewAnchorClient.y - rect.top;
+
+                const clamp = (value, min, max) =>
+                  Math.max(min, Math.min(max, value));
+
+                const spaceAbove = y;
+                const spaceBelow = rect.height - y;
+                const spaceLeft = x;
+                const spaceRight = rect.width - x;
+
+                const estHalfWidth = maxWidth / 2;
+                const estHalfHeight = estHeight / 2;
+
+                let placement;
+
+                if (spaceBelow >= estHeight + margin) {
+                  placement = "below";
+                } else if (spaceAbove >= estHeight + margin) {
+                  placement = "above";
+                } else if (spaceRight >= maxWidth + margin) {
+                  placement = "right";
+                } else if (spaceLeft >= maxWidth + margin) {
+                  placement = "left";
+                } else {
+                  // Fallback: bias below if possible, otherwise above.
+                  placement = spaceBelow >= spaceAbove ? "below" : "above";
+                }
+
+                if (placement === "below") {
+                  const clampedX = clamp(
+                    x,
+                    margin + estHalfWidth,
+                    rect.width - margin - estHalfWidth,
+                  );
+                  return {
+                    left: clampedX,
+                    top: y + 18,
+                    transform: "translateX(-50%)",
+                  };
+                }
+
+                if (placement === "above") {
+                  const clampedX = clamp(
+                    x,
+                    margin + estHalfWidth,
+                    rect.width - margin - estHalfWidth,
+                  );
+                  return {
+                    left: clampedX,
+                    top: y - 18,
+                    transform: "translate(-50%, -100%)",
+                  };
+                }
+
+                if (placement === "right") {
+                  const clampedY = clamp(
+                    y,
+                    margin + estHalfHeight,
+                    rect.height - margin - estHalfHeight,
+                  );
+                  return {
+                    left: Math.min(rect.width - margin, x + 18),
+                    top: clampedY,
+                    transform: "translateY(-50%)",
+                  };
+                }
+
+                // placement === "left"
+                const clampedY = clamp(
+                  y,
+                  margin + estHalfHeight,
+                  rect.height - margin - estHalfHeight,
+                );
+                return {
+                  left: Math.max(margin, x - 18),
+                  top: clampedY,
+                  transform: "translate(-100%, -50%)",
+                };
+              }
+
+              // Desktop fallback: center the preview on the screen.
               return {
                 left: "50%",
                 top: "50%",
