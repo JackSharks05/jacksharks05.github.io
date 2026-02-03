@@ -1,7 +1,6 @@
 import React, { Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import ComingSoon from "./pages/ComingSoon";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./App.css";
 
 const Loading = () => <div className="page">Loading…</div>;
