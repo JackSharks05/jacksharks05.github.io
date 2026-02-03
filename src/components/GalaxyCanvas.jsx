@@ -1224,7 +1224,9 @@ const GalaxyCanvas = ({
     setHoveredBody(null);
 
     let foundStar = null;
-    const hoverRadius = 15; // pixels
+    let bestDistSq = Infinity;
+    const maxHoverRadius = 11; // pixels, tighter for precision
+    const maxHoverRadiusSq = maxHoverRadius * maxHoverRadius;
 
     for (const star of starsRef.current) {
       // Only check visible stars (above horizon)
@@ -1233,14 +1235,14 @@ const GalaxyCanvas = ({
       // Show all stars if toggle is on, otherwise only named stars
       const shouldShow =
         showAllStarsRef.current || (star.name && star.name.length > 0);
-      if (shouldShow) {
-        const distance = Math.sqrt(
-          Math.pow(x - star.x, 2) + Math.pow(y - star.y, 2),
-        );
-        if (distance < hoverRadius) {
-          foundStar = star;
-          break;
-        }
+      if (!shouldShow) continue;
+
+      const dx = x - star.x;
+      const dy = y - star.y;
+      const distSq = dx * dx + dy * dy;
+      if (distSq <= maxHoverRadiusSq && distSq < bestDistSq) {
+        bestDistSq = distSq;
+        foundStar = star;
       }
     }
 
@@ -1376,29 +1378,31 @@ const GalaxyCanvas = ({
 
     const xs = visibleStars.map((s) => s.x);
     const ys = visibleStars.map((s) => s.y);
-    const minX = Math.min(...xs) - 40;
-    const maxX = Math.max(...xs) + 40;
-    const minY = Math.min(...ys) - 40;
-    const maxY = Math.max(...ys) + 40;
+    const minX = Math.min(...xs) - 30;
+    const maxX = Math.max(...xs) + 30;
+    const minY = Math.min(...ys) - 30;
+    const maxY = Math.max(...ys) + 30;
 
     if (x < minX || x > maxX || y < minY || y > maxY) {
       return false;
     }
 
     // Check proximity to any visible star
+    const starPickRadius = 20; // tighter than before
+    const starPickRadiusSq = starPickRadius * starPickRadius;
     if (
       visibleStars.some((star) => {
-        const distance = Math.sqrt(
-          Math.pow(x - star.x, 2) + Math.pow(y - star.y, 2),
-        );
-        return distance < 30;
+        const dx = x - star.x;
+        const dy = y - star.y;
+        const distSq = dx * dx + dy * dy;
+        return distSq < starPickRadiusSq;
       })
     ) {
       return true;
     }
 
     // Also allow interaction on the constellation lines.
-    const lineHitRadius = 10;
+    const lineHitRadius = 8;
     return constellation.connections.some(([startIdx, endIdx]) => {
       const start = constellation.stars[startIdx];
       const end = constellation.stars[endIdx];
