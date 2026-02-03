@@ -71,7 +71,12 @@ export const constellationCards = {
   Equ: { title: "Equuleus", fact: "(Add a fun fact here)", to: "/projects" },
   Eri: { title: "Eridanus", fact: "(Add a fun fact here)", to: "/thoughts" },
   For: { title: "Fornax", fact: "(Add a fun fact here)", to: "/research" },
-  Gem: { title: "Gemini", fact: "(Add a fun fact here)", to: "/resume" },
+  Gem: {
+    title: "Gemini",
+    fact: "Despite what many think, my younger brother and I are not twins. However, we are incredibly close, and he is one of the most brilliant people I know.",
+    to: "https://person.rdh540.dev/",
+    linkText: "Go check him out!",
+  },
   Gru: { title: "Grus", fact: "(Add a fun fact here)", to: "/projects" },
   Her: { title: "Hercules", fact: "(Add a fun fact here)", to: "/projects" },
   Hor: {
