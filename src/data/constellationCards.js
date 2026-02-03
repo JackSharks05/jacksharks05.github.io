@@ -9,6 +9,8 @@
 // - fact: Short fun fact (1-2 sentences)
 // - to:   Route for the link button
 // - linkText: Optional label for the link button (defaults to "See more")
+// - imageSrc: Optional image shown above the text inside the card
+// - imageAlt: Optional alt text for the image
 //
 // Tip: You can point multiple constellations at the same section.
 

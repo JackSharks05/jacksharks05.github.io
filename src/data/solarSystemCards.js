@@ -3,6 +3,14 @@
 // - The Sun is configured as a direct link (no preview card).
 // - Planets (and optionally the Moon) use the same card UI as constellations.
 //
+// Fields:
+// - title: Heading shown in the preview card
+// - fact: Short fun fact (1-2 sentences)
+// - to:   Route for the link button
+// - linkText: Optional label for the link button (defaults to "See more")
+// - imageSrc: Optional image shown above the text inside the card
+// - imageAlt: Optional alt text for the image
+//
 // Names must match `obj.name` from src/utils/solarSystem.js (e.g. "Mars").
 
 export const sunLink = {

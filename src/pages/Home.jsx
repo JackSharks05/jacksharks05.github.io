@@ -225,6 +225,8 @@ export default function Home() {
         blurb: card.fact || "",
         path: card.to || "/about",
         linkText: card.linkText || "See more",
+        imageSrc: card.imageSrc || null,
+        imageAlt: card.imageAlt || "",
       });
       setIsPreviewOpen(true);
       return;
@@ -242,6 +244,8 @@ export default function Home() {
       blurb: card.fact || "",
       path: card.to || "/about",
       linkText: card.linkText || "See more",
+      imageSrc: card.imageSrc || null,
+      imageAlt: card.imageAlt || "",
     });
     setIsPreviewOpen(true);
   };
@@ -504,6 +508,18 @@ export default function Home() {
             >
               ✕
             </button>
+            {constellationPreview.imageSrc && (
+              <div className="home__constellationPreviewMedia">
+                <img
+                  src={constellationPreview.imageSrc}
+                  alt={
+                    constellationPreview.imageAlt ||
+                    constellationPreview.title ||
+                    "Constellation preview"
+                  }
+                />
+              </div>
+            )}
             <div className="home__constellationPreviewTitle">
               {constellationPreview.title}
             </div>

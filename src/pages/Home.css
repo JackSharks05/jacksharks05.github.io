@@ -108,15 +108,30 @@
   padding: 14px 14px 12px;
   border-radius: 16px;
   border: 1px solid var(--theme-outline-outer, rgba(98, 31, 109, 0.92));
-  background:
+  /* background:
     radial-gradient(
       520px 420px at 50% 0%,
       rgba(254, 0, 0, 0.28),
       rgba(0, 0, 0, 0)
     ),
-    rgba(8, 12, 24, 0.86);
+    rgba(8, 12, 24, 0.86); */
   backdrop-filter: blur(12px);
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+}
+
+.home__constellationPreviewMedia {
+  margin-bottom: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--theme-outline-inner, rgba(254, 0, 0, 0.32));
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.home__constellationPreviewMedia img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
 }
 
 .home__constellationPreviewClose {
