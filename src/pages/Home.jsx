@@ -18,6 +18,8 @@ export default function Home() {
     }
   });
 
+  const [priorVisitCount, setPriorVisitCount] = useState(0);
+
   const [isPlanetarium, setIsPlanetarium] = useState(true);
   const [skyLoaded, setSkyLoaded] = useState(false);
   const [uiUnlocked, setUiUnlocked] = useState(false);
@@ -38,6 +40,17 @@ export default function Home() {
   const uiTimerRef = useRef(null);
   const hasActivatedConstellationRef = useRef(false);
   const skyLoadedHandledRef = useRef(false);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("home:visits");
+      const prev = raw ? Number.parseInt(raw, 10) || 0 : 0;
+      setPriorVisitCount(prev);
+      localStorage.setItem("home:visits", String(prev + 1));
+    } catch {
+      setPriorVisitCount(0);
+    }
+  }, []);
 
   useEffect(() => {
     // Keep a sticky flag so layout can infer current state on mount.
@@ -586,8 +599,14 @@ export default function Home() {
                     staggerFrom="first"
                     className="home__rotatingText"
                   />
-                  . Welcome to my planetarium portfolio! As you'll come to
-                  learn, I do a lot of things and love even more! You can use
+                  . Welcome to my planetarium portfolio! As{" "}
+                  {(() => {
+                    if (priorVisitCount === 0) return "you'll come to learn";
+                    if (priorVisitCount === 1) return "you may know";
+                    if (priorVisitCount < 10) return "you probably know";
+                    return "you definitely know";
+                  })()}
+                  , I do a lot of things and love even more! You can use
                   this site to learn about me, see my projects & research
                   experience, hear what I've been listening to recently, read my
                   thoughts...
