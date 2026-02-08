@@ -12,6 +12,32 @@
   background: rgba(0, 0, 0, 0.88);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.32);
   backdrop-filter: blur(10px);
+  max-height: min(520px, calc(100vh - 140px));
+  overflow-y: auto;
+  /* Hide scrollbar by default; show a white thumb on hover. */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.card-nav:hover {
+  scrollbar-color: rgba(255, 255, 255, 0.96) transparent;
+}
+
+.card-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.card-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.card-nav::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 999px;
+}
+
+.card-nav:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.96);
 }
 
 .logo {

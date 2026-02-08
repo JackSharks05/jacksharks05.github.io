@@ -47,7 +47,7 @@ export default function Research() {
                       </span>
                       <span className="research__subheadItem">
                         <a
-                          href="https://replace-with-duane-lab-url.example"
+                          href="https://prime.brown.edu/"
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -74,20 +74,26 @@ export default function Research() {
               </div>
               <div className="research__body">
                 <p>
-                  I lead research on “digital nudges” — how interface design
-                  choices shape user decisions in high-stakes environments.
+                  <strong>Decoding the Science of Influence.</strong> Since
+                  freshman year, I lead a team of graduate researchers
+                  investigating “digital nudges”—the subtle interface design
+                  choices that shape human decisions. We aren't just running one
+                  experiment; we are building a unified theory of ethical choice
+                  architecture.
                 </p>
                 <ul className="page__list">
                   <li>
-                    Quantitative meta-analysis across 100+ experimental studies
+                    Conducting a massive quantitative meta-analysis of 100+
+                    experimental studies to find the "signal" in behavioral
+                    noise
                   </li>
                   <li>
-                    Built a unified taxonomy to normalize design to maximize
-                    effects
+                    Developing a standardized data taxonomy to normalize
+                    disparate metrics across the field
                   </li>
                   <li>
-                    Leading a team of graduate students with backgrounds from
-                    behavioral science to business technology
+                    First author on a submitted publication on how to better
+                    design nudges for more consistent results
                   </li>
                 </ul>
               </div>
@@ -130,18 +136,26 @@ export default function Research() {
                 </div>
               </div>
               <div className="research__body">
+                <p>
+                  <strong>Opening the Black Box.</strong> Modern AI works, but
+                  we often don't know <em>how</em>. As a Technical Fellow, I've
+                  been investigating the inner workings of Large Language Models
+                  to detect failure modes before they happen in the real world.
+                </p>
                 <ul className="page__list">
                   <li>
-                    Mechanistic interpretability: superposition, sparse
-                    autoencoders, feature representations
+                    <strong>Mechanistic Interpretability:</strong> Using sparse
+                    autoencoders to map how models represent concepts like
+                    "deception" in high-dimensional space
                   </li>
                   <li>
-                    Probing: linear probes over activation vectors to elicit
-                    latent knowledge
+                    <strong>Adversarial Robustness:</strong> Investigating
+                    "sleeper agents" (backdoors) and reward hacking in RLHF
+                    systems
                   </li>
                   <li>
-                    Robustness: sleeper agents/backdoors and reward hacking in
-                    RLHF
+                    <strong>Governance:</strong> Translating technical risk
+                    assessments into safety standards for deployment
                   </li>
                 </ul>
               </div>
@@ -198,17 +212,23 @@ export default function Research() {
               </div>
               <div className="research__body">
                 <p>
-                  I work on the “relevance problem” (frame problem): how models
-                  decide what information is salient.
+                  <strong>Human vs. Machine Cognition.</strong> Do LLMs actually
+                  understand us, or are they just good at guessing? I use
+                  computational linguistics to measure the gap between
+                  statistical probability and true human intuition.
                 </p>
                 <ul className="page__list">
                   <li>
-                    Compared LLM outputs (BERT/GPT-style) against human
-                    behavioral data using R and Python
+                    Investigating the “Relevance Problem” (Frame Problem): How
+                    agents determine what information is salient
                   </li>
                   <li>
-                    Analyzed logits to predict human cloze-task performance and
-                    ambiguity handling
+                    Comparing model "logits" (probability scores) against human
+                    performance on linguistic tasks using R and Python
+                  </li>
+                  <li>
+                    Identifying where statistical correlation fails to match
+                    human cognitive patterns
                   </li>
                 </ul>
               </div>
@@ -238,9 +258,7 @@ export default function Research() {
                   </div>
                   <p className="page__meta research__meta">
                     <span className="page__pill">IP R&amp;D Lead</span>
-                    <span className="page__pill">
-                      Applied GenAI (2022–2024)
-                    </span>
+                    <span className="page__pill">Applied GenAI Strategy</span>
                   </p>
                 </div>
                 <div className="research__logoWrap" aria-hidden="true">
@@ -253,18 +271,25 @@ export default function Research() {
                 </div>
               </div>
               <div className="research__body">
+                <p>
+                  <strong>Pioneering GenAI Strategy.</strong> Working on GenAI
+                  since 2022, I led R&D to integrate early Large Language Models
+                  into caregiver support tools. I bridged the gap between
+                  bleeding-edge tech and business strategy.
+                </p>
                 <ul className="page__list">
                   <li>
-                    Evaluated early GenAI stacks and benchmarked tradeoffs
-                    (token efficiency vs reasoning) for specialized healthcare
-                    queries
+                    Benchmarked early models (BLOOM, Bard) to balance token
+                    efficiency with reasoning capability for healthcare queries
                   </li>
                   <li>
-                    Presented risk-aware technical roadmaps to executives;
-                    translated model limitations into business constraints
+                    Acted as a "Technical Translator" for the C-Suite, turning
+                    complex model limitations into product roadmaps
                   </li>
                   <li>
-                    Managed localization strategy for Spanish/French markets
+                    Managed the technical localization strategy to expand into
+                    Spanish and French translations of medical responses from
+                    the chatbot
                   </li>
                 </ul>
               </div>

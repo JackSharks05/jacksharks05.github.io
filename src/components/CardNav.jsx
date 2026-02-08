@@ -114,7 +114,8 @@ export default function CardNav({
 
     gsap.set(navEl, {
       height: collapsedHeight,
-      overflow: "hidden",
+      overflowX: "hidden",
+      overflowY: "auto",
       opacity: 0,
       pointerEvents: "none",
     });

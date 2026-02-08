@@ -13,8 +13,8 @@ export default function Contact() {
             <div>
               <p>
                 If you're hiring, want to collaborate, or just chat–please feel
-                free to reach out! I love meeting new people and would love to
-                hear what stories you have to share.
+                free to reach out! I <strong>love</strong> meeting new people
+                and would love to hear what stories you can share!
               </p>
               <p>
                 Contact me at{" "}
@@ -39,8 +39,10 @@ export default function Contact() {
                   },
                   {
                     key: "contact-2",
-                    src: "/media/photos/speech1.png",
-                    alt: "jack in front of a crowd at a chinese speech contest",
+                    src: "/star.png",
+                    alt: 'jack\'s "logo"',
+                    caption:
+                      'a photoshopped recoloring of the star arcanum from "the dragon prince" i made a long time ago, now used as my profile picture!',
                   },
                 ]}
               />

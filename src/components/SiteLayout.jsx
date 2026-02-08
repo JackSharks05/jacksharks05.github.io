@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState, createContext } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  createContext,
+} from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import CardNav from "./CardNav";
 import Dock from "./Dock";

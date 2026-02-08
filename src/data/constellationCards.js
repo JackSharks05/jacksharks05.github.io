@@ -24,7 +24,7 @@ export const constellationCards = {
   Ari: {
     title: "Aries",
     fact: "I am an Aries! Do with that what you will.",
-    to: "/projects",
+    to: "/about",
     linkText: "More about me!",
   },
   Aur: { title: "Auriga", fact: "(Add a fun fact here)", to: "/projects" },
@@ -36,7 +36,12 @@ export const constellationCards = {
     fact: "(Add a fun fact here)",
     to: "/projects",
   },
-  Cae: { title: "Caelum", fact: "(Add a fun fact here)", to: "/projects" },
+  Cae: {
+    title: "Caelum",
+    fact: 'This constellation\'s name reminds me of one of the main characters of my favourite TV show, "The Dragon Prince". It may seem like a kids show, but it has really deep themes.',
+    to: "/about",
+    linkText: "See what other things I like!",
+  },
   Cam: { title: "Camelopardalis", fact: "(Add a fun fact here)", to: "/about" },
   Cap: { title: "Capricornus", fact: "(Add a fun fact here)", to: "/resume" },
   Car: { title: "Carina", fact: "(Add a fun fact here)", to: "/projects" },
@@ -111,7 +116,7 @@ export const constellationCards = {
   Oph: { title: "Ophiuchus", fact: "(Add a fun fact here)", to: "/research" },
   Ori: {
     title: "Orion",
-    fact: "I love taking photos, especially of the stars. One of my best photos was of Orion!",
+    fact: "I love taking photos, especially of the stars. One of my best astrophotos was of Orion!",
     to: "/photography-videography",
     linkText: "Take a look!",
   },
@@ -122,7 +127,12 @@ export const constellationCards = {
     to: "/about",
     linkText: "read more about my langauge experiences!",
   },
-  Per: { title: "Perseus", fact: "(Add a fun fact here)", to: "/projects" },
+  Per: {
+    title: "Perseus",
+    fact: 'I, like many in my generation, am a fan of the "Percy Jackson" series. I miss the days where I could bury my head in one of those books (in the whole extended universe) and imagine I were there.',
+    to: "/about",
+    linkText: "See other things I like!",
+  },
   Phe: { title: "Phoenix", fact: "(Add a fun fact here)", to: "/about" },
   Pic: { title: "Pictor", fact: "(Add a fun fact here)", to: "/projects" },
   PsA: {
