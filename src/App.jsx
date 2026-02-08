@@ -2,26 +2,11 @@ import React, { Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
-import ComingSoon from "./pages/ComingSoon";
 import "./App.css";
 
 const Loading = () => <div className="page">Loading…</div>;
 
 function App() {
-  const isProd = import.meta.env.PROD;
-
-  if (isProd) {
-    return (
-      <>
-        <Routes>
-          <Route path="*" element={<ComingSoon />} />
-        </Routes>
-        <SpeedInsights />
-        <Analytics />
-      </>
-    );
-  }
-
   const SiteLayout = React.lazy(() => import("./components/SiteLayout"));
   const Home = React.lazy(() => import("./pages/Home"));
   const About = React.lazy(() => import("./pages/About"));
