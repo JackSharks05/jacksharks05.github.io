@@ -115,12 +115,12 @@ export default function About() {
               <a onClick={() => setShowEnergyPopup(true)}>
                 nigh-infinite energy I have
               </a>{" "}
-              (actually. ask anyone who knows me!) to make it meticulously
-              functional, but I actually work best when I'm working on many
-              things at the same time. Working at a higher level like this isn't
-              distracting--it actually keeps me more focused by seeing how
-              everything fits together. I view products and organizations as
-              decision systems that can be debugged and optimized.
+              to make it meticulously functional, but I actually work best when
+              I'm working on many things at the same time. Working at a higher
+              level like this isn't distracting--it actually keeps me more
+              focused by seeing how everything fits together. I view products
+              and organizations as decision systems that can be debugged and
+              optimized.
             </p>
             <p>
               In whatever project I work on, my goal isn't just to add value,
@@ -221,8 +221,7 @@ export default function About() {
               re: energy
             </h2>
             <p className="projects__popupBody">
-              I pour a lot of energy into the things I work on — sometimes to an
-              arguably unreasonable degree.
+              actually. ask anyone who knows me!
             </p>
             <button
               type="button"
