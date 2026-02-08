@@ -387,7 +387,7 @@ export default function Home() {
       if (uiTimerRef.current) window.clearTimeout(uiTimerRef.current);
       window.removeEventListener("planetarium:loaded", onLoaded);
       window.removeEventListener("planetarium:first-drag", onFirstDrag);
-       window.removeEventListener("planetarium:moved", onMoved);
+      window.removeEventListener("planetarium:moved", onMoved);
       window.removeEventListener("planetarium:click", onClick);
     };
   }, []);

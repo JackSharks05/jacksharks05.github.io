@@ -33,14 +33,14 @@ export const solarSystemCards = {
   },
   Venus: {
     title: "Venus",
-    fact: "(Add a fun fact here)",
-    to: "/projects",
+    fact: "Fun fact coming soon!",
+    to: "/",
     linkText: "See more",
   },
   Mars: {
     title: "Mars",
-    fact: "(Add a fun fact here)",
-    to: "/projects",
+    fact: "Fun fact coming soon!",
+    to: "/",
     linkText: "See more",
   },
   Jupiter: {
@@ -51,21 +51,21 @@ export const solarSystemCards = {
   },
   Saturn: {
     title: "Saturn",
-    fact: "(Add a fun fact here)",
-    to: "/projects",
+    fact: "Fun fact coming soon!",
+    to: "/",
     linkText: "See more",
   },
   Uranus: {
     title: "Uranus",
-    fact: "(Add a fun fact here)",
+    fact: "Uranus isn't visible by the naked eye, but I included it here as it's is one of my best friends' favourite planets: but not for the reason you may think. Shoutout Emma!",
     to: "https://www.emmazou.com",
-    linkText: "Open NASA overview",
+    linkText: "Go see what she's up to!",
   },
   Neptune: {
     title: "Neptune",
-    fact: "(Add a fun fact here)",
+    fact: "Neptune also isn't visible by the naked eye, but it's one of my best friend's favourite planets. Shoutout Yuyuan!",
     to: "https://www.yuyuanhuang.com",
-    linkText: "Open NASA overview",
+    linkText: "Check our her awesome work!",
   },
 };
 
