@@ -167,6 +167,7 @@ const GalaxyCanvas = ({
   forcedProjectionMode,
   onLoaded,
   onFirstDrag,
+  onDragMove,
   selectedConstellationKey,
   selectedConstellationKeys,
   interactive = true,
@@ -1327,6 +1328,7 @@ const GalaxyCanvas = ({
         didSignalFirstDragRef.current = true;
         onFirstDrag?.();
       }
+      onDragMove?.();
     }
 
     const nextLat = clamp(
@@ -1402,7 +1404,7 @@ const GalaxyCanvas = ({
     }
 
     // Also allow interaction on the constellation lines.
-    const lineHitRadius = 8;
+    const lineHitRadius = 16;
     return constellation.connections.some(([startIdx, endIdx]) => {
       const start = constellation.stars[startIdx];
       const end = constellation.stars[endIdx];

@@ -225,6 +225,9 @@ export default function SiteLayout() {
           onFirstDrag={() => {
             window.dispatchEvent(new CustomEvent("planetarium:first-drag"));
           }}
+          onDragMove={() => {
+            window.dispatchEvent(new CustomEvent("planetarium:moved"));
+          }}
           interactive={isHome}
         />
       )}
@@ -287,7 +290,7 @@ export default function SiteLayout() {
                   : "header-hint is-hidden"
               }
             >
-              Hover constellations or use the cards
+              find the constellations!
             </div>
           )}
         </div>

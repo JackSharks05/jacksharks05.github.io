@@ -357,6 +357,12 @@ export default function Home() {
     const onFirstDrag = () => {
       unlockUi();
     };
+    const onMoved = () => {
+      // Close any open constellation/solar-system preview when the sky moves again.
+      setIsPreviewOpen(false);
+      setConstellationPreview(null);
+      setPreviewAnchorClient(null);
+    };
     const onClick = (e) => {
       if (!e?.detail) return;
       handleConstellationClick(e.detail);
@@ -364,6 +370,7 @@ export default function Home() {
 
     window.addEventListener("planetarium:loaded", onLoaded);
     window.addEventListener("planetarium:first-drag", onFirstDrag);
+    window.addEventListener("planetarium:moved", onMoved);
     window.addEventListener("planetarium:click", onClick);
 
     // If the planetarium has already loaded (e.g. we navigated away and back),
@@ -380,6 +387,7 @@ export default function Home() {
       if (uiTimerRef.current) window.clearTimeout(uiTimerRef.current);
       window.removeEventListener("planetarium:loaded", onLoaded);
       window.removeEventListener("planetarium:first-drag", onFirstDrag);
+       window.removeEventListener("planetarium:moved", onMoved);
       window.removeEventListener("planetarium:click", onClick);
     };
   }, []);
@@ -615,9 +623,9 @@ export default function Home() {
                   , I do a lot of things and love even more! I live at the
                   intersection of human intuition and computational rigor. Use
                   this site to learn about the systems I architect, research
-                  human behavior and AI safety, hear what I've been listening
-                  to recently, and capture the world through film, photography,
-                  and code...
+                  human behavior and AI safety, hear what I've been listening to
+                  recently, and capture the world through film (coming soon),
+                  photography, and code...
                 </p>
                 <p className="home__lead">
                   ...and yes, this is <i>also</i> a fully functioning,
@@ -665,10 +673,10 @@ export default function Home() {
 
               <div className="home__cards">
                 <div className="home__card">
-                  <div className="home__cardTitle">The Builder & Scientist</div>
+                  <div className="home__cardTitle">the main quest</div>
                   <div className="home__cardBody">
-                    Architecting human-centric software (C@Bnet), investigating
-                    AI robustness, and solving unstructured problems.
+                    Architecting human-centric software, investigating
+                    behavioral technology, and solving unstructured problems.
                   </div>
                   <div className="home__cardLinks">
                     <Link to="/projects">Projects</Link>
@@ -677,7 +685,7 @@ export default function Home() {
                 </div>
 
                 <div className="home__card">
-                  <div className="home__cardTitle">The Creative</div>
+                  <div className="home__cardTitle">the side quests</div>
                   <div className="home__cardBody">
                     Capturing the world through photography, film, and the
                     patterns I find in music, language, and the stars.
@@ -689,7 +697,7 @@ export default function Home() {
                 </div>
 
                 <div className="home__card">
-                  <div className="home__cardTitle">The Force Multiplier</div>
+                  <div className="home__cardTitle">the quester</div>
                   <div className="home__cardBody">
                     I act as a catalyst for high-velocity teams. If you have a
                     complex problem or a "hunch" to turn into reality, let's

@@ -205,7 +205,7 @@ export const constellationCards = {
   Gem: {
     title: "Gemini",
     fact: "Despite what many think, my younger brother and I are not twins. However, we are incredibly close, and he is one of the most brilliant people I know.",
-    to: "https://person.rdh540.dev/",
+    to: "https://rdh540.dev/",
     linkText: "Go check him out!",
   },
   Gru: {
