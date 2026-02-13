@@ -1,15 +1,16 @@
 {
-  "rewrites": [
+  "routes": [
     {
-      "source": "/put",
-      "has": [{ "type": "host", "value": "s.jackdehaan.com" }],
-      "destination": "/api/put"
+      "src": "^/put$",
+      "headers": { "host": "^s\\.jackdehaan\\.com(:\\d+)?$" },
+      "dest": "/api/put"
     },
     {
-      "source": "/:code([A-Za-z0-9_-]{6,12})",
-      "has": [{ "type": "host", "value": "s.jackdehaan.com" }],
-      "destination": "/api/r/:code"
+      "src": "^/([A-Za-z0-9_-]{6,12})$",
+      "headers": { "host": "^s\\.jackdehaan\\.com(:\\d+)?$" },
+      "dest": "/api/r/$1"
     },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
