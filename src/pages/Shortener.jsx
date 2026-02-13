@@ -16,6 +16,13 @@ export default function Shortener() {
     return window.location.origin;
   }, []);
 
+  const shortBase = useMemo(() => {
+    if (typeof window === "undefined") return "";
+    return window.location.host === "s.jackdehaan.com"
+      ? window.location.origin
+      : "https://s.jackdehaan.com";
+  }, []);
+
   const pillar = useMemo(
     () => ({
       intensity: 1.0,
@@ -52,7 +59,7 @@ export default function Shortener() {
       }
 
       const code = data.msg;
-      setShortUrl(`${origin}/${code}`);
+      setShortUrl(`${shortBase}/${code}`);
     } catch (err) {
       setError(String(err));
     } finally {
@@ -85,54 +92,62 @@ export default function Shortener() {
         pillarRotation={pillar.pillarRotation}
       />
 
-      <div className="shortenerCard" role="main">
-        <h1 className="shortenerTitle">cc — url shortener</h1>
+      <div className="shortenerShell" role="main">
+        <div className="shortenerPanel">
+          <h1 className="shortenerTitle">cc — url shortener</h1>
 
-        <form className="shortenerForm" onSubmit={onSubmit}>
-          <input
-            className="shortenerInput"
-            placeholder="https://example.com/..."
-            autoComplete="off"
-            spellCheck={false}
-            required
-            value={longUrl}
-            onChange={(e) => setLongUrl(e.target.value)}
-          />
-          <button className="shortenerBtn" type="submit" disabled={busy}>
-            {busy ? "…" : "Shorten"}
-          </button>
-        </form>
-
-        {error ? <div className="shortenerOut">{error}</div> : null}
-
-        {shortUrl ? (
-          <div className="shortenerResultRow">
-            <div className="shortenerOut">
-              <a href={shortUrl}>{shortUrl}</a>
-            </div>
-            <button className="shortenerBtn secondary" type="button" onClick={onCopy}>
-              {copied ? "Copied" : "Copy"}
+          <form className="shortenerForm" onSubmit={onSubmit}>
+            <input
+              className="shortenerInput"
+              placeholder="https://example.com/..."
+              autoComplete="off"
+              spellCheck={false}
+              required
+              value={longUrl}
+              onChange={(e) => setLongUrl(e.target.value)}
+            />
+            <button className="shortenerBtn" type="submit" disabled={busy}>
+              {busy ? "…" : "Shorten"}
             </button>
-          </div>
-        ) : null}
+          </form>
 
-        <label className="shortenerMuted shortenerToggle">
-          <input
-            type="checkbox"
-            checked={showApi}
-            onChange={(e) => setShowApi(e.target.checked)}
-          />
-          Show API commands
-        </label>
+          {error ? <div className="shortenerOut">{error}</div> : null}
 
-        {showApi ? (
-          <div className="shortenerApi">
-            <div className="shortenerMuted">POST /put (body is URL), GET /&lt;code&gt;</div>
-            <pre>
-              <code>{`curl -X POST ${origin}/put -H 'Content-Type: text/plain' -d 'https://example.com'\n\ncurl -i ${origin}/<code>`}</code>
-            </pre>
-          </div>
-        ) : null}
+          {shortUrl ? (
+            <div className="shortenerResultRow">
+              <div className="shortenerOut">
+                <a href={shortUrl}>{shortUrl}</a>
+              </div>
+              <button
+                className="shortenerBtn secondary"
+                type="button"
+                onClick={onCopy}
+              >
+                {copied ? "Copied" : "Copy"}
+              </button>
+            </div>
+          ) : null}
+
+          <label className="shortenerMuted shortenerToggle">
+            <input
+              type="checkbox"
+              checked={showApi}
+              onChange={(e) => setShowApi(e.target.checked)}
+            />
+            Show API commands
+          </label>
+
+          {showApi ? (
+            <div className="shortenerApi">
+              <div className="shortenerMuted">
+                POST /put (body is URL), GET /&lt;code&gt;
+              </div>
+              <pre>
+                <code>{`curl -X POST ${shortBase}/put -H 'Content-Type: text/plain' -d 'https://example.com'\n\ncurl -i ${shortBase}/<code>`}</code>
+              </pre>
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );
