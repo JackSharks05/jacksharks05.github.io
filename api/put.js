@@ -55,7 +55,7 @@ function normalizeUrl(raw) {
   return url.toString();
 }
 
-async function generateUniqueCode() {
+async function generateUniqueCode(redis) {
   // 4 bytes => 6 chars base64url; matches the Rust cc feel.
   for (let attempt = 0; attempt < 20; attempt++) {
     const code = crypto.randomBytes(4).toString("base64url");
@@ -101,7 +101,7 @@ export default async function handler(req, res) {
       return;
     }
 
-    const code = await generateUniqueCode();
+    const code = await generateUniqueCode(redis);
     await redis.set(`c2u:${code}`, normalized);
     await redis.set(`u2c:${normalized}`, code);
 
