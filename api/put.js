@@ -4,10 +4,28 @@ import crypto from "node:crypto";
 const ALLOWED_PROTOCOLS = new Set(["http:", "https:"]);
 
 function getRedisOrNull() {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) return null;
-  return Redis.fromEnv();
+  const candidates = [
+    {
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    },
+    {
+      url: process.env.UPSTASH_REDIS_REST_API_URL,
+      token: process.env.UPSTASH_REDIS_REST_API_TOKEN,
+    },
+    {
+      url: process.env.KV_REST_API_URL,
+      token: process.env.KV_REST_API_TOKEN,
+    },
+    {
+      url: process.env.UPSTASH_REDIS_REST_KV_REST_API_URL,
+      token: process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN,
+    },
+  ];
+
+  const resolved = candidates.find((c) => typeof c.url === "string" && typeof c.token === "string" && c.url && c.token);
+  if (!resolved) return null;
+  return new Redis({ url: resolved.url, token: resolved.token });
 }
 
 function normalizeUrl(raw) {
@@ -47,7 +65,8 @@ export default async function handler(req, res) {
   if (!redis) {
     res.status(500).json({
       ok: false,
-      msg: "missing redis env vars (UPSTASH_REDIS_REST_URL/UPSTASH_REDIS_REST_TOKEN)",
+      msg:
+        "missing redis env vars (expected UPSTASH_REDIS_REST_URL/UPSTASH_REDIS_REST_TOKEN or UPSTASH_REDIS_REST_KV_REST_API_URL/UPSTASH_REDIS_REST_KV_REST_API_TOKEN)",
     });
     return;
   }

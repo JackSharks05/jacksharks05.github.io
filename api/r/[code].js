@@ -1,10 +1,28 @@
 import { Redis } from "@upstash/redis";
 
 function getRedisOrNull() {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) return null;
-  return Redis.fromEnv();
+  const candidates = [
+    {
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    },
+    {
+      url: process.env.UPSTASH_REDIS_REST_API_URL,
+      token: process.env.UPSTASH_REDIS_REST_API_TOKEN,
+    },
+    {
+      url: process.env.KV_REST_API_URL,
+      token: process.env.KV_REST_API_TOKEN,
+    },
+    {
+      url: process.env.UPSTASH_REDIS_REST_KV_REST_API_URL,
+      token: process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN,
+    },
+  ];
+
+  const resolved = candidates.find((c) => typeof c.url === "string" && typeof c.token === "string" && c.url && c.token);
+  if (!resolved) return null;
+  return new Redis({ url: resolved.url, token: resolved.token });
 }
 
 export default async function handler(req, res) {
@@ -17,7 +35,7 @@ export default async function handler(req, res) {
   const redis = getRedisOrNull();
   if (!redis) {
     res.status(500).send(
-      "missing redis env vars (UPSTASH_REDIS_REST_URL/UPSTASH_REDIS_REST_TOKEN)"
+      "missing redis env vars (expected UPSTASH_REDIS_REST_URL/UPSTASH_REDIS_REST_TOKEN or UPSTASH_REDIS_REST_KV_REST_API_URL/UPSTASH_REDIS_REST_KV_REST_API_TOKEN)"
     );
     return;
   }
