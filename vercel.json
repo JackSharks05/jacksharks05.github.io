@@ -1,3 +1,21 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "s\\.jackdehaan\\.com" }],
+      "destination": "/cc/index.html"
+    },
+    {
+      "source": "/put",
+      "has": [{ "type": "host", "value": "s\\.jackdehaan\\.com" }],
+      "destination": "/api/put"
+    },
+    {
+      "source": "/:code",
+      "has": [{ "type": "host", "value": "s\\.jackdehaan\\.com" }],
+      "destination": "/api/r/:code"
+    },
+    { "source": "/cc", "destination": "/cc/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

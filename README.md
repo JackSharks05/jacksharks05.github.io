@@ -189,3 +189,47 @@ Works in modern browsers that support:
 
 - Code: MIT (this repository).
 - Data derived from HYG: `src/data/hipStars.generated.js` is under CC BY-SA 4.0; if you redistribute that data, you must comply with the upstream license.
+
+---
+
+## cc (URL shortener subdomain)
+
+This repo also includes a minimal URL shortener that mirrors the `cc` program API:
+
+- `POST /put` with request body being the long URL (plain text)
+- returns JSON `{ ok: boolean, msg: string }` where `msg` is the code or an error message
+- `GET /<code>` responds with `308` redirect to the original URL
+
+### Hosting model
+
+This is implemented as Vercel serverless functions backed by Upstash Redis.
+It is designed to run cleanly on `s.jackdehaan.com` without breaking the main SPA routing.
+
+Relevant files:
+
+- [api/put.js](api/put.js)
+- [api/r/[code].js](api/r/%5Bcode%5D.js)
+- [public/cc/index.html](public/cc/index.html)
+- [vercel.json](vercel.json)
+
+### Redis (Upstash) setup
+
+Create a Redis store via Vercel Marketplace (Upstash Redis) and add the env vars:
+
+- `UPSTASH_REDIS_REST_URL`
+- `UPSTASH_REDIS_REST_TOKEN`
+- `UPSTASH_REDIS_REST_READ_ONLY_TOKEN` (optional)
+
+### Subdomain wiring
+
+In Vercel, add the custom domain `s.jackdehaan.com` to the same project.
+The routing is host-based: requests for `s.jackdehaan.com` will route:
+
+- `/` -> the shortener UI at `/cc/index.html`
+- `/put` -> the API handler at `/api/put`
+- `/<code>` -> the redirect handler at `/api/r/<code>`
+
+### Local testing
+
+Vite dev (`npm run dev`) does not run Vercel serverless functions.
+To test the shortener locally, use `vercel dev` (Vercel CLI) so `/put` and `/<code>` work.
