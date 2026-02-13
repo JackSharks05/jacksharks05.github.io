@@ -18,11 +18,22 @@ function getRedisOrNull() {
       url: process.env.UPSTASH_REDIS_REST_KV_REST_API_URL,
       token: process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN,
     },
+    {
+      url: process.env.UPSTASH_REDIS_REST_KV_URL,
+      token: process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN,
+    },
   ];
 
   const resolved = candidates.find((c) => typeof c.url === "string" && typeof c.token === "string" && c.url && c.token);
   if (!resolved) return null;
   return new Redis({ url: resolved.url, token: resolved.token });
+}
+
+function safeErrorMessage(err) {
+  const name = err && typeof err === "object" && "name" in err ? String(err.name) : "Error";
+  const message = err && typeof err === "object" && "message" in err ? String(err.message) : String(err);
+  const combined = `${name}: ${message}`;
+  return combined.length > 300 ? `${combined.slice(0, 300)}…` : combined;
 }
 
 export default async function handler(req, res) {
@@ -56,6 +67,6 @@ export default async function handler(req, res) {
     res.status(308).end();
   } catch (e) {
     console.error("cc redirect error", e);
-    res.status(500).send("problem with database");
+    res.status(500).send(`problem with database (${safeErrorMessage(e)})`);
   }
 }

@@ -221,7 +221,8 @@ Create a Redis store via Vercel Marketplace (Upstash Redis) and add the env vars
 - `UPSTASH_REDIS_REST_READ_ONLY_TOKEN` (optional)
 
 Note: depending on how the integration was added, Vercel may instead create variables like
-`UPSTASH_REDIS_REST_KV_REST_API_URL` and `UPSTASH_REDIS_REST_KV_REST_API_TOKEN`. The API handlers in this repo accept either naming scheme.
+`UPSTASH_REDIS_REST_KV_REST_API_URL` / `UPSTASH_REDIS_REST_KV_REST_API_TOKEN` (or sometimes `UPSTASH_REDIS_REST_KV_URL` alongside the token).
+The API handlers in this repo accept these naming schemes.
 
 ### Subdomain wiring
 
