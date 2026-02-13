@@ -1,11 +1,24 @@
 import { Redis } from "@upstash/redis";
 
-const redis = Redis.fromEnv();
+function getRedisOrNull() {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) return null;
+  return Redis.fromEnv();
+}
 
 export default async function handler(req, res) {
   const { code } = req.query || {};
   if (req.method !== "GET") {
     res.status(405).send("method not allowed");
+    return;
+  }
+
+  const redis = getRedisOrNull();
+  if (!redis) {
+    res.status(500).send(
+      "missing redis env vars (UPSTASH_REDIS_REST_URL/UPSTASH_REDIS_REST_TOKEN)"
+    );
     return;
   }
 

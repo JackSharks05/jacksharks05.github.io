@@ -2,7 +2,13 @@ import { Redis } from "@upstash/redis";
 import crypto from "node:crypto";
 
 const ALLOWED_PROTOCOLS = new Set(["http:", "https:"]);
-const redis = Redis.fromEnv();
+
+function getRedisOrNull() {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) return null;
+  return Redis.fromEnv();
+}
 
 function normalizeUrl(raw) {
   if (typeof raw !== "string") return null;
@@ -37,7 +43,21 @@ export default async function handler(req, res) {
     return;
   }
 
-  const rawBody = typeof req.body === "string" ? req.body : "";
+  const redis = getRedisOrNull();
+  if (!redis) {
+    res.status(500).json({
+      ok: false,
+      msg: "missing redis env vars (UPSTASH_REDIS_REST_URL/UPSTASH_REDIS_REST_TOKEN)",
+    });
+    return;
+  }
+
+  let rawBody = "";
+  if (typeof req.body === "string") rawBody = req.body;
+  else if (Buffer.isBuffer(req.body)) rawBody = req.body.toString("utf8");
+  else if (req.body && typeof req.body === "object" && typeof req.body.url === "string") {
+    rawBody = req.body.url;
+  }
   const normalized = normalizeUrl(rawBody);
   if (!normalized) {
     res.status(400).json({ ok: false, msg: "invalid url" });
