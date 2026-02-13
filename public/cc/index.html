@@ -15,8 +15,8 @@
         min-height: 100vh;
         display: grid;
         place-items: center;
-        background: #0b0d12;
-        color: #e6e8ef;
+        background: #0b0f1a;
+        color: #f5f5f5;
       }
       .card {
         width: min(720px, calc(100vw - 32px));
@@ -52,6 +52,10 @@
         color: inherit;
         cursor: pointer;
       }
+      .btn-secondary {
+        padding: 8px 10px;
+        border-radius: 10px;
+      }
       button:disabled {
         opacity: 0.6;
         cursor: not-allowed;
@@ -68,12 +72,35 @@
         border: 1px solid rgba(255, 255, 255, 0.12);
         word-break: break-all;
       }
+      .result-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        align-items: center;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+        font-size: 12px;
+      }
       a {
         color: inherit;
       }
       .muted {
         opacity: 0.7;
         font-size: 12px;
+      }
+      .api {
+        display: grid;
+        gap: 8px;
+      }
+      .api pre {
+        margin: 0;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        overflow: auto;
       }
     </style>
   </head>
@@ -93,9 +120,24 @@
       </form>
 
       <div class="row">
-        <div class="muted">API: POST /put (body is URL), GET /&lt;code&gt;</div>
-        <div id="status" class="out" style="display: none"></div>
-        <div id="result" class="out" style="display: none"></div>
+        <div id="error" class="out" style="display: none"></div>
+
+        <div id="resultRow" class="result-row" style="display: none">
+          <div id="result" class="out"></div>
+          <button id="copyBtn" class="btn-secondary" type="button">Copy</button>
+        </div>
+
+        <label class="muted" style="display: inline-flex; gap: 8px; align-items: center">
+          <input id="showApi" type="checkbox" />
+          Show API commands
+        </label>
+
+        <div id="api" class="api" style="display: none">
+          <div class="muted">POST /put (body is URL), GET /&lt;code&gt;</div>
+          <pre><code>curl -X POST https://s.jackdehaan.com/put -H 'Content-Type: text/plain' -d 'https://example.com'
+
+curl -i https://s.jackdehaan.com/&lt;code&gt;</code></pre>
+        </div>
       </div>
     </div>
 
@@ -103,18 +145,40 @@
       const form = document.getElementById("form");
       const input = document.getElementById("url");
       const btn = document.getElementById("btn");
-      const status = document.getElementById("status");
+      const error = document.getElementById("error");
+      const resultRow = document.getElementById("resultRow");
       const result = document.getElementById("result");
+      const copyBtn = document.getElementById("copyBtn");
+      const showApi = document.getElementById("showApi");
+      const api = document.getElementById("api");
+
+      let lastShortUrl = "";
 
       function show(el, text) {
         el.style.display = "block";
         el.textContent = text;
       }
 
-      function showLink(el, url) {
-        el.style.display = "block";
-        el.innerHTML = `<a href="${url}">${url}</a>`;
+      function showResult(url) {
+        lastShortUrl = url;
+        result.innerHTML = `<a href="${url}">${url}</a>`;
+        resultRow.style.display = "grid";
       }
+
+      showApi.addEventListener("change", () => {
+        api.style.display = showApi.checked ? "grid" : "none";
+      });
+
+      copyBtn.addEventListener("click", async () => {
+        if (!lastShortUrl) return;
+        try {
+          await navigator.clipboard.writeText(lastShortUrl);
+          copyBtn.textContent = "Copied";
+          setTimeout(() => (copyBtn.textContent = "Copy"), 1000);
+        } catch (e) {
+          show(error, `copy failed: ${String(e)}`);
+        }
+      });
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -122,8 +186,9 @@
         if (!longUrl) return;
 
         btn.disabled = true;
-        status.style.display = "none";
-        result.style.display = "none";
+        error.style.display = "none";
+        resultRow.style.display = "none";
+        copyBtn.textContent = "Copy";
 
         try {
           const resp = await fetch("/put", {
@@ -134,16 +199,15 @@
           const data = await resp.json();
 
           if (!data || !data.ok) {
-            show(status, data?.msg || "error");
+            show(error, data?.msg || "error");
             return;
           }
 
           const code = data.msg;
           const shortUrl = `${location.origin}/${code}`;
-          show(status, `ok (${resp.status})`);
-          showLink(result, shortUrl);
+          showResult(shortUrl);
         } catch (err) {
-          show(status, String(err));
+          show(error, String(err));
         } finally {
           btn.disabled = false;
         }
