@@ -220,7 +220,8 @@ To request a specific short code, send JSON to the same endpoint:
 
 Behavior:
 
-- If the URL was already shortened, the existing code is returned.
+- If no custom code is provided and the URL was already shortened, the existing (canonical) code is returned.
+- If a custom `code` is provided, it will create/return that code even if the URL already has another (canonical) code.
 - If the requested `code` is already taken for a different URL, the API returns `409`.
 
 ### Redis (Upstash) setup

@@ -138,28 +138,53 @@ export default async function handler(req, res) {
   }
 
   try {
-    const existingCode = await redis.get(`u2c:${normalized}`);
-    if (typeof existingCode === "string" && existingCode.length > 0) {
-      res.status(200).json({ ok: true, msg: existingCode });
+    const canonicalCode = await redis.get(`u2c:${normalized}`);
+
+    // If no custom code requested, behave like classic cc: return the existing canonical code.
+    if (!requestedCode) {
+      if (typeof canonicalCode === "string" && canonicalCode.length > 0) {
+        res.status(200).json({ ok: true, msg: canonicalCode });
+        return;
+      }
+
+      const code = await generateUniqueCode(redis);
+      await redis.set(`c2u:${code}`, normalized);
+      await redis.set(`u2c:${normalized}`, code);
+      await redis.sadd(`u2cs:${normalized}`, code);
+
+      res.status(201).json({ ok: true, msg: code });
       return;
     }
 
-    let code;
-    if (requestedCode) {
-      const existingUrlForCode = await redis.get(`c2u:${requestedCode}`);
-      if (typeof existingUrlForCode === "string" && existingUrlForCode.length > 0 && existingUrlForCode !== normalized) {
+    // Custom code requested:
+    // - If code is taken for another URL => 409
+    // - If code already points to this URL => return it
+    // - Otherwise create mapping and add to URL's set of codes
+    const existingUrlForCode = await redis.get(`c2u:${requestedCode}`);
+    if (typeof existingUrlForCode === "string" && existingUrlForCode.length > 0) {
+      if (existingUrlForCode !== normalized) {
         res.status(409).json({ ok: false, msg: "custom code already in use" });
         return;
       }
-      code = requestedCode;
-    } else {
-      code = await generateUniqueCode(redis);
+
+      // Idempotent: already exists for this URL.
+      await redis.sadd(`u2cs:${normalized}`, requestedCode);
+      if (!(typeof canonicalCode === "string" && canonicalCode.length > 0)) {
+        await redis.set(`u2c:${normalized}`, requestedCode);
+      }
+      res.status(200).json({ ok: true, msg: requestedCode });
+      return;
     }
 
-    await redis.set(`c2u:${code}`, normalized);
-    await redis.set(`u2c:${normalized}`, code);
+    await redis.set(`c2u:${requestedCode}`, normalized);
+    await redis.sadd(`u2cs:${normalized}`, requestedCode);
 
-    res.status(201).json({ ok: true, msg: code });
+    // If this URL doesn't yet have a canonical code, let the first created code be canonical.
+    if (!(typeof canonicalCode === "string" && canonicalCode.length > 0)) {
+      await redis.set(`u2c:${normalized}`, requestedCode);
+    }
+
+    res.status(201).json({ ok: true, msg: requestedCode });
   } catch (e) {
     console.error("cc put error", e);
     res.status(500).json({ ok: false, msg: `problem with database (${safeErrorMessage(e)})` });
