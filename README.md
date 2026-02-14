@@ -208,9 +208,20 @@ It is designed to run cleanly on `s.jackdehaan.com` without breaking the main SP
 Relevant files:
 
 - [api/put.js](api/put.js)
-- [api/r/[code].js](api/r/%5Bcode%5D.js)
+- [api/r.js](api/r.js)
 - [public/cc/index.html](public/cc/index.html)
 - [vercel.json](vercel.json)
+
+### Custom codes (optional)
+
+To request a specific short code, send JSON to the same endpoint:
+
+- `POST /api/put` with body `{ "url": "https://example.com", "code": "my-link" }`
+
+Behavior:
+
+- If the URL was already shortened, the existing code is returned.
+- If the requested `code` is already taken for a different URL, the API returns `409`.
 
 ### Redis (Upstash) setup
 
@@ -229,9 +240,9 @@ The API handlers in this repo accept these naming schemes.
 In Vercel, add the custom domain `s.jackdehaan.com` to the same project.
 The routing is host-based: requests for `s.jackdehaan.com` will route:
 
-- `/` -> the shortener UI at `/cc/index.html`
+- `/` -> the shortener UI (SPA)
 - `/put` -> the API handler at `/api/put`
-- `/<code>` -> the redirect handler at `/api/r/<code>`
+- `/<code>` -> the redirect handler at `/api/r?code=<code>`
 
 ### Local testing
 
