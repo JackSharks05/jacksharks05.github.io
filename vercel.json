@@ -5,6 +5,10 @@
       "handle": "filesystem"
     },
     {
+      "src": "^/api/r/([A-Za-z0-9_-]{1,64})$",
+      "dest": "/api/r?code=$1"
+    },
+    {
       "src": "^/put$",
       "headers": { "host": "s.jackdehaan.com" },
       "dest": "/api/put"
@@ -12,7 +16,7 @@
     {
       "src": "^/([A-Za-z0-9_-]{6,12})$",
       "headers": { "host": "s.jackdehaan.com" },
-      "dest": "/api/r/$1"
+      "dest": "/api/r?code=$1"
     },
     { "src": "^/(.*)$", "dest": "/index.html" }
   ]
