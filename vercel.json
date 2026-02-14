@@ -2,20 +2,18 @@
   "version": 2,
   "routes": [
     {
-      "src": "^/api/(.*)$",
-      "dest": "/api/$1"
+      "handle": "filesystem"
     },
     {
       "src": "^/put$",
-      "headers": { "host": "^s\\.jackdehaan\\.com(:\\d+)?$" },
+      "headers": { "host": "s.jackdehaan.com" },
       "dest": "/api/put"
     },
     {
       "src": "^/([A-Za-z0-9_-]{6,12})$",
-      "headers": { "host": "^s\\.jackdehaan\\.com(:\\d+)?$" },
+      "headers": { "host": "s.jackdehaan.com" },
       "dest": "/api/r/$1"
     },
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    { "src": "^/(.*)$", "dest": "/index.html" }
   ]
 }
