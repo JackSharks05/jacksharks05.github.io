@@ -224,6 +224,33 @@ Behavior:
 - If a custom `code` is provided, it will create/return that code even if the URL already has another (canonical) code.
 - If the requested `code` is already taken for a different URL, the API returns `409`.
 
+### Deleting entries
+
+There is a deletion endpoint:
+
+- `POST /api/del` (or `POST /del` on `s.jackdehaan.com`)
+
+Delete by code (recommended):
+
+```bash
+curl -X POST https://s.jackdehaan.com/api/del \
+  -H 'content-type: application/json' \
+  -d '{"code":"my-link"}'
+```
+
+Delete by URL (removes all codes for that URL):
+
+```bash
+curl -X POST https://s.jackdehaan.com/api/del \
+  -H 'content-type: application/json' \
+  -d '{"url":"https://example.com"}'
+```
+
+Optional protection: set `CC_ADMIN_TOKEN` in Vercel env vars and then send either:
+
+- `Authorization: Bearer <token>` or
+- `x-cc-admin-token: <token>`
+
 ### Redis (Upstash) setup
 
 Create a Redis store via Vercel Marketplace (Upstash Redis) and add the env vars:

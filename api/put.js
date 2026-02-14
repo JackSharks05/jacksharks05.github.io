@@ -2,7 +2,7 @@ import { Redis } from "@upstash/redis";
 import crypto from "node:crypto";
 
 const ALLOWED_PROTOCOLS = new Set(["http:", "https:"]);
-const RESERVED_CODES = new Set(["api", "put", "r"]);
+const RESERVED_CODES = new Set(["api", "put", "r", "del"]);
 
 function getRedisOrNull() {
   const candidates = [
