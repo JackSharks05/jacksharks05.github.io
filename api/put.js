@@ -2,6 +2,7 @@ import { Redis } from "@upstash/redis";
 import crypto from "node:crypto";
 
 const ALLOWED_PROTOCOLS = new Set(["http:", "https:"]);
+const RESERVED_CODES = new Set(["api", "put", "r"]);
 
 function getRedisOrNull() {
   const candidates = [
@@ -55,6 +56,36 @@ function normalizeUrl(raw) {
   return url.toString();
 }
 
+function normalizeRequestedCode(raw) {
+  if (typeof raw !== "string") return null;
+  let trimmed = raw.trim();
+  if (!trimmed) return null;
+
+  // If they paste a full short URL, extract the first path segment.
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    try {
+      const parsed = new URL(trimmed);
+      trimmed = parsed.pathname || "";
+    } catch {
+      // fall through
+    }
+  }
+
+  while (trimmed.startsWith("/")) trimmed = trimmed.slice(1);
+  if (!trimmed) return null;
+
+  // Only keep the first segment if a path was provided.
+  const firstSegment = trimmed.split("/")[0];
+  if (!firstSegment) return null;
+
+  const code = firstSegment;
+  if (code.length > 64) return null;
+  if (!/^[A-Za-z0-9_-]+$/.test(code)) return null;
+  if (RESERVED_CODES.has(code.toLowerCase())) return null;
+
+  return code;
+}
+
 async function generateUniqueCode(redis) {
   // 4 bytes => 6 chars base64url; matches the Rust cc feel.
   for (let attempt = 0; attempt < 20; attempt++) {
@@ -83,15 +114,27 @@ export default async function handler(req, res) {
   }
 
   let rawBody = "";
+  let requestedCode = null;
   if (typeof req.body === "string") rawBody = req.body;
   else if (Buffer.isBuffer(req.body)) rawBody = req.body.toString("utf8");
-  else if (req.body && typeof req.body === "object" && typeof req.body.url === "string") {
-    rawBody = req.body.url;
+  else if (req.body && typeof req.body === "object") {
+    if (typeof req.body.url === "string") rawBody = req.body.url;
+    if (typeof req.body.code === "string") requestedCode = normalizeRequestedCode(req.body.code);
+    else if (typeof req.body.custom === "string") requestedCode = normalizeRequestedCode(req.body.custom);
   }
   const normalized = normalizeUrl(rawBody);
   if (!normalized) {
     res.status(400).json({ ok: false, msg: "invalid url" });
     return;
+  }
+
+  // If the client tried to send a code but it didn't validate, return a clear error.
+  if (req.body && typeof req.body === "object" && ("code" in req.body || "custom" in req.body)) {
+    const raw = typeof req.body.code === "string" ? req.body.code : typeof req.body.custom === "string" ? req.body.custom : "";
+    if (raw && !requestedCode) {
+      res.status(400).json({ ok: false, msg: "invalid custom code (use 1-64 chars: A-Z a-z 0-9 _ -)" });
+      return;
+    }
   }
 
   try {
@@ -101,7 +144,18 @@ export default async function handler(req, res) {
       return;
     }
 
-    const code = await generateUniqueCode(redis);
+    let code;
+    if (requestedCode) {
+      const existingUrlForCode = await redis.get(`c2u:${requestedCode}`);
+      if (typeof existingUrlForCode === "string" && existingUrlForCode.length > 0 && existingUrlForCode !== normalized) {
+        res.status(409).json({ ok: false, msg: "custom code already in use" });
+        return;
+      }
+      code = requestedCode;
+    } else {
+      code = await generateUniqueCode(redis);
+    }
+
     await redis.set(`c2u:${code}`, normalized);
     await redis.set(`u2c:${normalized}`, code);
 

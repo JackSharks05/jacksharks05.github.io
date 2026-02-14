@@ -5,6 +5,7 @@ import "./Shortener.css";
 
 export default function Shortener() {
   const [longUrl, setLongUrl] = useState("");
+  const [customCode, setCustomCode] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -40,16 +41,18 @@ export default function Shortener() {
     const value = longUrl.trim();
     if (!value) return;
 
+    const desired = customCode.trim();
+
     setBusy(true);
     setError("");
     setShortUrl("");
     setCopied(false);
 
     try {
-      const resp = await fetch("/put", {
+      const resp = await fetch("/api/put", {
         method: "POST",
-        headers: { "Content-Type": "text/plain" },
-        body: value,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(desired ? { url: value, code: desired } : { url: value }),
       });
 
       const data = await resp.json();
@@ -109,6 +112,15 @@ export default function Shortener() {
             <button className="shortenerBtn" type="submit" disabled={busy}>
               {busy ? "…" : "Shorten"}
             </button>
+
+            <input
+              className="shortenerInput shortenerInputFull"
+              placeholder="Custom code (optional) — e.g. my-link"
+              autoComplete="off"
+              spellCheck={false}
+              value={customCode}
+              onChange={(e) => setCustomCode(e.target.value)}
+            />
           </form>
 
           {error ? <div className="shortenerOut">{error}</div> : null}
@@ -143,7 +155,7 @@ export default function Shortener() {
                 POST /put (body is URL), GET /&lt;code&gt;
               </div>
               <pre>
-                <code>{`curl -X POST ${shortBase}/put -H 'Content-Type: text/plain' -d 'https://example.com'\n\ncurl -i ${shortBase}/<code>`}</code>
+                <code>{`# cc-compatible\ncurl -X POST ${shortBase}/put -H 'Content-Type: text/plain' -d 'https://example.com'\n\n# custom code\ncurl -X POST ${shortBase}/api/put -H 'Content-Type: application/json' -d '{"url":"https://example.com","code":"my-link"}'\n\n# redirect\ncurl -i ${shortBase}/my-link`}</code>
               </pre>
             </div>
           ) : null}

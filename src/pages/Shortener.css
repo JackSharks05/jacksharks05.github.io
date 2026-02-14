@@ -42,6 +42,10 @@
   gap: 10px;
 }
 
+.shortenerInputFull {
+  grid-column: 1 / -1;
+}
+
 .shortenerInput {
   padding: 10px 12px;
   border-radius: 10px;
