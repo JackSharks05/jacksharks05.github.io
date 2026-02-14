@@ -28,15 +28,25 @@ function getRedisOrNull() {
   ];
 
   const resolved = candidates.find(
-    (c) => typeof c.url === "string" && typeof c.token === "string" && c.url && c.token
+    (c) =>
+      typeof c.url === "string" &&
+      typeof c.token === "string" &&
+      c.url &&
+      c.token,
   );
   if (!resolved) return null;
   return new Redis({ url: resolved.url, token: resolved.token });
 }
 
 function safeErrorMessage(err) {
-  const name = err && typeof err === "object" && "name" in err ? String(err.name) : "Error";
-  const message = err && typeof err === "object" && "message" in err ? String(err.message) : String(err);
+  const name =
+    err && typeof err === "object" && "name" in err
+      ? String(err.name)
+      : "Error";
+  const message =
+    err && typeof err === "object" && "message" in err
+      ? String(err.message)
+      : String(err);
   const combined = `${name}: ${message}`;
   return combined.length > 300 ? `${combined.slice(0, 300)}…` : combined;
 }
@@ -90,12 +100,71 @@ function isAuthorized(req) {
 
   const header = req.headers?.authorization;
   const bearer = typeof header === "string" ? header.trim() : "";
-  if (bearer.startsWith("Bearer ") && bearer.slice("Bearer ".length) === expected) return true;
+  if (
+    bearer.startsWith("Bearer ") &&
+    bearer.slice("Bearer ".length) === expected
+  )
+    return true;
 
   const alt = req.headers?.["x-cc-admin-token"];
   if (typeof alt === "string" && alt === expected) return true;
 
   return false;
+}
+
+async function scanKeys(redis, match) {
+  const allKeys = [];
+  let cursor = "0";
+  // Safety bound to avoid infinite loops if something changes.
+  for (let i = 0; i < 5000; i++) {
+    const res = await redis.scan(cursor, { match, count: 1000 });
+
+    let nextCursor;
+    let keys;
+
+    if (Array.isArray(res)) {
+      nextCursor = res[0];
+      keys = res[1];
+    } else if (res && typeof res === "object") {
+      // Some clients return { cursor, keys }
+      nextCursor = res.cursor;
+      keys = res.keys;
+    }
+
+    if (typeof nextCursor !== "string") nextCursor = "0";
+    if (!Array.isArray(keys)) keys = [];
+
+    for (const key of keys) {
+      if (typeof key === "string" && key.length > 0) allKeys.push(key);
+    }
+
+    cursor = nextCursor;
+    if (cursor === "0") break;
+  }
+
+  return allKeys;
+}
+
+async function deleteAllEntries(redis) {
+  const patterns = ["c2u:*", "u2c:*", "u2cs:*"];
+  const deletedByPattern = {};
+  let totalDeleted = 0;
+
+  for (const pattern of patterns) {
+    const keys = await scanKeys(redis, pattern);
+    deletedByPattern[pattern] = keys.length;
+
+    for (let i = 0; i < keys.length; i += 500) {
+      const batch = keys.slice(i, i + 500);
+      if (batch.length === 0) continue;
+      // del supports variadic keys
+      await redis.del(...batch);
+    }
+
+    totalDeleted += keys.length;
+  }
+
+  return { totalDeleted, deletedByPattern };
 }
 
 async function deleteByCode(redis, code) {
@@ -112,7 +181,9 @@ async function deleteByCode(redis, code) {
   const canonical = await redis.get(`u2c:${url}`);
   if (canonical === code) {
     const remaining = await redis.smembers(`u2cs:${url}`);
-    const next = Array.isArray(remaining) ? remaining.find((c) => typeof c === "string" && c.length > 0) : null;
+    const next = Array.isArray(remaining)
+      ? remaining.find((c) => typeof c === "string" && c.length > 0)
+      : null;
     if (next) {
       await redis.set(`u2c:${url}`, next);
     } else {
@@ -132,7 +203,11 @@ async function deleteByUrl(redis, url) {
   if (!Array.isArray(codes)) codes = [];
 
   const canonical = await redis.get(`u2c:${normalized}`);
-  if (typeof canonical === "string" && canonical.length > 0 && !codes.includes(canonical)) {
+  if (
+    typeof canonical === "string" &&
+    canonical.length > 0 &&
+    !codes.includes(canonical)
+  ) {
     codes.push(canonical);
   }
 
@@ -153,11 +228,6 @@ export default async function handler(req, res) {
     return;
   }
 
-  if (!isAuthorized(req)) {
-    res.status(401).json({ ok: false, msg: "unauthorized" });
-    return;
-  }
-
   const redis = getRedisOrNull();
   if (!redis) {
     res.status(500).json({
@@ -168,23 +238,60 @@ export default async function handler(req, res) {
   }
 
   try {
+    const queryAll = typeof req.query?.all === "string" ? req.query.all : "";
+    const queryConfirm = typeof req.query?.confirm === "string" ? req.query.confirm : "";
+
     const queryCode = typeof req.query?.code === "string" ? req.query.code : "";
     const queryUrl = typeof req.query?.url === "string" ? req.query.url : "";
 
     let bodyCode = "";
     let bodyUrl = "";
+    let bodyAll = false;
+    let bodyConfirm = "";
 
     if (typeof req.body === "string") {
       const trimmed = req.body.trim();
-      if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) bodyUrl = trimmed;
+      if (trimmed.startsWith("http://") || trimmed.startsWith("https://"))
+        bodyUrl = trimmed;
       else bodyCode = trimmed;
     } else if (Buffer.isBuffer(req.body)) {
       const trimmed = req.body.toString("utf8").trim();
-      if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) bodyUrl = trimmed;
+      if (trimmed.startsWith("http://") || trimmed.startsWith("https://"))
+        bodyUrl = trimmed;
       else bodyCode = trimmed;
     } else if (req.body && typeof req.body === "object") {
       if (typeof req.body.code === "string") bodyCode = req.body.code;
       if (typeof req.body.url === "string") bodyUrl = req.body.url;
+      if (typeof req.body.all === "boolean") bodyAll = req.body.all;
+      if (typeof req.body.confirm === "string") bodyConfirm = req.body.confirm;
+    }
+
+    const wantsAll = bodyAll || queryAll === "1" || queryAll.toLowerCase() === "true";
+    if (wantsAll) {
+      // For safety: require CC_ADMIN_TOKEN to be set for delete-all.
+      if (!process.env.CC_ADMIN_TOKEN) {
+        res.status(400).json({ ok: false, msg: "set CC_ADMIN_TOKEN before using delete-all" });
+        return;
+      }
+      if (!isAuthorized(req)) {
+        res.status(401).json({ ok: false, msg: "unauthorized" });
+        return;
+      }
+
+      const confirm = (bodyConfirm || queryConfirm || "").trim();
+      if (confirm !== "DELETE_ALL") {
+        res.status(400).json({ ok: false, msg: "to delete all, set confirm=DELETE_ALL" });
+        return;
+      }
+
+      const result = await deleteAllEntries(redis);
+      res.status(200).json({ ok: true, msg: `deleted ${result.totalDeleted} keys`, ...result });
+      return;
+    }
+
+    if (!isAuthorized(req)) {
+      res.status(401).json({ ok: false, msg: "unauthorized" });
+      return;
     }
 
     const code = normalizeCode(queryCode || bodyCode);
@@ -204,6 +311,11 @@ export default async function handler(req, res) {
     res.status(400).json({ ok: false, msg: "provide code or url" });
   } catch (e) {
     console.error("cc del error", e);
-    res.status(500).json({ ok: false, msg: `problem with database (${safeErrorMessage(e)})` });
+    res
+      .status(500)
+      .json({
+        ok: false,
+        msg: `problem with database (${safeErrorMessage(e)})`,
+      });
   }
 }

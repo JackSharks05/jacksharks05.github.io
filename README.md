@@ -251,6 +251,36 @@ Optional protection: set `CC_ADMIN_TOKEN` in Vercel env vars and then send eithe
 - `Authorization: Bearer <token>` or
 - `x-cc-admin-token: <token>`
 
+Generate a token (pick one):
+
+```bash
+# base64url-ish token (no + / =)
+node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
+
+# or base64 (fine for headers, includes +/ and maybe =)
+openssl rand -base64 32
+```
+
+Delete by code using plain text (no JSON):
+
+```bash
+curl -X POST https://s.jackdehaan.com/api/del \
+  -H 'content-type: text/plain' \
+  --data 'my-link'
+```
+
+Delete all entries (DANGEROUS):
+
+- Requires `CC_ADMIN_TOKEN` to be set.
+- Requires `confirm: "DELETE_ALL"`.
+
+```bash
+curl -X POST https://s.jackdehaan.com/api/del \
+  -H 'authorization: Bearer YOURTOKEN' \
+  -H 'content-type: application/json' \
+  -d '{"all":true,"confirm":"DELETE_ALL"}'
+```
+
 ### Redis (Upstash) setup
 
 Create a Redis store via Vercel Marketplace (Upstash Redis) and add the env vars:
