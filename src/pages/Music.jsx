@@ -32,15 +32,16 @@ export default function Music() {
             </p>
             <div className="page__callout music__listCard">
               <p>
-                <b>From January 20th</b>. Credits to Leo and Daniel for the
+                <b>From March 14th</b>. Credits to Emma, Daniel, & Don for the
                 recs!
               </p>
               <ul className="music__list">
-                <li>Poulenc Piano Concerto in C-Sharp Minor</li>
-                <li>Poulenc Piano Concerto for 2 Pianos and Orchestra</li>
-                <li>Prokofiev Piano Sonata No. 1</li>
-                <li>Dvořák Symphony No. 6</li>
-                <li>Dvořák Symphony No. 7</li>
+                <li>La Valse</li>
+                <li>Brahms Piano Concerto No. 1</li>
+                <li>Brahms Symphony 3</li>
+                <li>Brahms Op. 117</li>
+                <li>Brahms Op. 118</li>
+                <li>Sibelius Symphony No. 1</li>
               </ul>
             </div>
 
