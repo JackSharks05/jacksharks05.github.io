@@ -8,7 +8,8 @@ const Loading = () => <div className="page">Loading…</div>;
 
 function App() {
   const isShortenerHost =
-    typeof window !== "undefined" && window.location.host === "s.jackdehaan.com";
+    typeof window !== "undefined" &&
+    window.location.host === "s.jackdehaan.com";
 
   const Shortener = React.lazy(() => import("./pages/Shortener"));
 
@@ -71,6 +72,10 @@ function App() {
             />
             <Route path="resume" element={<Resume />} />
             <Route path="shortener" element={<Shortener />} />
+            <Route
+              path="about-me"
+              element={<Navigate to="/" replace state={{ openIntro: true }} />}
+            />
 
             {/* Backwards-compat / constellation section mapping */}
             <Route
