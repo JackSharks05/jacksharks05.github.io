@@ -192,9 +192,18 @@ Works in modern browsers that support:
 
 ---
 
-## cc (URL shortener subdomain)
+## cc (URL shortener subdomain) — moved
 
-This repo also includes a minimal URL shortener that mirrors the `cc` program API:
+The `s.jackdehaan.com` URL shortener used to live here as Vercel serverless
+functions backed by Upstash Redis. It has moved into the **Mensa** dashboard on
+the home server (SQLite, managed from a dashboard widget) and is served publicly
+via a Cloudflare Tunnel. This repo no longer contains any shortener code, API
+routes, or `s.jackdehaan.com` routing.
+
+<details>
+<summary>Historical: original Vercel + Upstash design</summary>
+
+This repo also included a minimal URL shortener that mirrored the `cc` program API:
 
 - `POST /put` with request body being the long URL (plain text)
 - returns JSON `{ ok: boolean, msg: string }` where `msg` is the code or an error message
@@ -306,3 +315,5 @@ The routing is host-based: requests for `s.jackdehaan.com` will route:
 
 Vite dev (`npm run dev`) does not run Vercel serverless functions.
 To test the shortener locally, use `vercel dev` (Vercel CLI) so `/put` and `/<code>` work.
+
+</details>

@@ -7,27 +7,8 @@ import "./App.css";
 const Loading = () => <div className="page">Loading…</div>;
 
 function App() {
-  const isShortenerHost =
-    typeof window !== "undefined" &&
-    window.location.host === "s.jackdehaan.com";
-
-  const Shortener = React.lazy(() => import("./pages/Shortener"));
-
-  if (isShortenerHost) {
-    return (
-      <>
-        <Suspense fallback={<Loading />}>
-          <Routes>
-            <Route path="/" element={<Shortener />} />
-            <Route path="*" element={<Shortener />} />
-          </Routes>
-        </Suspense>
-        <SpeedInsights />
-        <Analytics />
-      </>
-    );
-  }
-
+  // The URL shortener (s.jackdehaan.com) now lives in the Mensa dashboard on the
+  // home server; this site no longer serves or routes to it.
   const SiteLayout = React.lazy(() => import("./components/SiteLayout"));
   const Home = React.lazy(() => import("./pages/Home"));
   const About = React.lazy(() => import("./pages/About"));
@@ -71,7 +52,6 @@ function App() {
               element={<Navigate to="/photography-videography" replace />}
             />
             <Route path="resume" element={<Resume />} />
-            <Route path="shortener" element={<Shortener />} />
             <Route
               path="about-me"
               element={<Navigate to="/" replace state={{ openIntro: true }} />}

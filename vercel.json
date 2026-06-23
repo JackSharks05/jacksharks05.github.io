@@ -2,29 +2,6 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/:path*"
-    },
-    {
-      "source": "/api/r/:code([A-Za-z0-9_-]{1,64})",
-      "destination": "/api/r?code=:code"
-    },
-    {
-      "source": "/put",
-      "has": [{ "type": "host", "value": "s.jackdehaan.com" }],
-      "destination": "/api/put"
-    },
-    {
-      "source": "/del",
-      "has": [{ "type": "host", "value": "s.jackdehaan.com" }],
-      "destination": "/api/del"
-    },
-    {
-      "source": "/:code([A-Za-z0-9_-]{1,64})",
-      "has": [{ "type": "host", "value": "s.jackdehaan.com" }],
-      "destination": "/api/r?code=:code"
-    },
-    {
       "source": "/:path*",
       "destination": "/index.html"
     }
