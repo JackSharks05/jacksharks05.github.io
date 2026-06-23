@@ -64,13 +64,6 @@ export function calculateLocalSiderealTime(lon, date) {
     360.98564736629 * (jd - 2451545.0) +
     T * T * (0.000387933 - T / 38710000.0);
 
-  // Add time of day
-  const hours =
-    date.getUTCHours() +
-    date.getUTCMinutes() / 60.0 +
-    date.getUTCSeconds() / 3600.0;
-  gst += hours * 15.0;
-
   // Normalize to 0-360
   gst = gst % 360;
   if (gst < 0) gst += 360;

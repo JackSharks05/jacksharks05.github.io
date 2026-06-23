@@ -2,6 +2,46 @@
   position: relative;
 }
 
+.photography__comingSoon {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+}
+
+.photography__comingSoonInner {
+  max-width: 360px;
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid var(--theme-outline-inner, rgba(254, 0, 0, 0.32));
+  background: rgba(8, 12, 24, 0.96);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.7);
+  padding: 18px 18px 16px;
+  text-align: center;
+}
+
+.photography__comingSoonBadge {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--theme-outline-outer, rgba(98, 31, 109, 0.92));
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.photography__comingSoonText {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.86);
+}
+
 .page__card .masonry__list {
   margin-top: 12px;
   min-height: 260px;

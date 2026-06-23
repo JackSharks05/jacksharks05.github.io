@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./ImageCarousel.css";
 
 export default function ImageCarousel({
@@ -37,12 +37,23 @@ export default function ImageCarousel({
 
   const go = (n) => setIndex(clampIndex(n));
 
+  useEffect(() => {
+    if (slides.length <= 1) return;
+
+    const id = setInterval(() => {
+      setIndex((current) => clampIndex(current + 1));
+    }, 5000);
+
+    return () => clearInterval(id);
+  }, [slides.length]);
+
   return (
     <section className={`carousel ${className}`.trim()} aria-label={ariaLabel}>
       <div className="carousel__viewport">
         {slides.map((it, i) => {
           const isActive = i === index;
           const hasSrc = Boolean(it.src);
+          const isVideo = it.type === "video" && it.embedUrl;
 
           return (
             <div
@@ -52,7 +63,17 @@ export default function ImageCarousel({
               }
               aria-hidden={!isActive}
             >
-              {hasSrc ? (
+              {isVideo ? (
+                <div className="carousel__videoWrapper">
+                  <iframe
+                    src={it.embedUrl}
+                    title={it.alt || it.caption || "Video"}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
+              ) : hasSrc ? (
                 <img
                   className="carousel__img"
                   src={it.src}

@@ -189,3 +189,131 @@ Works in modern browsers that support:
 
 - Code: MIT (this repository).
 - Data derived from HYG: `src/data/hipStars.generated.js` is under CC BY-SA 4.0; if you redistribute that data, you must comply with the upstream license.
+
+---
+
+## cc (URL shortener subdomain) — moved
+
+The `s.jackdehaan.com` URL shortener used to live here as Vercel serverless
+functions backed by Upstash Redis. It has moved into the **Mensa** dashboard on
+the home server (SQLite, managed from a dashboard widget) and is served publicly
+via a Cloudflare Tunnel. This repo no longer contains any shortener code, API
+routes, or `s.jackdehaan.com` routing.
+
+<details>
+<summary>Historical: original Vercel + Upstash design</summary>
+
+This repo also included a minimal URL shortener that mirrored the `cc` program API:
+
+- `POST /put` with request body being the long URL (plain text)
+- returns JSON `{ ok: boolean, msg: string }` where `msg` is the code or an error message
+- `GET /<code>` responds with `308` redirect to the original URL
+
+### Hosting model
+
+This is implemented as Vercel serverless functions backed by Upstash Redis.
+It is designed to run cleanly on `s.jackdehaan.com` without breaking the main SPA routing.
+
+Relevant files:
+
+- [api/put.js](api/put.js)
+- [api/r.js](api/r.js)
+- [public/cc/index.html](public/cc/index.html)
+- [vercel.json](vercel.json)
+
+### Custom codes (optional)
+
+To request a specific short code, send JSON to the same endpoint:
+
+- `POST /api/put` with body `{ "url": "https://example.com", "code": "my-link" }`
+
+Behavior:
+
+- If no custom code is provided and the URL was already shortened, the existing (canonical) code is returned.
+- If a custom `code` is provided, it will create/return that code even if the URL already has another (canonical) code.
+- If the requested `code` is already taken for a different URL, the API returns `409`.
+
+### Deleting entries
+
+There is a deletion endpoint:
+
+- `POST /api/del` (or `POST /del` on `s.jackdehaan.com`)
+
+Delete by code (recommended):
+
+```bash
+curl -X POST https://s.jackdehaan.com/api/del \
+  -H 'content-type: application/json' \
+  -d '{"code":"my-link"}'
+```
+
+Delete by URL (removes all codes for that URL):
+
+```bash
+curl -X POST https://s.jackdehaan.com/api/del \
+  -H 'content-type: application/json' \
+  -d '{"url":"https://example.com"}'
+```
+
+Optional protection: set `CC_ADMIN_TOKEN` in Vercel env vars and then send either:
+
+- `Authorization: Bearer <token>` or
+- `x-cc-admin-token: <token>`
+
+Generate a token (pick one):
+
+```bash
+# base64url-ish token (no + / =)
+node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
+
+# or base64 (fine for headers, includes +/ and maybe =)
+openssl rand -base64 32
+```
+
+Delete by code using plain text (no JSON):
+
+```bash
+curl -X POST https://s.jackdehaan.com/api/del \
+  -H 'content-type: text/plain' \
+  --data 'my-link'
+```
+
+Delete all entries (DANGEROUS):
+
+- Requires `CC_ADMIN_TOKEN` to be set.
+- Requires `confirm: "DELETE_ALL"`.
+
+```bash
+curl -X POST https://s.jackdehaan.com/api/del \
+  -H 'authorization: Bearer YOURTOKEN' \
+  -H 'content-type: application/json' \
+  -d '{"all":true,"confirm":"DELETE_ALL"}'
+```
+
+### Redis (Upstash) setup
+
+Create a Redis store via Vercel Marketplace (Upstash Redis) and add the env vars:
+
+- `UPSTASH_REDIS_REST_URL`
+- `UPSTASH_REDIS_REST_TOKEN`
+- `UPSTASH_REDIS_REST_READ_ONLY_TOKEN` (optional)
+
+Note: depending on how the integration was added, Vercel may instead create variables like
+`UPSTASH_REDIS_REST_KV_REST_API_URL` / `UPSTASH_REDIS_REST_KV_REST_API_TOKEN` (or sometimes `UPSTASH_REDIS_REST_KV_URL` alongside the token).
+The API handlers in this repo accept these naming schemes.
+
+### Subdomain wiring
+
+In Vercel, add the custom domain `s.jackdehaan.com` to the same project.
+The routing is host-based: requests for `s.jackdehaan.com` will route:
+
+- `/` -> the shortener UI (SPA)
+- `/put` -> the API handler at `/api/put`
+- `/<code>` -> the redirect handler at `/api/r?code=<code>`
+
+### Local testing
+
+Vite dev (`npm run dev`) does not run Vercel serverless functions.
+To test the shortener locally, use `vercel dev` (Vercel CLI) so `/put` and `/<code>` work.
+
+</details>

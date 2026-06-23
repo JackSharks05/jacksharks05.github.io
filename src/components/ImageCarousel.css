@@ -40,6 +40,17 @@
   object-fit: cover;
 }
 
+.carousel__videoWrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.carousel__videoWrapper iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .carousel__placeholder {
   width: 100%;
   height: 100%;

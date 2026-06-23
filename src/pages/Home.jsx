@@ -18,6 +18,8 @@ export default function Home() {
     }
   });
 
+  const [priorVisitCount, setPriorVisitCount] = useState(0);
+
   const [isPlanetarium, setIsPlanetarium] = useState(true);
   const [skyLoaded, setSkyLoaded] = useState(false);
   const [uiUnlocked, setUiUnlocked] = useState(false);
@@ -38,6 +40,17 @@ export default function Home() {
   const uiTimerRef = useRef(null);
   const hasActivatedConstellationRef = useRef(false);
   const skyLoadedHandledRef = useRef(false);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("home:visits");
+      const prev = raw ? Number.parseInt(raw, 10) || 0 : 0;
+      setPriorVisitCount(prev);
+      localStorage.setItem("home:visits", String(prev + 1));
+    } catch {
+      setPriorVisitCount(0);
+    }
+  }, []);
 
   useEffect(() => {
     // Keep a sticky flag so layout can infer current state on mount.
@@ -225,6 +238,8 @@ export default function Home() {
         blurb: card.fact || "",
         path: card.to || "/about",
         linkText: card.linkText || "See more",
+        imageSrc: card.imageSrc || null,
+        imageAlt: card.imageAlt || "",
       });
       setIsPreviewOpen(true);
       return;
@@ -242,6 +257,8 @@ export default function Home() {
       blurb: card.fact || "",
       path: card.to || "/about",
       linkText: card.linkText || "See more",
+      imageSrc: card.imageSrc || null,
+      imageAlt: card.imageAlt || "",
     });
     setIsPreviewOpen(true);
   };
@@ -332,12 +349,19 @@ export default function Home() {
       uiTimerRef.current = null;
     }, 5000);
   };
+
   useEffect(() => {
     const onLoaded = () => {
       handleSkyLoaded();
     };
     const onFirstDrag = () => {
       unlockUi();
+    };
+    const onMoved = () => {
+      // Close any open constellation/solar-system preview when the sky moves again.
+      setIsPreviewOpen(false);
+      setConstellationPreview(null);
+      setPreviewAnchorClient(null);
     };
     const onClick = (e) => {
       if (!e?.detail) return;
@@ -346,6 +370,7 @@ export default function Home() {
 
     window.addEventListener("planetarium:loaded", onLoaded);
     window.addEventListener("planetarium:first-drag", onFirstDrag);
+    window.addEventListener("planetarium:moved", onMoved);
     window.addEventListener("planetarium:click", onClick);
 
     // If the planetarium has already loaded (e.g. we navigated away and back),
@@ -362,6 +387,7 @@ export default function Home() {
       if (uiTimerRef.current) window.clearTimeout(uiTimerRef.current);
       window.removeEventListener("planetarium:loaded", onLoaded);
       window.removeEventListener("planetarium:first-drag", onFirstDrag);
+      window.removeEventListener("planetarium:moved", onMoved);
       window.removeEventListener("planetarium:click", onClick);
     };
   }, []);
@@ -399,7 +425,96 @@ export default function Home() {
                 };
               }
 
-              // Desktop: center the preview on the screen.
+              // If we have an anchor from the click, position the card
+              // adjacent to that point without covering it, and keep it
+              // within the stage bounds.
+              if (previewAnchorClient) {
+                const margin = 16;
+                const maxWidth = Math.min(340, rect.width - 44);
+                const estHeight = 170;
+
+                let x = previewAnchorClient.x - rect.left;
+                let y = previewAnchorClient.y - rect.top;
+
+                const clamp = (value, min, max) =>
+                  Math.max(min, Math.min(max, value));
+
+                const spaceAbove = y;
+                const spaceBelow = rect.height - y;
+                const spaceLeft = x;
+                const spaceRight = rect.width - x;
+
+                const estHalfWidth = maxWidth / 2;
+                const estHalfHeight = estHeight / 2;
+
+                let placement;
+
+                if (spaceBelow >= estHeight + margin) {
+                  placement = "below";
+                } else if (spaceAbove >= estHeight + margin) {
+                  placement = "above";
+                } else if (spaceRight >= maxWidth + margin) {
+                  placement = "right";
+                } else if (spaceLeft >= maxWidth + margin) {
+                  placement = "left";
+                } else {
+                  // Fallback: bias below if possible, otherwise above.
+                  placement = spaceBelow >= spaceAbove ? "below" : "above";
+                }
+
+                if (placement === "below") {
+                  const clampedX = clamp(
+                    x,
+                    margin + estHalfWidth,
+                    rect.width - margin - estHalfWidth,
+                  );
+                  return {
+                    left: clampedX,
+                    top: y + 18,
+                    transform: "translateX(-50%)",
+                  };
+                }
+
+                if (placement === "above") {
+                  const clampedX = clamp(
+                    x,
+                    margin + estHalfWidth,
+                    rect.width - margin - estHalfWidth,
+                  );
+                  return {
+                    left: clampedX,
+                    top: y - 18,
+                    transform: "translate(-50%, -100%)",
+                  };
+                }
+
+                if (placement === "right") {
+                  const clampedY = clamp(
+                    y,
+                    margin + estHalfHeight,
+                    rect.height - margin - estHalfHeight,
+                  );
+                  return {
+                    left: Math.min(rect.width - margin, x + 18),
+                    top: clampedY,
+                    transform: "translateY(-50%)",
+                  };
+                }
+
+                // placement === "left"
+                const clampedY = clamp(
+                  y,
+                  margin + estHalfHeight,
+                  rect.height - margin - estHalfHeight,
+                );
+                return {
+                  left: Math.max(margin, x - 18),
+                  top: clampedY,
+                  transform: "translate(-100%, -50%)",
+                };
+              }
+
+              // Desktop fallback: center the preview on the screen.
               return {
                 left: "50%",
                 top: "50%",
@@ -415,6 +530,18 @@ export default function Home() {
             >
               ✕
             </button>
+            {constellationPreview.imageSrc && (
+              <div className="home__constellationPreviewMedia">
+                <img
+                  src={constellationPreview.imageSrc}
+                  alt={
+                    constellationPreview.imageAlt ||
+                    constellationPreview.title ||
+                    "Constellation preview"
+                  }
+                />
+              </div>
+            )}
             <div className="home__constellationPreviewTitle">
               {constellationPreview.title}
             </div>
@@ -457,12 +584,15 @@ export default function Home() {
                       "a long distance runner",
                       "a translator",
                       "a record-breaker",
+                      "a process architect",
+                      "a timekeeper",
                       "a horticulturist",
                       "a linguist",
                       "a mentor",
                       "a ski coach",
                       "a tester",
                       "a traveler",
+                      "a full-stack engineer",
                       "a inspirer",
                       "a team leader",
                       "an award-winning poet",
@@ -481,16 +611,35 @@ export default function Home() {
                     staggerFrom="first"
                     className="home__rotatingText"
                   />
-                  . Welcome to my planetarium portfolio! As you'll come to
-                  learn, I do a lot of things and love even more! You can use
-                  this site to learn about me, see my projects & research
-                  experience, hear what I've been listening to recently, read my
-                  thoughts...
+                  . Welcome to my planetarium portfolio! Just as a constellation
+                  creates meaning from scattered stars, I build systems that
+                  find signal in the noise. As{" "}
+                  {(() => {
+                    if (priorVisitCount === 0) return "you'll come to learn";
+                    if (priorVisitCount === 1) return "you may already know";
+                    if (priorVisitCount < 10) return "you probably know";
+                    return "you definitely know by now";
+                  })()}
+                  , I do a lot of things and love even more! I live at the
+                  intersection of human intuition and computational rigor. Use
+                  this site to learn about the systems I architect, research
+                  human behavior and AI safety, hear what I've been listening to
+                  recently, and capture the world through film (coming soon),
+                  photography, and code...
                 </p>
                 <p className="home__lead">
-                  ...and you can <i>also</i> use it as a fully functioning and
-                  accurate planetarium, accurate to the sky above you (really!
-                  try it out!)!
+                  ...and yes, this is <i>also</i> a fully functioning,
+                  location-accurate planetarium. I built it because I love
+                  mapping complex systems to better understand them! Go ahead
+                  and connect with the stars (
+                  {(() => {
+                    if (priorVisitCount === 0)
+                      return "really, try clicking them!";
+                    if (priorVisitCount < 3)
+                      return "go find more constellations!";
+                    return "thanks for exploring my universe!";
+                  })()}
+                  )
                 </p>
               </div>
 
@@ -521,72 +670,43 @@ export default function Home() {
                   ]}
                 />
               </div>
-            </div>
 
-            <div className="home__cards">
-              <div className="home__card">
-                <div className="home__cardTitle">What I do</div>
-                <div className="home__cardBody">
-                  Full-stack engineering, data/visualization, and building tools
-                  that feel great to use.
+              <div className="home__cards">
+                <div className="home__card">
+                  <div className="home__cardTitle">the main quest</div>
+                  <div className="home__cardBody">
+                    Architecting human-centric software, investigating
+                    behavioral technology, and solving unstructured problems.
+                  </div>
+                  <div className="home__cardLinks">
+                    <Link to="/projects">Projects</Link>
+                    <Link to="/research">Research</Link>
+                  </div>
                 </div>
-                <div className="home__cardLinks">
-                  <Link to="/projects">Projects</Link>
-                  <Link to="/research">Research</Link>
-                </div>
-              </div>
 
-              <div className="home__card">
-                <div className="home__cardTitle">What I’m into</div>
-                <div className="home__cardBody">
-                  Astronomy visuals, human-centered interfaces, and music.
+                <div className="home__card">
+                  <div className="home__cardTitle">the side quests</div>
+                  <div className="home__cardBody">
+                    Capturing the world through photography, film, and the
+                    patterns I find in music, language, and the stars.
+                  </div>
+                  <div className="home__cardLinks">
+                    <Link to="/photography-videography">Gallery</Link>
+                    <Link to="/music">Music</Link>
+                  </div>
                 </div>
-                <div className="home__cardLinks">
-                  <Link to="/music">Music</Link>
-                  <Link to="/thoughts">Thoughts</Link>
-                </div>
-              </div>
 
-              <div className="home__card">
-                <div className="home__cardTitle">Let’s talk</div>
-                <div className="home__cardBody">
-                  If you’re hiring, collaborating, or just curious, I’d love to
-                  connect.
-                </div>
-                <div className="home__cardLinks">
-                  <Link to="/resume">Resume</Link>
-                  <Link to="/contact">Contact</Link>
-                </div>
-              </div>
-            </div>
-
-            <div className="home__split">
-              <div className="home__panel">
-                <h3 className="home__h3">Highlights</h3>
-                <ul className="home__bullets">
-                  <li>Click-to-navigate constellations and sky routing</li>
-                  <li>Authoritative stick figures (Stellarium western)</li>
-                  <li>Smooth projection blending and realistic twinkle</li>
-                </ul>
-              </div>
-              <div className="home__panel">
-                <h3 className="home__h3">Quick links</h3>
-                <div className="home__quick">
-                  <Link className="home__quickBtn" to="/projects">
-                    Projects
-                  </Link>
-                  <Link className="home__quickBtn" to="/about">
-                    About
-                  </Link>
-                  <Link
-                    className="home__quickBtn"
-                    to="/photography-videography"
-                  >
-                    Photo/Video
-                  </Link>
-                  <Link className="home__quickBtn" to="/contact">
-                    Contact
-                  </Link>
+                <div className="home__card">
+                  <div className="home__cardTitle">the quester</div>
+                  <div className="home__cardBody">
+                    I act as a catalyst for high-velocity teams. If you have a
+                    complex problem or a "hunch" to turn into reality, let's
+                    talk.
+                  </div>
+                  <div className="home__cardLinks">
+                    <Link to="/resume">Resume</Link>
+                    <Link to="/contact">Contact</Link>
+                  </div>
                 </div>
               </div>
             </div>

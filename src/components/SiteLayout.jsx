@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  createContext,
+} from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import CardNav from "./CardNav";
 import Dock from "./Dock";
@@ -6,6 +12,8 @@ import GalaxyCanvas from "./GalaxyCanvas";
 import starPng from "../assets/star.png";
 import starSvg from "../assets/star.svg";
 import "./SiteLayout.css";
+
+export const SiteLayoutContext = createContext(null);
 
 export default function SiteLayout() {
   const location = useLocation();
@@ -81,16 +89,6 @@ export default function SiteLayout() {
     window.addEventListener("planetarium:state", onPlanetariumState);
     return () =>
       window.removeEventListener("planetarium:state", onPlanetariumState);
-  }, []);
-
-  useEffect(() => {
-    const on404 = (e) => {
-      const active = Boolean(e?.detail?.active);
-      setHidePlanetarium(active);
-      setIsNotFound(active);
-    };
-    window.addEventListener("planetarium:404", on404);
-    return () => window.removeEventListener("planetarium:404", on404);
   }, []);
 
   useEffect(() => {
@@ -196,6 +194,11 @@ export default function SiteLayout() {
     [],
   );
 
+  const contextValue = useMemo(
+    () => ({ setIsNotFound, setHidePlanetarium }),
+    [],
+  );
+
   return (
     <div
       className={
@@ -221,6 +224,9 @@ export default function SiteLayout() {
           }}
           onFirstDrag={() => {
             window.dispatchEvent(new CustomEvent("planetarium:first-drag"));
+          }}
+          onDragMove={() => {
+            window.dispatchEvent(new CustomEvent("planetarium:moved"));
           }}
           interactive={isHome}
         />
@@ -284,7 +290,7 @@ export default function SiteLayout() {
                   : "header-hint is-hidden"
               }
             >
-              Hover constellations or use the cards
+              find the constellations!
             </div>
           )}
         </div>
@@ -326,7 +332,9 @@ export default function SiteLayout() {
               : "site-main"
         }
       >
-        <Outlet />
+        <SiteLayoutContext.Provider value={contextValue}>
+          <Outlet />
+        </SiteLayoutContext.Provider>
       </main>
 
       {showDock && (

@@ -5,6 +5,7 @@ import "./PhotographyVideography.css";
 
 export default function PhotographyVideography() {
   const [selected, setSelected] = useState(null);
+  const COMING_SOON = true;
   useEffect(() => {
     if (!selected) return undefined;
     const onKeyDown = (e) => {
@@ -23,6 +24,16 @@ export default function PhotographyVideography() {
           A few stills from places that stuck with me.
         </p>
         <div className="page__content photography__content">
+          {COMING_SOON && (
+            <div className="photography__comingSoon">
+              <div className="photography__comingSoonInner">
+                <div className="photography__comingSoonBadge">coming soon</div>
+                <p className="photography__comingSoonText">
+                  I&apos;m still curating this gallery. Check back soon!
+                </p>
+              </div>
+            </div>
+          )}
           <Masonry
             items={[
               {
@@ -30,97 +41,96 @@ export default function PhotographyVideography() {
                 img: "/media/photos/speech1.png",
                 url: "/media/photos/speech1.png",
                 height: 520,
-                label: "Speech, summer 2019",
-                description:
-                  "Talking about design and learning in a small auditorium.",
+                label: "spoilers!!",
+                description: "hey, who let you in!? :D",
               },
               {
                 id: "speech2",
                 img: "/media/photos/speech2.jpeg",
                 url: "/media/photos/speech2.jpeg",
                 height: 520,
-                label: "Speech, winter 2019",
-                description: "A different stage; same nerves.",
+                label: "spoilers!!",
+                description: "hey, who let you in!? :D",
               },
               {
                 id: "leaf",
                 img: "/media/photos/leaf.JPG",
                 url: "/media/photos/leaf.JPG",
                 height: 640,
-                label: "Leaf in shadow",
-                description: "Afternoon light catching a single leaf.",
+                label: "spoilers!!",
+                description: "hey, who let you in!? :D",
               },
               {
                 id: "tree",
                 img: "/media/photos/tree.jpeg",
                 url: "/media/photos/tree.jpeg",
                 height: 680,
-                label: "Tree at dusk",
-                description: "Long exposure in a very quiet park.",
+                label: "spoilers!!",
+                description: "hey, who let you in!? :D",
               },
               {
                 id: "hanging",
                 img: "/media/photos/hanging.jpeg",
                 url: "/media/photos/hanging.jpeg",
                 height: 720,
-                label: "Hanging lights",
-                description: "Warm lights over a winter street.",
+                label: "spoilers!!",
+                description: "hey, who let you in!? :D",
               },
               {
                 id: "franconia",
                 img: "/media/photos/franconia.JPG",
                 url: "/media/photos/franconia.JPG",
                 height: 720,
-                label: "Franconia",
-                description: "A hazy hike near Franconia Notch.",
+                label: "spoilers!!",
+                description: "hey, who let you in!? :D",
               },
               {
                 id: "green",
                 img: "/media/photos/green.JPG",
                 url: "/media/photos/green.JPG",
                 height: 640,
-                label: "Green field",
-                description: "Soaked grass after a sudden storm.",
+                label: "spoilers!!",
+                description: "hey, who let you in!? :D",
               },
               {
                 id: "shadow",
                 img: "/media/photos/shadow.jpeg",
                 url: "/media/photos/shadow.jpeg",
                 height: 640,
-                label: "Shadow",
-                description: "Finding shapes in late afternoon light.",
+                label: "spoilers!!",
+                description: "hey, who let you in!? :D",
               },
               {
                 id: "shanghai",
                 img: "/media/photos/shanghai.jpeg",
                 url: "/media/photos/shanghai.jpeg",
                 height: 720,
-                label: "Shanghai",
-                description: "Neon and rain downtown.",
+                label: "spoilers!!",
+                description: "hey, who let you in!? :D",
               },
               {
                 id: "ski",
                 img: "/media/photos/ski.jpeg",
                 url: "/media/photos/ski.jpeg",
                 height: 680,
-                label: "Ski lift",
-                description: "Blue hour on the way up the mountain.",
+                label: "spoilers!!",
+                description: "hey, who let you in!? :D",
               },
               {
                 id: "guards1",
                 img: "/media/photos/guards1.jpg",
                 url: "/media/photos/guards1.jpg",
                 height: 640,
-                label: "Guards",
-                description: "Changing of the guard, handheld at a distance.",
+                label: "spoilers!!",
+                description: "hey, who let you in!? :D",
               },
               {
                 id: "yiheyuan",
                 img: "/media/photos/yiheyuan.jpeg",
                 url: "/media/photos/yiheyuan.jpeg",
                 height: 720,
-                label: "Yiheyuan",
-                description: "Muted colors at the Summer Palace.",
+                label: "spoilers!!",
+                description: "hey, who let you in!? :D",
               },
             ]}
             animateFrom="bottom"
