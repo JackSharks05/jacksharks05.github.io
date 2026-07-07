@@ -25,3 +25,4 @@ scripts/.cache/
 *.njsproj
 *.sln
 *.sw?
+cloudflare_errors

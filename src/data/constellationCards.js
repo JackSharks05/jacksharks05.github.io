@@ -58,8 +58,7 @@ export const constellationCards = {
   },
   Boo: {
     title: "Boötes",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/resume",
+    fact: "The herdsman. Sometimes, I feel like Boötes when I'm ski coaching, herding my adorable kids around. And other times... I feel like Puppis. :)",
   },
   CMa: {
     title: "Canis Major",
@@ -164,8 +163,8 @@ export const constellationCards = {
   },
   Crv: {
     title: "Corvus",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/thoughts",
+    fact: "Corvus is a crow, though traditionally depicted as a raven on the back of Hydra. Though I haven't seen any in my dreams lately...",
+    to: "https://www.netflix.com/tudum/videos/dream-meets-matthew-the-raven-the-sandman-s1e3",
   },
   Cyg: {
     title: "Cygnus",
@@ -184,8 +183,8 @@ export const constellationCards = {
   },
   Dra: {
     title: "Draco",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/about",
+    fact: 'The dragon. One of my favourite universes is that of "The Dragon Prince". So much amazing worldbuilding! That\'s also where my logo comes from.',
+    to: "https://thedragonprince.com/world/#:~:text=seeing%20into%20the%20%E2%80%9Cbeyond.%E2%80%9D",
   },
   Equ: {
     title: "Equuleus",
@@ -226,13 +225,12 @@ export const constellationCards = {
   },
   Hya: {
     title: "Hydra",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/projects",
+    fact: 'One of my favourite Marvel movies (with Ragnarok, GotG, Civil War, et al.) is "Captain America: The Winter Soldier". And I love AoS. Why is this relevant to Hydra? Well...',
+    to: "https://marvelcinematicuniverse.fandom.com/wiki/Hydra",
   },
   Hyi: {
     title: "Hydrus",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/projects",
+    fact: "Today I learned there's a \"lesser water snake\". Why isn't this just another triangle?",
   },
   Ind: {
     title: "Indus",
@@ -241,8 +239,7 @@ export const constellationCards = {
   },
   LMi: {
     title: "Leo Minor",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/projects",
+    fact: "who's a good little lion?? 🥰",
   },
   Lac: {
     title: "Lacerta",
@@ -261,13 +258,12 @@ export const constellationCards = {
   },
   Lib: {
     title: "Libra",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/resume",
+    fact: "The scales. Balance. Fun fact, it's the only zodiac constellation representing an inanimate object!",
   },
   Lup: {
     title: "Lupus",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/projects",
+    fact: "I was originally going to say something about Remus Lupin, but I almost prefer Lupin (the character et surtout la série).",
+    to: "https://youtu.be/I5TZeyADMWU?si=F7D1n5rHW0h-3zl9&t=40",
   },
   Lyn: {
     title: "Lynx",
@@ -276,18 +272,20 @@ export const constellationCards = {
   },
   Lyr: {
     title: "Lyra",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/music",
+    fact: "Oh, how I wish I could play the harp. Please give recommendations for harp pieces to listen to!",
+    to: "https://youtu.be/QxHkLdQy5f0?si=j2OVQIPaqA6g-P1J&t=21",
+    linkText: "or enjoy this cadenza :)",
   },
   Men: {
     title: "Mensa",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/projects",
+    fact: "This represents Table Mountain, in South Africa. I haven't been since young but I have roots there (no not in the mountain) and am hoping to return some day!",
+    to: "/about",
   },
   Mic: {
     title: "Microscopium",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/research",
+    fact: "...or the macroscope 👀",
+    to: "https://mitmh2026.com/#:~:text=Congratulations%20to%20The%20Providence%20Bureau%20of%20Invest%2DEgg%2DAtions%20for%20finishing%20first%20and%20finding%20the%20Coin!",
+    linkText: "coming soon!",
   },
   Mon: {
     title: "Monoceros",
@@ -301,18 +299,17 @@ export const constellationCards = {
   },
   Nor: {
     title: "Norma",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/projects",
+    fact: "Didn't see much (or any) of Norma, but I loved Donna.",
+    to: "https://suits.fandom.com/wiki/Donna_Paulsen",
   },
   Oct: {
     title: "Octans",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/about",
+    fact: "Not much to say about this more recent constellation. I do appreciate how many constellations were named after navigational instruments; it feels like a nice tribute. Though maybe nautical astronomers didn't have much else on their minds...",
   },
   Oph: {
     title: "Ophiuchus",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/research",
+    fact: 'The "serpent bearer", often attributed to Asclepius, the god of medicine. Interesting symbolism there...',
+    // to: "/research",
   },
   Ori: {
     title: "Orion",
@@ -389,13 +386,13 @@ export const constellationCards = {
   },
   Ser: {
     title: "Serpens",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/research",
+    // fact: "to be filled in soon! go find another constellation",
+    to: "https://www.snakebitefoundation.org/blog/asclepius-and-snakes-symbols-of-medicine-and-healing#:~:text=In%20one%20story%2C%C2%A0Asclepius%20killed%20a%20snake%20and%20watched%20as%20second%20snake%20arrived%20shortly%20after%20and%20fed%20herbs%20to%20the%20first%20one%2C%20reviving%20it.",
   },
   Sex: {
     title: "Sextans",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/projects",
+    fact: "The classic exemplar of the tip of the tongue phenomenon.",
+    to: "https://thereader.mitpress.mit.edu/tip-of-the-tongue-phenomenon/#:~:text=A%20navigational%20instrument%20used%20in%20measuring%20angular%20distances%2C%20especially%20the%20altitude%20of%20the%20sun%2C%20moon%2C%20and%20stars%20at%20sea.",
   },
   Sge: {
     title: "Sagitta",
@@ -404,8 +401,8 @@ export const constellationCards = {
   },
   Sgr: {
     title: "Sagittarius",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/projects",
+    fact: "The archer. Growing up playing Minecraft, I'd always find myself perched on top of a tower, sniping monsters (or friends) with my infinity bow while friends fought with swords.",
+    // to: "/projects",
   },
   Tau: {
     title: "Taurus",
@@ -414,18 +411,20 @@ export const constellationCards = {
   },
   Tel: {
     title: "Telescopium",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/research",
-  },
-  Tra: {
-    title: "Triangulum Australe",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/projects",
+    fact: "I love telescopes! Not much to say.",
+    // to: "/research",
   },
   Tri: {
     title: "Triangulum",
-    fact: "to be filled in soon! go find another constellation",
-    to: "/projects",
+    fact: 'Not super inspiring, I think. I prefered when it was "the plough" from babylonian star catalogues. And that reminds me of perhaps my favourite style of writing, boustrophedon. Which reminds me of one of my favourite linguistics puzzles. Wait, how did we get here?',
+    to: "https://naclo.org/resources/problems/2022/N2022-A.pdf",
+    linkText: "Lines in the Sand",
+  },
+  Tra: {
+    title: "Triangulum Australe",
+    fact: "This reminds me of a crazy silly puzzle from Galactic Puzzle Hunt 2024, one of my first ever hunts! Sometimes, don't overthink it!",
+    to: "https://2024.galacticpuzzlehunt.com/puzzle/whats_the_answer",
+    linkText: "Tri it!",
   },
   Tuc: {
     title: "Tucana",
@@ -445,7 +444,7 @@ export const constellationCards = {
   },
   Vel: {
     title: "Vela",
-    fact: "to be filled in soon! go find another constellation",
+    fact: "A current project... soon to be announced!",
     to: "/projects",
   },
   Vir: {
